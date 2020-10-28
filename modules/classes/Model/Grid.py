@@ -15,7 +15,7 @@
 
 from typing import List
 
-from modules.settings import VERTICAL_SIZE, HORIZONTAL_SIZE
+from modules.settings import GRID_HEIGHT, GRID_WIDTH
 
 
 class Grid:
@@ -60,9 +60,9 @@ class Grid:
         if shape is None:
             # On crée un tableau à deux dimensions rempli de False
             self._shape = []
-            for line in range(VERTICAL_SIZE):
+            for line in range(GRID_HEIGHT):
                 self._shape.append([])
-                for _ in range(HORIZONTAL_SIZE):
+                for _ in range(GRID_WIDTH):
                     self._shape[line].append(False)
         else:
             self._shape = shape

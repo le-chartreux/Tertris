@@ -25,7 +25,7 @@ from modules.classes.Model.Statistics import Statistics
 from modules.classes.Utilities.Direction import Direction
 from modules.classes.Utilities.TetrominoType import TetrominoType
 
-from modules.settings import HORIZONTAL_SIZE, VERTICAL_SIZE
+from modules.settings import GRID_WIDTH, GRID_HEIGHT
 
 
 class Model:
@@ -129,9 +129,9 @@ class Model:
             while column < 4 and possible:
                 possible = (
                     (
-                        0 <= self.get_active_tetromino().get_x() + column + direction.value.get_x() < HORIZONTAL_SIZE
-                        and
-                        0 <= self.get_active_tetromino().get_y() + line + direction.value.get_y() < VERTICAL_SIZE
+                            0 <= self.get_active_tetromino().get_x() + column + direction.value.get_x() < GRID_WIDTH
+                            and
+                            0 <= self.get_active_tetromino().get_y() + line + direction.value.get_y() < GRID_HEIGHT
                     )
                     and not (
                         self.get_grid().is_occupied(
