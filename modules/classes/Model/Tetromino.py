@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe Tetromino, qui sert à représenter un Tétromino
+# Définir la classe Tetromino, qui sert à représenter un tétromino
 # -----------------------------
 # CONTENU :
 # + __slots__
@@ -12,8 +12,9 @@
 # + SETTERS
 # + is_occupied()
 # ==========================================================
-
 from typing import List
+
+from modules.classes.Utilities.TetrominoType import TetrominoType
 
 
 class Tetromino:
@@ -34,7 +35,7 @@ class Tetromino:
     ###############################################################
     def __init__(
             self,
-            shape: List[List[bool]] = None
+            shape: List[List[bool]]
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -62,3 +63,72 @@ class Tetromino:
     ###############################################################
     def is_occupied(self, x: int, y: int) -> bool:
         return self.get_shape()[y][x]
+
+
+###############################################################
+##################### TETROMINO_FACTORY #######################
+###############################################################
+def tetromino_factory(tetromino_type: TetrominoType) -> Tetromino:
+    if tetromino_type == TetrominoType.I:
+        return Tetromino(
+            [
+                [True, True, True, True],
+                [False, False, False, False],
+                [False, False, False, False],
+                [False, False, False, False],
+            ]
+        )
+    elif tetromino_type == TetrominoType.O:
+        return Tetromino(
+            [
+                [False, False, False, False],
+                [False, True, True, False],
+                [False, True, True, False],
+                [False, False, False, False],
+            ]
+        )
+    elif tetromino_type == TetrominoType.T:
+        return Tetromino(
+            [
+                [False, True, False, False],
+                [False, True, True, False],
+                [False, True, False, False],
+                [False, False, False, False],
+            ]
+        )
+    elif tetromino_type == TetrominoType.L:
+        return Tetromino(
+            [
+                [False, False, False, False],
+                [False, True, True, True],
+                [False, True, False, False],
+                [False, False, False, False],
+            ]
+        )
+    elif tetromino_type == TetrominoType.J:
+        return Tetromino(
+            [
+                [False, False, False, False],
+                [False, True, True, True],
+                [False, False, False, True],
+                [False, False, False, False],
+            ]
+        )
+    elif tetromino_type == TetrominoType.Z:
+        return Tetromino(
+            [
+                [False, False, False, False],
+                [False, True, True, False],
+                [False, False, True, True],
+                [False, False, False, False],
+            ]
+        )
+    elif tetromino_type == TetrominoType.S:
+        return Tetromino(
+            [
+                [False, False, False, False],
+                [False, True, True, False],
+                [True, True, False, False],
+                [False, False, False, False],
+            ]
+        )

@@ -10,7 +10,8 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
-# + get_duration
+# + get_duration()
+# + get_speed()
 # ==========================================================
 
 import time

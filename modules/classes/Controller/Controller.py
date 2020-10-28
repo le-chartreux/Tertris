@@ -14,7 +14,6 @@
 
 from modules.classes.Model.Model import Model
 from modules.classes.View.View import View
-from modules.classes.Utilities.Query import Query
 
 
 class Controller:
@@ -36,7 +35,9 @@ class Controller:
     ########################## __INIT__ ###########################
     ###############################################################
     def __init__(
-            self
+            self,
+            model: Model = None,
+            view: View = None
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -46,8 +47,13 @@ class Controller:
         # - son model (_model)
         # - sa vue (_view)
         # =============================
-        self.set_model(Model(self))
-        self.set_view(View(self))
+        if model is None:
+            model = Model()
+        if view is None:
+            view = View()
+
+        self.set_model(model)
+        self.set_view(view)
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -66,9 +72,3 @@ class Controller:
 
     def set_view(self, view: View) -> None:
         self._view = view
-
-    ###############################################################
-    ######################## PROCESS_QUERY ########################
-    ###############################################################
-    def process_query(self, query: Query):
-        pass

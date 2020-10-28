@@ -10,15 +10,22 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
+# + send_query()
+# + next_tick()
 # ==========================================================
 
 from typing import Optional
+from random import choice
 
 from modules.classes.Model.Grid import Grid
-from modules.classes.Model.Tetromino import Tetromino
+from modules.classes.Model.Tetromino import Tetromino, tetromino_factory
+from modules.classes.Model.ActiveTetromino import ActiveTetromino
 from modules.classes.Model.Statistics import Statistics
 
-from modules.classes.Controller.Controller import Controller
+from modules.classes.Utilities.Direction import Direction
+from modules.classes.Utilities.TetrominoType import TetrominoType
+
+from modules.settings import HORIZONTAL_SIZE, VERTICAL_SIZE
 
 
 class Model:
@@ -26,7 +33,6 @@ class Model:
     ########################## __SLOTS__ ##########################
     ###############################################################
     __slots__ = (
-        "_controller",
         "_grid",
         "_active_tetromino",
         "_stored_tetromino",
@@ -36,9 +42,8 @@ class Model:
     ###############################################################
     ############################ HINTS ############################
     ###############################################################
-    _controller: Controller
     _grid: Grid
-    _active_tetromino: Tetromino
+    _active_tetromino: ActiveTetromino
     _stored_tetromino: Optional[Tetromino]
     _statistics: Statistics
 
@@ -47,9 +52,8 @@ class Model:
     ###############################################################
     def __init__(
             self,
-            controller: Controller,
             grid: Grid = None,
-            active_tetromino: Tetromino = None,
+            active_tetromino: ActiveTetromino = None,
             stored_tetromino: Optional[Tetromino] = None,
             statistics: Statistics = None
     ) -> None:
@@ -58,7 +62,6 @@ class Model:
         # -----------------------------
         # UTILITÉ :
         # Crée un objet Model, caractérisé par :
-        # - son controller (_controller)
         # - la grille de jeu (_grid)
         # - le tetromino actif (_active_tetromino)
         # - le tetromino stocké (_stored_tetromino)
@@ -68,12 +71,11 @@ class Model:
             grid = Grid()
 
         if active_tetromino is None:
-            active_tetromino = Tetromino()
+            active_tetromino = ActiveTetromino(0, 0, tetromino=random_next_tetromino())
 
         if statistics is None:
             statistics = Statistics()
 
-        self.set_controller(controller)
         self.set_grid(grid)
         self.set_active_tetromino(active_tetromino)
         self.set_stored_tetromino(stored_tetromino)
@@ -82,13 +84,10 @@ class Model:
     ###############################################################
     ########################### GETTERS ###########################
     ###############################################################
-    def get_controller(self) -> Controller:
-        return self._controller
-
     def get_grid(self) -> Grid:
         return self._grid
 
-    def get_active_tetromino(self) -> Tetromino:
+    def get_active_tetromino(self) -> ActiveTetromino:
         return self._active_tetromino
 
     def get_stored_tetromino(self) -> Optional[Tetromino]:
@@ -100,13 +99,10 @@ class Model:
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_controller(self, controller: Controller):
-        self._controller = controller
-
     def set_grid(self, grid: Grid) -> None:
         self._grid = grid
 
-    def set_active_tetromino(self, active_tetromino: Tetromino) -> None:
+    def set_active_tetromino(self, active_tetromino: ActiveTetromino) -> None:
         self._active_tetromino = active_tetromino
 
     def set_stored_tetromino(self, stored_tetromino: Optional[Tetromino]) -> None:
@@ -116,7 +112,43 @@ class Model:
         self._statistics = statistics
 
     ###############################################################
-    ########################## SEND_QUERY #########################
+    ########################## NEXT_TICK ##########################
     ###############################################################
-    def send_query(self, query: Query):
-        self._controller
+    def next_tick(self):
+        pass
+
+    ###############################################################
+    ################# CAN_ACTIVE_TETROMINO_MOVE ###################
+    ###############################################################
+    def can_active_tetromino_move(self, direction: Direction) -> bool:
+        line = 0
+
+        possible = True
+        while line < 4 and possible:
+            column = 0
+            while column < 4 and possible:
+                possible = (
+                    (
+                        0 <= self.get_active_tetromino().get_x() + column + direction.value.get_x() < HORIZONTAL_SIZE
+                        and
+                        0 <= self.get_active_tetromino().get_y() + line + direction.value.get_y() < VERTICAL_SIZE
+                    )
+                    and not (
+                        self.get_grid().is_occupied(
+                            self.get_active_tetromino().get_x() + direction.value.get_x(),
+                            self.get_active_tetromino().get_y() + direction.value.get_y()
+                        )
+                        and
+                        self.get_active_tetromino().get_shape()[line][column]
+                   )
+                )
+                column += 1
+            line += 1
+        return possible
+
+
+###############################################################
+################### RANDOM_NEXT_TETROMINO #####################
+###############################################################
+def random_next_tetromino() -> Tetromino:
+    return tetromino_factory(choice(list(TetrominoType)))

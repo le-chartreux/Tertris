@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe Grid, qui sert à représenter la grille de jeu
+# Définir la classe Grid, qui sert à représenter la grille de jeu du côté modèle
 # -----------------------------
 # CONTENU :
 # + __slots__
@@ -14,6 +14,8 @@
 # ==========================================================
 
 from typing import List
+
+from modules.settings import VERTICAL_SIZE, HORIZONTAL_SIZE
 
 
 class Grid:
@@ -58,9 +60,9 @@ class Grid:
         if shape is None:
             # On crée un tableau à deux dimensions rempli de False
             self._shape = []
-            for line in range(22):
+            for line in range(VERTICAL_SIZE):
                 self._shape.append([])
-                for _ in range(10):
+                for _ in range(HORIZONTAL_SIZE):
                     self._shape[line].append(False)
         else:
             self._shape = shape

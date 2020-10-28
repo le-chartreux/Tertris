@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe Query, qui sert à gérer les demandes de la vue et du modèle
+# Définir la classe Position
 # -----------------------------
 # CONTENU :
 # + __slots__
@@ -12,57 +12,55 @@
 # + SETTERS
 # ==========================================================
 
-from modules.classes.Utilities.Subject import Subject
 
-
-class Query:
+class Position:
     ###############################################################
     ########################## __SLOTS__ ##########################
     ###############################################################
     __slots__ = (
-        "_subject",
-        "_content"
+        "_x",
+        "_y"
     )
 
     ###############################################################
     ############################ HINTS ############################
     ###############################################################
-    _subject: Subject
-    _content: object
+    _x: float
+    _y: float
 
     ###############################################################
     ########################## __INIT__ ###########################
     ###############################################################
     def __init__(
             self,
-            subject: Subject,
-            content: object
+            x: float,
+            y: float
     ) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Crée un objet Query, caractérisé par :
-        # - un sujet (_subject)
-        # - un contenu (_content)
+        # Crée un objet Position, caractérisé par :
+        # - sa position sur l'axe X (_x)
+        # - sa position sur l'axe Y (_y)
         # =============================
-        self.set_subject(subject)
-        self.set_content(content)
+        self.set_x(x)
+        self.set_y(y)
 
     ###############################################################
     ########################### GETTERS ###########################
     ###############################################################
-    def get_subject(self) -> Subject:
-        return self._subject
+    def get_x(self) -> float:
+        return self._x
 
-    def get_content(self) -> object:
-        return self._content
+    def get_y(self) -> float:
+        return self._y
 
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_subject(self, subject: Subject):
-        self._subject = subject
+    def set_x(self, x: float):
+        self._x = x
 
-    def set_content(self, content: object):
-        self._content = content
+    def set_y(self, y: float):
+        self._y = y
