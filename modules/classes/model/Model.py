@@ -17,13 +17,13 @@
 from typing import Optional
 from random import choice
 
-from modules.classes.Model.Grid import Grid
-from modules.classes.Model.Tetromino import Tetromino, tetromino_factory
-from modules.classes.Model.ActiveTetromino import ActiveTetromino
-from modules.classes.Model.Statistics import Statistics
+from modules.classes.utilities.Grid import Grid
+from modules.classes.model.Tetromino import Tetromino, tetromino_factory
+from modules.classes.model.ActiveTetromino import ActiveTetromino
+from modules.classes.utilities.Statistics import Statistics
 
-from modules.classes.Utilities.Direction import Direction
-from modules.classes.Utilities.TetrominoType import TetrominoType
+from modules.classes.utilities.Direction import Direction
+from modules.classes.utilities.TetrominoType import TetrominoType
 
 from modules.settings import GRID_WIDTH, GRID_HEIGHT
 

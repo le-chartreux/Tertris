@@ -1,0 +1,426 @@
+# ==========================================================
+# INFORMATIONS SUR CE PACKAGE :
+# -----------------------------
+# UTILITÉ DE SON CONTENU :
+# Définir la classe View, qui gère la partie Vue du MVC
+# -----------------------------
+# CONTENU :
+# + __slots__
+# + HINTS
+# + __init__()
+# + GETTERS
+# + SETTERS
+# ==========================================================
+
+import curses
+
+from modules.classes.model.ActiveTetromino import ActiveTetromino
+from modules.classes.model.Tetromino import Tetromino
+from modules.classes.utilities.Statistics import Statistics
+
+from modules.classes.utilities.Grid import Grid
+
+from modules.settings import (
+    GRID_WIDTH,
+    GRID_HEIGHT,
+
+    VIEW_GRID_BEGIN_X,
+    VIEW_GRID_BEGIN_Y,
+    VIEW_GRID_WIDTH,
+    VIEW_GRID_HEIGHT,
+
+    VIEW_NEXT_BEGIN_X,
+    VIEW_NEXT_BEGIN_Y,
+    VIEW_NEXT_WIDTH,
+    VIEW_NEXT_HEIGHT,
+
+    VIEW_STORED_BEGIN_X,
+    VIEW_STORED_BEGIN_Y,
+    VIEW_STORED_WIDTH,
+    VIEW_STORED_HEIGHT,
+
+    VIEW_LOGO_BEGIN_X,
+    VIEW_LOGO_BEGIN_Y,
+    VIEW_LOGO_WIDTH,
+    VIEW_LOGO_HEIGHT,
+
+    VIEW_STATISTICS_BEGIN_X,
+    VIEW_STATISTICS_BEGIN_Y,
+    VIEW_STATISTICS_WIDTH,
+    VIEW_STATISTICS_HEIGHT,
+
+    VIEW_KEYBINDS_BEGIN_X,
+    VIEW_KEYBINDS_BEGIN_Y,
+    VIEW_KEYBINDS_WIDTH,
+    VIEW_KEYBINDS_HEIGHT
+)
+
+
+class View:
+    ###############################################################
+    ########################## __SLOTS__ ##########################
+    ###############################################################
+    __slots__ = (
+        "_window_all",
+        "_window_game",
+        "_window_next",
+        "_window_stored",
+        "_window_logo",
+        "_window_statistics",
+        "_window_keymaps"
+    )
+
+    ###############################################################
+    ############################ HINTS ############################
+    ###############################################################
+    _window_all: object
+    _window_game: object
+    _window_next: object
+    _window_stored: object
+    _window_logo: object
+    _window_statistics: object
+    _window_keymaps: object
+
+    ###############################################################
+    ########################## __INIT__ ###########################
+    ###############################################################
+    def __init__(
+            self
+    ) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Crée un objet View, caractérisé par :
+        # - une fenêtre de tout le terminal (_window_all)
+        # - une fenêtre du jeu, partie de _window_all (_window_game)
+        # - une fenêtre des statistiques, partie de _window_all (_window_statistics)
+        # - une fenêtre des touches, partie de _window_all (_window_keymaps)
+        # Et le paramètre pour qu'il soit capable de gérer la partie
+        # =============================
+        window_all = curses.initscr()
+
+        curses.curs_set(False)
+        curses.noecho()
+        curses.cbreak()
+        window_all.keypad(True)
+
+        self.set_window_all(window_all)
+
+        self.set_window_game(
+            curses.newwin(
+                VIEW_GRID_HEIGHT,
+                VIEW_GRID_WIDTH,
+                VIEW_GRID_BEGIN_Y,
+                VIEW_GRID_BEGIN_X
+            )
+        )
+
+        self.set_window_next(
+            curses.newwin(
+                VIEW_NEXT_HEIGHT,
+                VIEW_NEXT_WIDTH,
+                VIEW_NEXT_BEGIN_Y,
+                VIEW_NEXT_BEGIN_X
+            )
+        )
+
+        self.set_window_stored(
+            curses.newwin(
+                VIEW_STORED_HEIGHT,
+                VIEW_STORED_WIDTH,
+                VIEW_STORED_BEGIN_Y,
+                VIEW_STORED_BEGIN_X
+            )
+        )
+
+        self.set_window_logo(
+            curses.newwin(
+                VIEW_LOGO_HEIGHT,
+                VIEW_LOGO_WIDTH,
+                VIEW_LOGO_BEGIN_Y,
+                VIEW_LOGO_BEGIN_X
+            )
+        )
+
+        self.set_window_statistics(
+            curses.newwin(
+                VIEW_STATISTICS_HEIGHT,
+                VIEW_STATISTICS_WIDTH,
+                VIEW_STATISTICS_BEGIN_Y,
+                VIEW_STATISTICS_BEGIN_X
+            )
+        )
+
+        self.set_window_keymaps(
+            curses.newwin(
+                VIEW_KEYBINDS_HEIGHT,
+                VIEW_KEYBINDS_WIDTH,
+                VIEW_KEYBINDS_BEGIN_Y,
+                VIEW_KEYBINDS_BEGIN_X
+            )
+        )
+
+        # Gestion des couleurs
+        set_colorscheme()
+        self.set_backgrounds()
+
+    ###############################################################
+    ########################### __DEL__ ###########################
+    ###############################################################
+    def __del__(self):
+        curses.curs_set(True)
+        curses.nocbreak()
+        self.get_window_all().keypad(False)
+        curses.echo()
+        curses.endwin()
+
+    ###############################################################
+    ########################### GETTERS ###########################
+    ###############################################################
+    def get_window_all(self) -> object:
+        return self._window_all
+
+    def get_window_game(self) -> object:
+        return self._window_game
+
+    def get_window_next(self) -> object:
+        return self._window_next
+
+    def get_window_stored(self) -> object:
+        return self._window_stored
+
+    def get_window_logo(self) -> object:
+        return self._window_logo
+
+    def get_window_statistics(self) -> object:
+        return self._window_statistics
+
+    def get_window_keymaps(self) -> object:
+        return self._window_keymaps
+
+    ###############################################################
+    ########################### SETTERS ###########################
+    ###############################################################
+    def set_window_all(self, window_all) -> None:
+        self._window_all = window_all
+
+    def set_window_game(self, window_game) -> None:
+        self._window_game = window_game
+
+    def set_window_next(self, window_next) -> None:
+        self._window_next = window_next
+
+    def set_window_stored(self, window_stored) -> None:
+        self._window_stored = window_stored
+
+    def set_window_logo(self, window_logo) -> None:
+        self._window_logo = window_logo
+
+    def set_window_statistics(self, window_statistics) -> None:
+        self._window_statistics = window_statistics
+
+    def set_window_keymaps(self, window_keymaps) -> None:
+        self._window_keymaps = window_keymaps
+
+    ###############################################################
+    ####################### SET_BACKGROUNDS #######################
+    ###############################################################
+    def set_backgrounds(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Met les fonds d'écran des différentes fenêtres de la bonne couleur
+        # -----------------------------
+        # PRÉCONDITION :
+        # set_colorscheme() a déjà été appelé
+        # =============================
+        self.get_window_all().bkgd(' ', curses.color_pair(8))
+        self.get_window_game().bkgd(' ', curses.color_pair(8))
+        self.get_window_next().bkgd(' ', curses.color_pair(8))
+        self.get_window_stored().bkgd(' ', curses.color_pair(8))
+        self.get_window_logo().bkgd(' ', curses.color_pair(8))
+        self.get_window_statistics().bkgd(' ', curses.color_pair(8))
+        self.get_window_keymaps().bkgd(' ', curses.color_pair(8))
+
+        self.refresh_all()
+
+    ###############################################################
+    ######################## REFRESH_ALL ##########################
+    ###############################################################
+    def refresh_all(self) -> None:
+        self.get_window_all().refresh()
+        self.get_window_game().refresh()
+        self.get_window_next().refresh()
+        self.get_window_stored().refresh()
+        self.get_window_logo().refresh()
+        self.get_window_statistics().refresh()
+        self.get_window_keymaps().refresh()
+
+    ###############################################################
+    ########################## PRINT_GRID #########################
+    ###############################################################
+    def print_grid(self, grid: Grid) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche la grille de jeu dans la fenêtre de jeu
+        # /!\ pas le tétromino actif ! /!\
+        # =============================
+        for line in range(GRID_HEIGHT):
+            for column in range(GRID_WIDTH):
+                if grid.is_occupied(x=column, y=line):
+                    # On met un bloc
+                    self.get_window_game().addstr(line + 1, column + 1, "#", curses.color_pair(5))
+                else:
+                    # On met un espace pour supprimer un éventuel ancien bloc
+                    self.get_window_game().addstr(line + 1, column + 1, " ", curses.color_pair(8))
+
+        self.get_window_game().refresh()
+
+    ###############################################################
+    ###################### PRINT_GRID_BORDER ######################
+    ###############################################################
+    def print_grid_border(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche la bordure autour de la grille de jeu
+        # =============================
+        # Première ligne
+        self.get_window_game().addstr(0, 0, "+", curses.color_pair(8))
+        self.get_window_game().addstr("--", curses.color_pair(8))
+        self.get_window_game().addstr("Ter-tris", curses.color_pair(8))
+        self.get_window_game().addstr("--", curses.color_pair(8))
+        self.get_window_game().addstr("+", curses.color_pair(8))
+
+        # Lignes intermédiaires
+        for line in range(1, VIEW_GRID_HEIGHT - 1):
+            self.get_window_game().addstr(line, 0, "|", curses.color_pair(8))
+            self.get_window_game().addstr(line, VIEW_GRID_WIDTH - 2, "|", curses.color_pair(8))
+
+        # Dernière ligne
+        self.get_window_game().addstr(VIEW_GRID_HEIGHT - 1, 0, "+", curses.color_pair(8))
+        self.get_window_game().addstr("------------", curses.color_pair(8))
+        self.get_window_game().addstr("+", curses.color_pair(8))
+
+        self.get_window_game().refresh()
+
+    ###############################################################
+    ################### PRINT_ACTIVE_TETROMINO ####################
+    ###############################################################
+    def print_active_tetromino(self, active_tetromino: ActiveTetromino) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche le tétromino actif dans la fenêtre de jeu
+        # =============================
+        for line in range(4):
+            for column in range(4):
+                if active_tetromino.is_occupied(x=column, y=line):
+                    self.get_window_game().addstr(
+                        line + active_tetromino.get_y() + 1,
+                        column + active_tetromino.get_x() + 1,
+                        "#",
+                        curses.A_BOLD | curses.color_pair(5)
+                    )
+
+        self.get_window_game().refresh()
+
+    ###############################################################
+    ###################### PRINT_STATISTICS #######################
+    ###############################################################
+    def print_statistics(self, statistics: Statistics) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche les statistiques dans la fenêtre de statistiques
+        # =============================
+        self.get_window_statistics().addstr(1, 1, "Level: " + str(statistics.get_level()))
+        self.get_window_statistics().addstr(2, 1, "Score: " + str(statistics.get_score()))
+        self.get_window_statistics().addstr(3, 1, "Lines: " + str(statistics.get_lines_completed()))
+        self.get_window_statistics().addstr(4, 1, "Time: " + str(statistics.get_duration()))
+
+        self.get_window_statistics().refresh()
+
+    ###############################################################
+    ################## PRINT_STATISTICS_BORDER ####################
+    ###############################################################
+    def print_statistics_border(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche la bordure autour des statistiques de jeu
+        # =============================
+        # Première ligne
+        self.get_window_statistics().addstr(0, 0, "+", curses.color_pair(8))
+        self.get_window_statistics().addstr("----", curses.color_pair(8))
+        self.get_window_statistics().addstr("Statistics", curses.color_pair(8))
+        self.get_window_statistics().addstr("----", curses.color_pair(8))
+        self.get_window_statistics().addstr("+", curses.color_pair(8))
+
+        # Lignes intermédiaires
+        for line in range(1, VIEW_STATISTICS_HEIGHT - 2):
+            self.get_window_statistics().addstr(line, 0, "|", curses.color_pair(8))
+            self.get_window_statistics().addstr(line, VIEW_STATISTICS_WIDTH - 1, "|", curses.color_pair(8))
+
+        # Dernière ligne
+        self.get_window_statistics().addstr(VIEW_STATISTICS_HEIGHT - 2, 0, "+", curses.color_pair(8))
+        self.get_window_statistics().addstr("------------------", curses.color_pair(8))
+        self.get_window_statistics().addstr("+", curses.color_pair(8))
+
+        self.get_window_statistics().refresh()
+
+    ###############################################################
+    ######################## PRINT_KEYMAPS ########################
+    ###############################################################
+    def print_keymaps(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche les raccourcis dans la fenêtre de raccourcis
+        # =============================
+        self.get_window_keymaps().addstr(0, 1, "Keybinds:", curses.A_BOLD)
+        self.get_window_keymaps().addstr(1, 1, "Arrow-left: Left")
+        self.get_window_keymaps().addstr(2, 1, "Arrow-right: Right")
+        self.get_window_keymaps().addstr(3, 1, "Arrow-down: Down")
+        self.get_window_keymaps().addstr(4, 1, "S: Rotate left")
+        self.get_window_keymaps().addstr(5, 1, "F: Rotate right")
+        self.get_window_keymaps().addstr(6, 1, "Esc: Quit")
+
+        self.get_window_keymaps().refresh()
+
+    ###############################################################
+    ########################## WAIT_ESC ###########################
+    ###############################################################
+    def wait_esc(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Attend que l'utilisateur appuie sur Esc
+        # =============================
+        while self.get_window_all().getch() != 27:
+            pass
+
+
+###############################################################
+###################### SET_COLORSCHEME ########################
+###############################################################
+def set_colorscheme() -> None:
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_WHITE)  # I
+    curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_WHITE)  # O
+    curses.init_pair(3, curses.COLOR_MAGENTA, curses.COLOR_WHITE)  # T
+    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_WHITE)  # L
+    curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_WHITE)  # J
+    curses.init_pair(6, curses.COLOR_RED, curses.COLOR_WHITE)  # Z
+    curses.init_pair(7, curses.COLOR_GREEN, curses.COLOR_WHITE)   # S
+    curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_WHITE)  # Background & texts

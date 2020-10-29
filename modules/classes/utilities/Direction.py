@@ -9,7 +9,7 @@
 # ==========================================================
 
 from enum import Enum
-from modules.classes.Utilities.Position import Position
+from modules.classes.utilities.Position import Position
 
 
 class Direction(Enum):

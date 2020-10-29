@@ -12,8 +12,8 @@
 # + SETTERS
 # ==========================================================
 
-from modules.classes.Model.Model import Model
-from modules.classes.View.View import View
+from modules.classes.model.Model import Model
+from modules.classes.view.View import View
 
 
 class Controller:

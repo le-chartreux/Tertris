@@ -15,6 +15,7 @@
 # ==========================================================
 
 import time
+from typing import Optional
 
 
 class Statistics:
@@ -94,14 +95,17 @@ class Statistics:
     ###############################################################
     ######################### GET_DURATION ########################
     ###############################################################
-    def get_duration(self, end_time: float) -> float:
+    def get_duration(self, end_time: Optional[float] = None) -> int:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
         # Retourne la durée, en secondes, depuis le temps de début
         # =============================
-        return end_time - self.get_begin_time()
+        if end_time is None:
+            return int(time.time() - self.get_begin_time())
+        else:
+            return int(end_time - self.get_begin_time())
 
     ###############################################################
     ########################### GET_SPEED #########################

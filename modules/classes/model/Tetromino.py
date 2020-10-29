@@ -14,7 +14,7 @@
 # ==========================================================
 from typing import List
 
-from modules.classes.Utilities.TetrominoType import TetrominoType
+from modules.classes.utilities.TetrominoType import TetrominoType
 
 
 class Tetromino:

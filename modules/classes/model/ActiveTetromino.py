@@ -15,10 +15,10 @@
 
 from typing import List, Optional
 
-from modules.classes.Model.Tetromino import Tetromino
+from modules.classes.model.Tetromino import Tetromino
 
-from modules.classes.Utilities.Position import Position
-from modules.classes.Utilities.Direction import Direction
+from modules.classes.utilities.Position import Position
+from modules.classes.utilities.Direction import Direction
 
 
 class ActiveTetromino(Tetromino):
