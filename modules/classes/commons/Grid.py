@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe Grid, qui sert à représenter la grille de jeu du côté modèle
+# Définir la classe Grid, qui sert à représenter la grille de jeu
 # -----------------------------
 # CONTENU :
 # + __slots__
@@ -14,6 +14,8 @@
 # ==========================================================
 
 from typing import List
+
+from modules.classes.commons.ActiveTetromino import ActiveTetromino
 
 from modules.settings import GRID_HEIGHT, GRID_WIDTH
 
@@ -71,4 +73,26 @@ class Grid:
     ######################### IS_OCCUPIED #########################
     ###############################################################
     def is_occupied(self, x: int, y: int) -> bool:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne si la case est occupée par un bloc
+        # =============================
         return self.get_shape()[y][x]
+
+    ###############################################################
+    #################### ADD_ACTIVE_TETROMINO #####################
+    ###############################################################
+    def add_active_tetromino(self, active_tetromino: ActiveTetromino):
+        for line in range(4):
+            for column in range(4):
+                self.get_shape()[
+                        line + int(active_tetromino.get_y())
+                    ][
+                        column + int(active_tetromino.get_x())
+                    ] = self.is_occupied(
+                        x=column + int(active_tetromino.get_x()),
+                        y=line + int(active_tetromino.get_y())
+                    ) and active_tetromino.is_occupied(x=column, y=line)
+
