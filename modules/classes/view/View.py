@@ -14,11 +14,11 @@
 
 import curses
 
-from modules.classes.model.ActiveTetromino import ActiveTetromino
-from modules.classes.model.Tetromino import Tetromino
-from modules.classes.utilities.Statistics import Statistics
+from modules.classes.commons.ActiveTetromino import ActiveTetromino
+from modules.classes.commons.Tetromino import Tetromino
+from modules.classes.commons.Statistics import Statistics
 
-from modules.classes.utilities.Grid import Grid
+from modules.classes.commons.Grid import Grid
 
 from modules.settings import (
     GRID_WIDTH,
@@ -332,6 +332,145 @@ class View:
         self.get_window_game().refresh()
 
     ###############################################################
+    ########################## PRINT_NEXT #########################
+    ###############################################################
+    def print_next(self, next_tetromino: Tetromino):
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche le tétromino suivant dans la fenêtre next
+        # =============================
+        for line in range(4):
+            for column in range(4):
+                if next_tetromino.is_occupied(x=column, y=line):
+                    self.get_window_next().addstr(
+                        line + 1,
+                        column + 1,
+                        "#",
+                        curses.A_BOLD | curses.color_pair(5)
+                    )
+
+        self.get_window_next().refresh()
+
+    ###############################################################
+    ##################### PRINT_NEXT_BORDER #######################
+    ###############################################################
+    def print_next_border(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche la bordure autour du tetromino suivant
+        # =============================
+        # Première ligne
+        self.get_window_next().addstr(0, 0, "+", curses.color_pair(8))
+        self.get_window_next().addstr("Next", curses.color_pair(8))
+        self.get_window_next().addstr("+", curses.color_pair(8))
+
+        # Lignes intermédiaires
+        for line in range(1, VIEW_NEXT_HEIGHT - 2):
+            self.get_window_next().addstr(line, 0, "|", curses.color_pair(8))
+            self.get_window_next().addstr(line, VIEW_NEXT_WIDTH - 1, "|", curses.color_pair(8))
+
+        # Dernière ligne
+        self.get_window_next().addstr(VIEW_NEXT_HEIGHT - 2, 0, "+", curses.color_pair(8))
+        self.get_window_next().addstr("----", curses.color_pair(8))
+        self.get_window_next().addstr("+", curses.color_pair(8))
+
+        self.get_window_next().refresh()
+
+    ###############################################################
+    ######################## PRINT_STORED #########################
+    ###############################################################
+    def print_stored(self, stored_tetromino: Tetromino):
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche le tétromino suivant dans la fenêtre stored
+        # =============================
+        for line in range(4):
+            for column in range(4):
+                if stored_tetromino.is_occupied(x=column, y=line):
+                    self.get_window_stored().addstr(
+                        line + 1,
+                        column + 1,
+                        "#",
+                        curses.A_BOLD | curses.color_pair(5)
+                    )
+
+        self.get_window_stored().refresh()
+
+    ###############################################################
+    ################### PRINT_STORED_BORDER #######################
+    ###############################################################
+    def print_stored_border(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche la bordure autour du tetromino stocké
+        # =============================
+        # Première ligne
+        self.get_window_stored().addstr(0, 0, "Stored", curses.color_pair(8))
+
+        # Lignes intermédiaires
+        for line in range(1, VIEW_STORED_HEIGHT - 2):
+            self.get_window_stored().addstr(line, 0, "|", curses.color_pair(8))
+            self.get_window_stored().addstr(line, VIEW_STORED_WIDTH - 1, "|", curses.color_pair(8))
+
+        # Dernière ligne
+        self.get_window_stored().addstr(VIEW_STORED_HEIGHT - 2, 0, "+", curses.color_pair(8))
+        self.get_window_stored().addstr("----", curses.color_pair(8))
+        self.get_window_stored().addstr("+", curses.color_pair(8))
+
+        self.get_window_stored().refresh()
+
+    ###############################################################
+    ########################## PRINT_LOGO #########################
+    ###############################################################
+    def print_logo(self):
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche le logo dans la fenêtre logo
+        # =============================
+        self.get_window_logo().addstr(2, 1, ">", curses.color_pair(8))
+        self.get_window_logo().addstr("###", curses.color_pair(6))
+        self.get_window_logo().addstr(3, 3, "#", curses.color_pair(6))
+
+        self.get_window_stored().refresh()
+
+    ###############################################################
+    ##################### PRINT_LOGO_BORDER #######################
+    ###############################################################
+    def print_logo_border(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche la bordure autour du logo
+        # =============================
+        # Première ligne
+        self.get_window_logo().addstr(0, 0, "+", curses.color_pair(8))
+        self.get_window_logo().addstr("Logo", curses.color_pair(8))
+        self.get_window_logo().addstr("+", curses.color_pair(8))
+
+        # Lignes intermédiaires
+        for line in range(1, VIEW_LOGO_HEIGHT - 2):
+            self.get_window_logo().addstr(line, 0, "|", curses.color_pair(8))
+            self.get_window_logo().addstr(line, VIEW_LOGO_WIDTH - 1, "|", curses.color_pair(8))
+
+        # Dernière ligne
+        self.get_window_logo().addstr(VIEW_LOGO_HEIGHT - 2, 0, "+", curses.color_pair(8))
+        self.get_window_logo().addstr("----", curses.color_pair(8))
+        self.get_window_logo().addstr("+", curses.color_pair(8))
+
+        self.get_window_logo().refresh()
+
+    ###############################################################
     ###################### PRINT_STATISTICS #######################
     ###############################################################
     def print_statistics(self, statistics: Statistics) -> None:
@@ -387,13 +526,42 @@ class View:
         # UTILITÉ :
         # Affiche les raccourcis dans la fenêtre de raccourcis
         # =============================
-        self.get_window_keymaps().addstr(0, 1, "Keybinds:", curses.A_BOLD)
         self.get_window_keymaps().addstr(1, 1, "Arrow-left: Left")
         self.get_window_keymaps().addstr(2, 1, "Arrow-right: Right")
         self.get_window_keymaps().addstr(3, 1, "Arrow-down: Down")
-        self.get_window_keymaps().addstr(4, 1, "S: Rotate left")
-        self.get_window_keymaps().addstr(5, 1, "F: Rotate right")
-        self.get_window_keymaps().addstr(6, 1, "Esc: Quit")
+
+        self.get_window_keymaps().addstr(5, 1, "S: Rotate left")
+        self.get_window_keymaps().addstr(6, 1, "F: Rotate right")
+        self.get_window_keymaps().addstr(7, 1, "Esc: Quit")
+
+        self.get_window_keymaps().refresh()
+
+    ###############################################################
+    ##################### PRINT_KEYMAPS_BORDER ####################
+    ###############################################################
+    def print_keymaps_border(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Affiche la bordure autour des raccourcis
+        # =============================
+        # Première ligne
+        self.get_window_keymaps().addstr(0, 0, "+", curses.color_pair(8))
+        self.get_window_keymaps().addstr("-----", curses.color_pair(8))
+        self.get_window_keymaps().addstr("Keybinds", curses.color_pair(8))
+        self.get_window_keymaps().addstr("-----", curses.color_pair(8))
+        self.get_window_keymaps().addstr("+", curses.color_pair(8))
+
+        # Lignes intermédiaires
+        for line in range(1, VIEW_KEYBINDS_HEIGHT - 2):
+            self.get_window_keymaps().addstr(line, 0, "|", curses.color_pair(8))
+            self.get_window_keymaps().addstr(line, VIEW_KEYBINDS_WIDTH - 1, "|", curses.color_pair(8))
+
+        # Dernière ligne
+        self.get_window_keymaps().addstr(VIEW_KEYBINDS_HEIGHT - 2, 0, "+", curses.color_pair(8))
+        self.get_window_keymaps().addstr("------------------", curses.color_pair(8))
+        self.get_window_keymaps().addstr("+", curses.color_pair(8))
 
         self.get_window_keymaps().refresh()
 
