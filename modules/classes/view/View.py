@@ -104,6 +104,7 @@ class View:
         curses.noecho()
         curses.cbreak()
         window_all.keypad(True)
+        window_all.nodelay(True)
 
         self.set_window_all(window_all)
 
@@ -566,6 +567,12 @@ class View:
         self.get_window_keymaps().refresh()
 
     ###############################################################
+    ###################### GET_PLAYER_INPUT #######################
+    ###############################################################
+    def get_player_input(self) -> str:
+        pass
+
+    ###############################################################
     ########################## WAIT_ESC ###########################
     ###############################################################
     def wait_esc(self) -> None:
@@ -575,8 +582,10 @@ class View:
         # UTILITÉ :
         # Attend que l'utilisateur appuie sur Esc
         # =============================
-        while self.get_window_all().getch() != 27:
-            pass
+        from time import sleep
+        while self.get_window_logo().getch() != 27:
+            # pour une raison curse (lul), le code est + rapide si on getch() sur une petite fenêtre
+            sleep(0.03)
 
 
 ###############################################################
