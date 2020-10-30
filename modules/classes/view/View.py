@@ -273,7 +273,7 @@ class View:
             for column in range(GRID_WIDTH):
                 if grid.is_occupied(x=column, y=line):
                     # On met un bloc
-                    self.get_window_game().addstr(line + 1, column + 1, "#", curses.color_pair(5))
+                    self.get_window_game().addstr(line + 1, column + 1, "█", curses.color_pair(5))
                 else:
                     # On met un espace pour supprimer un éventuel ancien bloc
                     self.get_window_game().addstr(line + 1, column + 1, " ", curses.color_pair(8))
@@ -291,21 +291,21 @@ class View:
         # Affiche la bordure autour de la grille de jeu
         # =============================
         # Première ligne
-        self.get_window_game().addstr(0, 0, "+", curses.color_pair(8))
-        self.get_window_game().addstr("--", curses.color_pair(8))
-        self.get_window_game().addstr("Ter-tris", curses.color_pair(8))
-        self.get_window_game().addstr("--", curses.color_pair(8))
-        self.get_window_game().addstr("+", curses.color_pair(8))
+        self.get_window_game().addstr(0, 0, "╔", curses.color_pair(8))
+        self.get_window_game().addstr("══", curses.color_pair(8))
+        self.get_window_game().addstr("════════", curses.color_pair(8))
+        self.get_window_game().addstr("══", curses.color_pair(8))
+        self.get_window_game().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
         for line in range(1, VIEW_GRID_HEIGHT - 1):
-            self.get_window_game().addstr(line, 0, "|", curses.color_pair(8))
-            self.get_window_game().addstr(line, VIEW_GRID_WIDTH - 2, "|", curses.color_pair(8))
+            self.get_window_game().addstr(line, 0, "║", curses.color_pair(8))
+            self.get_window_game().addstr(line, VIEW_GRID_WIDTH - 2, "║", curses.color_pair(8))
 
         # Dernière ligne
-        self.get_window_game().addstr(VIEW_GRID_HEIGHT - 1, 0, "+", curses.color_pair(8))
-        self.get_window_game().addstr("------------", curses.color_pair(8))
-        self.get_window_game().addstr("+", curses.color_pair(8))
+        self.get_window_game().addstr(VIEW_GRID_HEIGHT - 1, 0, "╚", curses.color_pair(8))
+        self.get_window_game().addstr("════════════", curses.color_pair(8))
+        self.get_window_game().addstr("╝", curses.color_pair(8))
 
         self.get_window_game().refresh()
 
@@ -325,7 +325,7 @@ class View:
                     self.get_window_game().addstr(
                         line + active_tetromino.get_y() + 1,
                         column + active_tetromino.get_x() + 1,
-                        "#",
+                        "█",
                         curses.A_BOLD | curses.color_pair(5)
                     )
 
@@ -347,7 +347,7 @@ class View:
                     self.get_window_next().addstr(
                         line + 1,
                         column + 1,
-                        "#",
+                        "█",
                         curses.A_BOLD | curses.color_pair(5)
                     )
 
@@ -364,19 +364,19 @@ class View:
         # Affiche la bordure autour du tetromino suivant
         # =============================
         # Première ligne
-        self.get_window_next().addstr(0, 0, "+", curses.color_pair(8))
+        self.get_window_next().addstr(0, 0, "╔", curses.color_pair(8))
         self.get_window_next().addstr("Next", curses.color_pair(8))
-        self.get_window_next().addstr("+", curses.color_pair(8))
+        self.get_window_next().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
         for line in range(1, VIEW_NEXT_HEIGHT - 2):
-            self.get_window_next().addstr(line, 0, "|", curses.color_pair(8))
-            self.get_window_next().addstr(line, VIEW_NEXT_WIDTH - 1, "|", curses.color_pair(8))
+            self.get_window_next().addstr(line, 0, "║", curses.color_pair(8))
+            self.get_window_next().addstr(line, VIEW_NEXT_WIDTH - 1, "║", curses.color_pair(8))
 
         # Dernière ligne
-        self.get_window_next().addstr(VIEW_NEXT_HEIGHT - 2, 0, "+", curses.color_pair(8))
-        self.get_window_next().addstr("----", curses.color_pair(8))
-        self.get_window_next().addstr("+", curses.color_pair(8))
+        self.get_window_next().addstr(VIEW_NEXT_HEIGHT - 2, 0, "╚", curses.color_pair(8))
+        self.get_window_next().addstr("════", curses.color_pair(8))
+        self.get_window_next().addstr("╝", curses.color_pair(8))
 
         self.get_window_next().refresh()
 
@@ -396,7 +396,7 @@ class View:
                     self.get_window_stored().addstr(
                         line + 1,
                         column + 1,
-                        "#",
+                        "█",
                         curses.A_BOLD | curses.color_pair(5)
                     )
 
@@ -417,13 +417,13 @@ class View:
 
         # Lignes intermédiaires
         for line in range(1, VIEW_STORED_HEIGHT - 2):
-            self.get_window_stored().addstr(line, 0, "|", curses.color_pair(8))
-            self.get_window_stored().addstr(line, VIEW_STORED_WIDTH - 1, "|", curses.color_pair(8))
+            self.get_window_stored().addstr(line, 0, "║", curses.color_pair(8))
+            self.get_window_stored().addstr(line, VIEW_STORED_WIDTH - 1, "║", curses.color_pair(8))
 
         # Dernière ligne
-        self.get_window_stored().addstr(VIEW_STORED_HEIGHT - 2, 0, "+", curses.color_pair(8))
-        self.get_window_stored().addstr("----", curses.color_pair(8))
-        self.get_window_stored().addstr("+", curses.color_pair(8))
+        self.get_window_stored().addstr(VIEW_STORED_HEIGHT - 2, 0, "╚", curses.color_pair(8))
+        self.get_window_stored().addstr("════", curses.color_pair(8))
+        self.get_window_stored().addstr("╝", curses.color_pair(8))
 
         self.get_window_stored().refresh()
 
@@ -438,8 +438,8 @@ class View:
         # Affiche le logo dans la fenêtre logo
         # =============================
         self.get_window_logo().addstr(2, 1, ">", curses.color_pair(8))
-        self.get_window_logo().addstr("###", curses.color_pair(6))
-        self.get_window_logo().addstr(3, 3, "#", curses.color_pair(6))
+        self.get_window_logo().addstr("███", curses.color_pair(6))
+        self.get_window_logo().addstr(3, 3, "█", curses.color_pair(6))
 
         self.get_window_stored().refresh()
 
@@ -454,19 +454,19 @@ class View:
         # Affiche la bordure autour du logo
         # =============================
         # Première ligne
-        self.get_window_logo().addstr(0, 0, "+", curses.color_pair(8))
+        self.get_window_logo().addstr(0, 0, "╔", curses.color_pair(8))
         self.get_window_logo().addstr("Logo", curses.color_pair(8))
-        self.get_window_logo().addstr("+", curses.color_pair(8))
+        self.get_window_logo().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
         for line in range(1, VIEW_LOGO_HEIGHT - 2):
-            self.get_window_logo().addstr(line, 0, "|", curses.color_pair(8))
-            self.get_window_logo().addstr(line, VIEW_LOGO_WIDTH - 1, "|", curses.color_pair(8))
+            self.get_window_logo().addstr(line, 0, "║", curses.color_pair(8))
+            self.get_window_logo().addstr(line, VIEW_LOGO_WIDTH - 1, "║", curses.color_pair(8))
 
         # Dernière ligne
-        self.get_window_logo().addstr(VIEW_LOGO_HEIGHT - 2, 0, "+", curses.color_pair(8))
-        self.get_window_logo().addstr("----", curses.color_pair(8))
-        self.get_window_logo().addstr("+", curses.color_pair(8))
+        self.get_window_logo().addstr(VIEW_LOGO_HEIGHT - 2, 0, "╚", curses.color_pair(8))
+        self.get_window_logo().addstr("════", curses.color_pair(8))
+        self.get_window_logo().addstr("╝", curses.color_pair(8))
 
         self.get_window_logo().refresh()
 
@@ -498,21 +498,21 @@ class View:
         # Affiche la bordure autour des statistiques de jeu
         # =============================
         # Première ligne
-        self.get_window_statistics().addstr(0, 0, "+", curses.color_pair(8))
-        self.get_window_statistics().addstr("----", curses.color_pair(8))
+        self.get_window_statistics().addstr(0, 0, "╔", curses.color_pair(8))
+        self.get_window_statistics().addstr("════", curses.color_pair(8))
         self.get_window_statistics().addstr("Statistics", curses.color_pair(8))
-        self.get_window_statistics().addstr("----", curses.color_pair(8))
-        self.get_window_statistics().addstr("+", curses.color_pair(8))
+        self.get_window_statistics().addstr("════", curses.color_pair(8))
+        self.get_window_statistics().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
         for line in range(1, VIEW_STATISTICS_HEIGHT - 2):
-            self.get_window_statistics().addstr(line, 0, "|", curses.color_pair(8))
-            self.get_window_statistics().addstr(line, VIEW_STATISTICS_WIDTH - 1, "|", curses.color_pair(8))
+            self.get_window_statistics().addstr(line, 0, "║", curses.color_pair(8))
+            self.get_window_statistics().addstr(line, VIEW_STATISTICS_WIDTH - 1, "║", curses.color_pair(8))
 
         # Dernière ligne
-        self.get_window_statistics().addstr(VIEW_STATISTICS_HEIGHT - 2, 0, "+", curses.color_pair(8))
-        self.get_window_statistics().addstr("------------------", curses.color_pair(8))
-        self.get_window_statistics().addstr("+", curses.color_pair(8))
+        self.get_window_statistics().addstr(VIEW_STATISTICS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
+        self.get_window_statistics().addstr("══════════════════", curses.color_pair(8))
+        self.get_window_statistics().addstr("╝", curses.color_pair(8))
 
         self.get_window_statistics().refresh()
 
@@ -547,21 +547,21 @@ class View:
         # Affiche la bordure autour des raccourcis
         # =============================
         # Première ligne
-        self.get_window_keymaps().addstr(0, 0, "+", curses.color_pair(8))
-        self.get_window_keymaps().addstr("-----", curses.color_pair(8))
+        self.get_window_keymaps().addstr(0, 0, "╔", curses.color_pair(8))
+        self.get_window_keymaps().addstr("═════", curses.color_pair(8))
         self.get_window_keymaps().addstr("Keybinds", curses.color_pair(8))
-        self.get_window_keymaps().addstr("-----", curses.color_pair(8))
-        self.get_window_keymaps().addstr("+", curses.color_pair(8))
+        self.get_window_keymaps().addstr("═════", curses.color_pair(8))
+        self.get_window_keymaps().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
         for line in range(1, VIEW_KEYBINDS_HEIGHT - 2):
-            self.get_window_keymaps().addstr(line, 0, "|", curses.color_pair(8))
-            self.get_window_keymaps().addstr(line, VIEW_KEYBINDS_WIDTH - 1, "|", curses.color_pair(8))
+            self.get_window_keymaps().addstr(line, 0, "║", curses.color_pair(8))
+            self.get_window_keymaps().addstr(line, VIEW_KEYBINDS_WIDTH - 1, "║", curses.color_pair(8))
 
         # Dernière ligne
-        self.get_window_keymaps().addstr(VIEW_KEYBINDS_HEIGHT - 2, 0, "+", curses.color_pair(8))
-        self.get_window_keymaps().addstr("------------------", curses.color_pair(8))
-        self.get_window_keymaps().addstr("+", curses.color_pair(8))
+        self.get_window_keymaps().addstr(VIEW_KEYBINDS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
+        self.get_window_keymaps().addstr("══════════════════", curses.color_pair(8))
+        self.get_window_keymaps().addstr("╝", curses.color_pair(8))
 
         self.get_window_keymaps().refresh()
 
