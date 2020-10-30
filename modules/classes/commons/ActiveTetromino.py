@@ -19,6 +19,7 @@ from modules.classes.commons.Tetromino import Tetromino
 
 from modules.classes.commons.Position import Position
 from modules.classes.commons.Direction import Direction
+from modules.classes.commons.Rotation import Rotation
 
 
 class ActiveTetromino(Tetromino):
@@ -99,3 +100,28 @@ class ActiveTetromino(Tetromino):
         # =============================
         self.set_x(self.get_x() + direction.value.get_x())
         self.set_y(self.get_y() + direction.value.get_y())
+
+    ###############################################################
+    ########################### ROTATE ############################
+    ###############################################################
+    def rotate(self, rotation: Rotation):
+        # Création de la nouvelle forme :
+        new_shape = []
+        for line in range(4):
+            new_shape.append([False, False, False, False])
+
+        # Rotation
+        if rotation == Rotation.LEFT:
+            for i in range(4):
+                self.get_shape()[i].reverse()
+        elif rotation == Rotation.RIGHT:
+            self.get_shape().reverse()
+        else:
+            raise ValueError("Error: impossible to rotate the active tetromino: rotation argument incorrect")
+
+        for line in range(4):
+            for column in range(4):
+                new_shape[line][column] = self.get_shape()[column][line]
+
+        # Assignation de la nouvelle forme
+        self.set_shape(new_shape)
