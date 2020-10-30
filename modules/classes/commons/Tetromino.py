@@ -62,6 +62,12 @@ class Tetromino:
     ######################### IS_OCCUPIED #########################
     ###############################################################
     def is_occupied(self, x: int, y: int) -> bool:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne si le tétromino a un bloc à cet emplacement dans sa grille
+        # =============================
         return self.get_shape()[y][x]
 
 
@@ -69,6 +75,12 @@ class Tetromino:
 ##################### TETROMINO_FACTORY #######################
 ###############################################################
 def tetromino_factory(tetromino_type: TetrominoType) -> Tetromino:
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Crée un tétromino correspondant au TetrominoType donné
+    # =============================
     if tetromino_type == TetrominoType.I:
         return Tetromino(
             [

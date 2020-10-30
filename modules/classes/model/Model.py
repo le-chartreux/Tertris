@@ -175,7 +175,7 @@ class Model:
                         )
                         and
                         self.get_active_tetromino().get_shape()[line][column]
-                   )
+                    )
                 )
                 column += 1
             line += 1
@@ -186,4 +186,10 @@ class Model:
 ################### RANDOM_NEXT_TETROMINO #####################
 ###############################################################
 def random_next_tetromino() -> Tetromino:
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Tire au hazard le prochain tétromino
+    # =============================
     return tetromino_factory(choice(list(TetrominoType)))

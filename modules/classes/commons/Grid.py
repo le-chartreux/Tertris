@@ -10,7 +10,8 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
-# + get_duration
+# + is_occupied()
+# + add_active_tetromino()
 # ==========================================================
 
 from typing import List
@@ -85,6 +86,12 @@ class Grid:
     #################### ADD_ACTIVE_TETROMINO #####################
     ###############################################################
     def add_active_tetromino(self, active_tetromino: ActiveTetromino):
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Ajoute le tétromino actuel dans la grille
+        # =============================
         for line in range(4):
             for column in range(4):
                 self.get_shape()[

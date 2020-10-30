@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe Statistics, qui sert à contenir les informations liées aux statistiques de la partie
+# Définir la classe Statistics, conteneur des statistiques de la partie en cours
 # -----------------------------
 # CONTENU :
 # + __slots__
@@ -115,6 +115,6 @@ class Statistics:
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Retourne la vitesse de chute du tétromino du joueur, en case / seconde
+        # Retourne la vitesse de chute du tétromino du joueur, en cases / seconde
         # =============================
         return self.get_level()

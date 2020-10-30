@@ -11,6 +11,7 @@
 # + GETTERS
 # + SETTERS
 # + move()
+# + rotate()
 # ==========================================================
 
 from typing import List, Optional

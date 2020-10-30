@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe Color, qui sert à représenter une couleur
+# Définir la classe Color, qui sert à représenter une couleur (actuellement inutile)
 # -----------------------------
 # CONTENU :
 # + __slots__
