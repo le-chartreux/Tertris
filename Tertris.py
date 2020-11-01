@@ -8,10 +8,9 @@ try:
     while(True):
         controller.setup()
         controller.do_tick()
-        sleep(0.1)
+        sleep(0.05)
 
-except Exception as ex:
+except:  # Pour avoir le message d'erreur et ne pas mess le terminal de l'utilisateur
     error_output = open("error_output.txt", "w")
     error_output.write(traceback.format_exc())
-    raise ex
-
+    error_output.close()
