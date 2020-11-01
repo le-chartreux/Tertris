@@ -92,6 +92,18 @@ class Statistics:
         self._begin_time = begin_time
 
     ###############################################################
+    ############################ ADDERS ###########################
+    ###############################################################
+    def add_level(self, level_to_add: int) -> None:
+        self.set_level(self.get_level() + level_to_add)
+
+    def add_score(self, score_to_add: int) -> None:
+        self.set_score(self.get_score() + score_to_add)
+
+    def add_lines_completed(self, lines_completed_to_add: int) -> None:
+        self.set_lines_completed(self.get_lines_completed() + lines_completed_to_add)
+
+    ###############################################################
     ######################### GET_DURATION ########################
     ###############################################################
     def get_duration(self, end_time: Optional[float] = None) -> int:
@@ -105,3 +117,24 @@ class Statistics:
             return int(time.time() - self.get_begin_time())
         else:
             return int(end_time - self.get_begin_time())
+
+    ###############################################################
+    #################### GET_POINTS_FOR_LINES #####################
+    ###############################################################
+    def get_points_for_lines(self, number_of_lines: int) -> int:
+        multiplier = 0
+        if number_of_lines == 1:
+            multiplier = 40
+        elif number_of_lines == 2:
+            multiplier = 100
+        elif number_of_lines == 3:
+            multiplier = 300
+        elif number_of_lines == 4:
+            multiplier = 1200
+        return multiplier * (self.get_level() + 1)
+
+    ###############################################################
+    #################### ADD_POINTS_FOR_LINES #####################
+    ###############################################################
+    def add_points_for_lines(self, number_of_lines: int) -> None:
+        self.add_score(self.get_points_for_lines(number_of_lines))

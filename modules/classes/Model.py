@@ -178,6 +178,7 @@ class Model:
         #   générer un nouveau prochain tétromino
         #   autoriser le joueur à switcher à nouveau
         #   regarder si des lignes ont été complétées
+        #   ajouter les lignes complétées et les points engendrés aux statistiques
         # =============================
         if self.have_to_go_down():
             self.set_last_down(time())
@@ -190,10 +191,13 @@ class Model:
                 self.set_can_player_switch(True)
 
                 # On regarde si des lignes ont été remplies :
+                number_of_completed_lines = 0
                 for line in range(GRID_HEIGHT):
                     if self.get_grid().is_line_full(line):
                         self.get_grid().drop_lines_upper(line)
-                        self.get_statistics().set_lines_completed(self.get_statistics().get_lines_completed() + 1)
+                        number_of_completed_lines += 1
+                self.get_statistics().add_lines_completed(number_of_completed_lines)
+                self.get_statistics().add_points_for_lines(number_of_completed_lines)
 
     ###############################################################
     ################# CAN_ACTIVE_TETROMINO_MOVE ###################
