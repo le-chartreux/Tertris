@@ -12,6 +12,8 @@
 # + SETTERS
 # ==========================================================
 
+from time import sleep
+
 from modules.classes.model.Model import Model
 from modules.classes.view.View import View
 
@@ -101,10 +103,8 @@ class Controller:
             while player_action == PlayerAction.MISSCLIC:
                 player_action = self.get_view().get_player_input()
 
-            if player_action == PlayerAction.QUIT_GAME:
-                exit()
             # Déplacements
-            elif (
+            if (
                     player_action == PlayerAction.MOVE_ACTIVE_TETROMINO_RIGHT
                     and self.get_model().can_active_tetromino_move(Direction.RIGHT)
             ):
@@ -120,10 +120,31 @@ class Controller:
             ):
                 self.get_model().get_active_tetromino().move(Direction.DOWN)
             # Rotations
-            elif player_action == PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT:
+            elif (
+                    player_action == PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
+                    and self.get_model().can_active_tetromino_rotate(Rotation.RIGHT)
+            ):
                 self.get_model().get_active_tetromino().rotate(Rotation.RIGHT)
-            elif player_action == PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT:
+            elif (
+                    player_action == PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT
+                    and self.get_model().can_active_tetromino_rotate(Rotation.LEFT)
+            ):
                 self.get_model().get_active_tetromino().rotate(Rotation.LEFT)
+            # Stockage
+            elif (
+                    player_action == PlayerAction.STORE_ACTIVE_TETROMINO
+                    and self.get_model().get_can_player_switch()
+            ):
+                self.get_model().swap_active_and_stored()
+                self.get_model().set_can_player_switch(False)
+            # Pause
+            elif player_action == PlayerAction.PAUSE_GAME:
+                player_action = self.get_view().get_player_input()
+                while player_action != PlayerAction.PAUSE_GAME and player_action != PlayerAction.QUIT_GAME:
+                    player_action = self.get_view().get_player_input()
+                    sleep(0.1)
+            if player_action == PlayerAction.QUIT_GAME:
+                exit()
 
         # Gestion des actions normales du modèle :
         self.get_model().do_tick()
@@ -134,4 +155,3 @@ class Controller:
         self.get_view().print_next(self.get_model().get_next_tetromino())
         self.get_view().print_stored(self.get_model().get_stored_tetromino())
         self.get_view().print_statistics(self.get_model().get_statistics())
-

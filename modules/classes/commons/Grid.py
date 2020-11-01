@@ -83,6 +83,41 @@ class Grid:
         return self.get_shape()[y][x]
 
     ###############################################################
+    ######################## IS_LINE_FULL #########################
+    ###############################################################
+    def is_line_full(self, line_number: int) -> bool:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne si la ligne est remplie
+        # =============================
+        column = 0
+        while column < GRID_WIDTH and self.is_occupied(x=column, y=line_number):
+            column += 1
+        return column == GRID_WIDTH
+
+    ###############################################################
+    ###################### DROP_LINES_UPPER #######################
+    ###############################################################
+    def drop_lines_upper(self, line_number: int):
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Remplace la ligne par la ligne au-dessus, la ligne au-dessus par celle d'encore au-dessus, etc.
+        # =============================
+        # On remplace la ligne par la ligne au-dessus, la ligne au-dessus par celle d'encore au-dessus, etc.
+        line = line_number
+        while line != 0:
+            self.get_shape()[line] = self.get_shape()[line - 1]
+            line -= 1
+        # On remplie la ligne la plus en haut de False
+        for column in range(GRID_WIDTH):
+            self.get_shape()[0][column] = False
+
+
+    ###############################################################
     #################### ADD_ACTIVE_TETROMINO #####################
     ###############################################################
     def add_active_tetromino(self, active_tetromino: ActiveTetromino):
@@ -106,4 +141,3 @@ class Grid:
                             x=column + int(active_tetromino.get_x()),
                             y=line + int(active_tetromino.get_y())
                         ) or active_tetromino.is_occupied(x=column, y=line)
-
