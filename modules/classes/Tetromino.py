@@ -12,9 +12,10 @@
 # + SETTERS
 # + is_occupied()
 # ==========================================================
+
 from typing import List
 
-from modules.classes.commons.TetrominoType import TetrominoType
+from modules.classes.TetrominoType import TetrominoType
 
 
 class Tetromino:
@@ -79,7 +80,7 @@ def tetromino_factory(tetromino_type: TetrominoType) -> Tetromino:
     # INFORMATIONS :
     # -----------------------------
     # UTILITÉ :
-    # Crée un tétromino correspondant au TetrominoType donné
+    # Crée puis retourne un tétromino correspondant au TetrominoType donné
     # =============================
     if tetromino_type == TetrominoType.I:
         return Tetromino(

@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe ActiveTetromino, le tétromino actuellement joué
+# Définir la classe ActiveTetromino, le tétromino contrôlé par le joueur
 # -----------------------------
 # CONTENU :
 # + __slots__
@@ -16,11 +16,11 @@
 
 from typing import List, Optional
 
-from modules.classes.commons.Tetromino import Tetromino
+from modules.classes.Tetromino import Tetromino
 
-from modules.classes.commons.Position import Position
-from modules.classes.commons.Direction import Direction
-from modules.classes.commons.Rotation import Rotation
+from modules.classes.Position import Position
+from modules.classes.Direction import Direction
+from modules.classes.Rotation import Rotation
 
 
 class ActiveTetromino(Tetromino):

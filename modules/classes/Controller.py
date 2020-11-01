@@ -10,16 +10,18 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
+# + setup()
+# + do_tick()
 # ==========================================================
 
 from time import sleep
 
-from modules.classes.model.Model import Model
-from modules.classes.view.View import View
+from modules.classes.Model import Model
+from modules.classes.View import View
 
-from modules.classes.commons.PlayerAction import PlayerAction
-from modules.classes.commons.Direction import Direction
-from modules.classes.commons.Rotation import Rotation
+from modules.classes.PlayerAction import PlayerAction
+from modules.classes.Direction import Direction
+from modules.classes.Rotation import Rotation
 
 
 class Controller:
@@ -28,7 +30,8 @@ class Controller:
     ###############################################################
     __slots__ = (
         "_model",
-        "_view"
+        "_view",
+        "_continue_game"
     )
 
     ###############################################################
@@ -36,6 +39,7 @@ class Controller:
     ###############################################################
     _model: Model
     _view: View
+    _continue_game: bool
 
     ###############################################################
     ########################## __INIT__ ###########################
@@ -53,6 +57,7 @@ class Controller:
         # =============================
         self.set_model(Model())
         self.set_view(View())
+        self._continue_game = True
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -63,6 +68,9 @@ class Controller:
     def get_view(self) -> View:
         return self._view
 
+    def get_continue_game(self) -> bool:
+        return self._continue_game
+
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
@@ -71,6 +79,9 @@ class Controller:
 
     def set_view(self, view: View) -> None:
         self._view = view
+
+    def set_continue_game(self, continue_game: bool) -> None:
+        self._continue_game = continue_game
 
     ###############################################################
     ############################ SETUP ############################
@@ -92,14 +103,16 @@ class Controller:
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Execute l'ensemble des actions d'un tick
+        # Execute l'ensemble des actions d'un tick.
+        # Retourne s’il faut continuer ou non
         # =============================
+
         # Gestion des actions du joueur
         player_action = PlayerAction.MISSCLIC
-        # On gère le(s) missclic
         while player_action != PlayerAction.NOTHING:
             player_action = self.get_view().get_player_input()
 
+            # On gère le(s) missclic
             while player_action == PlayerAction.MISSCLIC:
                 player_action = self.get_view().get_player_input()
 
@@ -119,6 +132,7 @@ class Controller:
                     and self.get_model().can_active_tetromino_move(Direction.DOWN)
             ):
                 self.get_model().get_active_tetromino().move(Direction.DOWN)
+
             # Rotations
             elif (
                     player_action == PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
@@ -130,21 +144,25 @@ class Controller:
                     and self.get_model().can_active_tetromino_rotate(Rotation.LEFT)
             ):
                 self.get_model().get_active_tetromino().rotate(Rotation.LEFT)
+
             # Stockage
             elif (
                     player_action == PlayerAction.STORE_ACTIVE_TETROMINO
                     and self.get_model().get_can_player_switch()
             ):
-                self.get_model().swap_active_and_stored()
+                self.get_model().store_active_tetromino()
                 self.get_model().set_can_player_switch(False)
+
             # Pause
             elif player_action == PlayerAction.PAUSE_GAME:
                 player_action = self.get_view().get_player_input()
                 while player_action != PlayerAction.PAUSE_GAME and player_action != PlayerAction.QUIT_GAME:
                     player_action = self.get_view().get_player_input()
                     sleep(0.1)
+
+            # Arrêt
             if player_action == PlayerAction.QUIT_GAME:
-                exit()
+                self._continue_game = False
 
         # Gestion des actions normales du modèle :
         self.get_model().do_tick()

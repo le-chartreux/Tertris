@@ -1,17 +1,17 @@
-from modules.classes.controller.Controller import Controller
 from time import sleep
-import traceback
+from traceback import format_exc
 
-controller = Controller()
+from modules.classes.Controller import Controller
 
 try:
+    controller = Controller()
     controller.setup()
-    while(True):
+    while controller.get_continue_game():
         controller.do_tick()
         sleep(0.05)
 
 
 except:  # Pour avoir le message d'erreur et ne pas mess le terminal de l'utilisateur
     error_output = open("error_output.txt", "w")
-    error_output.write(traceback.format_exc())
+    error_output.write(format_exc())
     error_output.close()

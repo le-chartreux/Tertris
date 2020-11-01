@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe PlayerAction, les actions que peuvent faire le joueur
+# Définir la classe PlayerAction, l'énumération des actions que peut faire le joueur
 # ==========================================================
 
 from enum import Enum, auto

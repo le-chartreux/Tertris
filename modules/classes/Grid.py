@@ -16,7 +16,7 @@
 
 from typing import List
 
-from modules.classes.commons.ActiveTetromino import ActiveTetromino
+from modules.classes.ActiveTetromino import ActiveTetromino
 
 from modules.settings import GRID_HEIGHT, GRID_WIDTH
 
@@ -106,16 +106,16 @@ class Grid:
         # -----------------------------
         # UTILITÉ :
         # Remplace la ligne par la ligne au-dessus, la ligne au-dessus par celle d'encore au-dessus, etc.
+        # La première ligne du tableau deviendra vide
         # =============================
         # On remplace la ligne par la ligne au-dessus, la ligne au-dessus par celle d'encore au-dessus, etc.
         line = line_number
         while line != 0:
             self.get_shape()[line] = self.get_shape()[line - 1]
             line -= 1
-        # On remplie la ligne la plus en haut de False
+        # On remplie la ligne la plus en haut de False pour la vider
         for column in range(GRID_WIDTH):
             self.get_shape()[0][column] = False
-
 
     ###############################################################
     #################### ADD_ACTIVE_TETROMINO #####################

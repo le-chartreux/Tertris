@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe Statistics, conteneur des statistiques de la partie en cours
+# Définir la classe Statistics, qui contient les statistiques de la partie en cours
 # -----------------------------
 # CONTENU :
 # + __slots__
@@ -11,7 +11,6 @@
 # + GETTERS
 # + SETTERS
 # + get_duration()
-# + get_speed()
 # ==========================================================
 
 import time
@@ -106,15 +105,3 @@ class Statistics:
             return int(time.time() - self.get_begin_time())
         else:
             return int(end_time - self.get_begin_time())
-
-    ###############################################################
-    ########################### GET_SPEED #########################
-    ###############################################################
-    def get_speed(self) -> float:
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Retourne la vitesse de chute du tétromino du joueur, en cases / seconde
-        # =============================
-        return self.get_level()

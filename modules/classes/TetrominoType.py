@@ -2,7 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe TetrominoTypes, les noms de Tetromino.
+# Définir la classe TetrominoTypes, énumération des noms de Tetromino.
 # Utilisé pour créer un tétromino avec tetromino_factory()
 # ==========================================================
 

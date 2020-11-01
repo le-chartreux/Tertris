@@ -10,21 +10,25 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
-# + send_query()
+# + have_to_go_down()
 # + do_tick()
+# + can_active_tetromino_move()
+# + can_active_tetromino_rotate()
+# + store_active_tetromino()
 # ==========================================================
+
 from time import time
 from typing import Optional
 from random import choice
 
-from modules.classes.commons.Grid import Grid
-from modules.classes.commons.Tetromino import Tetromino, tetromino_factory
-from modules.classes.commons.ActiveTetromino import ActiveTetromino
-from modules.classes.commons.Statistics import Statistics
-from modules.classes.commons.Rotation import Rotation
+from modules.classes.Grid import Grid
+from modules.classes.Tetromino import Tetromino, tetromino_factory
+from modules.classes.ActiveTetromino import ActiveTetromino
+from modules.classes.Statistics import Statistics
+from modules.classes.Rotation import Rotation
 
-from modules.classes.commons.Direction import Direction
-from modules.classes.commons.TetrominoType import TetrominoType
+from modules.classes.Direction import Direction
+from modules.classes.TetrominoType import TetrominoType
 
 from modules.settings import GRID_WIDTH, GRID_HEIGHT
 
@@ -76,7 +80,7 @@ class Model:
         # - le tetromino stocké (_stored_tetromino)
         # - les statistiques de la partie (_statistics)
         # - la dernière fois que l'action de baisser le tétromino actif a été faite (_last_down)
-        # - si le joueur peut switch de tétromino maintenant (_can_player_switch)
+        # - si le joueur peut stocker son tétromino maintenant (_can_player_store)
         # =============================
         self._last_down = time()
         self._can_player_store = True
@@ -275,9 +279,9 @@ class Model:
         return possible
 
     ###############################################################
-    ################# CAN_ACTIVE_TETROMINO_MOVE ###################
+    ################### STORE_ACTIVE_TETROMINO ####################
     ###############################################################
-    def swap_active_and_stored(self) -> None:
+    def store_active_tetromino(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
