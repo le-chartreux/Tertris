@@ -84,8 +84,8 @@ def tetromino_factory(tetromino_type: TetrominoType) -> Tetromino:
     if tetromino_type == TetrominoType.I:
         return Tetromino(
             [
-                [True, True, True, True],
                 [False, False, False, False],
+                [True, True, True, True],
                 [False, False, False, False],
                 [False, False, False, False],
             ]
