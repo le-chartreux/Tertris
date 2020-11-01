@@ -41,8 +41,8 @@ class ActiveTetromino(Tetromino):
     ###############################################################
     def __init__(
             self,
-            x: float,
-            y: float,
+            x: float = 4,
+            y: float = -1,  # -1 car la première ligne du tetromino est toujours vide
             shape: Optional[List[List[bool]]] = None,
             tetromino: Optional[Tetromino] = None
     ) -> None:

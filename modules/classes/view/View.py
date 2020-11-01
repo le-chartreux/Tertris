@@ -559,8 +559,13 @@ class View:
             return PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
         elif player_input == 27:  # Esc
             return PlayerAction.QUIT_GAME
+        elif player_input == 80 or player_input == 112:  # P ou p
+            return PlayerAction.PAUSE_GAME
+        elif player_input == 83 or player_input == 115:  # S ou s
+            return PlayerAction.STORE_ACTIVE_TETROMINO
         else:
             return PlayerAction.MISSCLIC
+
 
 ###############################################################
 ###################### SET_COLORSCHEME ########################

@@ -102,10 +102,10 @@ def tetromino_factory(tetromino_type: TetrominoType) -> Tetromino:
     elif tetromino_type == TetrominoType.T:
         return Tetromino(
             [
+                [False, False, False, False],
                 [False, True, False, False],
                 [False, True, True, False],
-                [False, True, False, False],
-                [False, False, False, False],
+                [False, True, False, False]
             ]
         )
     elif tetromino_type == TetrominoType.L:

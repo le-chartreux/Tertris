@@ -16,6 +16,9 @@ class PlayerAction(Enum):
     ROTATE_ACTIVE_TETROMINO_RIGHT = auto()
     ROTATE_ACTIVE_TETROMINO_LEFT = auto()
 
+    STORE_ACTIVE_TETROMINO = auto()
+
+    PAUSE_GAME = auto()
     QUIT_GAME = auto()
 
     NOTHING = auto()
