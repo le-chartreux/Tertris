@@ -41,11 +41,6 @@ from modules.settings import (
     VIEW_STORED_WIDTH,
     VIEW_STORED_HEIGHT,
 
-    VIEW_LOGO_BEGIN_X,
-    VIEW_LOGO_BEGIN_Y,
-    VIEW_LOGO_WIDTH,
-    VIEW_LOGO_HEIGHT,
-
     VIEW_STATISTICS_BEGIN_X,
     VIEW_STATISTICS_BEGIN_Y,
     VIEW_STATISTICS_WIDTH,
@@ -137,15 +132,6 @@ class View:
             )
         )
 
-        self.set_window_logo(
-            curses.newwin(
-                VIEW_LOGO_HEIGHT,
-                VIEW_LOGO_WIDTH,
-                VIEW_LOGO_BEGIN_Y,
-                VIEW_LOGO_BEGIN_X
-            )
-        )
-
         self.set_window_statistics(
             curses.newwin(
                 VIEW_STATISTICS_HEIGHT,
@@ -164,8 +150,8 @@ class View:
             )
         )
 
-        self.get_window_logo().nodelay(True)
-        self.get_window_logo().keypad(True)
+        self.get_window_next().nodelay(True)
+        self.get_window_next().keypad(True)
         # Gestion des couleurs
         set_colorscheme()
         self.set_backgrounds()
@@ -194,9 +180,6 @@ class View:
     def get_window_stored(self) -> object:
         return self._window_stored
 
-    def get_window_logo(self) -> object:
-        return self._window_logo
-
     def get_window_statistics(self) -> object:
         return self._window_statistics
 
@@ -217,9 +200,6 @@ class View:
 
     def set_window_stored(self, window_stored) -> None:
         self._window_stored = window_stored
-
-    def set_window_logo(self, window_logo) -> None:
-        self._window_logo = window_logo
 
     def set_window_statistics(self, window_statistics) -> None:
         self._window_statistics = window_statistics
@@ -244,7 +224,6 @@ class View:
         self.get_window_game().bkgd(' ', curses.color_pair(8))
         self.get_window_next().bkgd(' ', curses.color_pair(8))
         self.get_window_stored().bkgd(' ', curses.color_pair(8))
-        self.get_window_logo().bkgd(' ', curses.color_pair(8))
         self.get_window_statistics().bkgd(' ', curses.color_pair(8))
         self.get_window_keymaps().bkgd(' ', curses.color_pair(8))
 
@@ -258,7 +237,6 @@ class View:
         self.get_window_game().refresh()
         self.get_window_next().refresh()
         self.get_window_stored().refresh()
-        self.get_window_logo().refresh()
         self.get_window_statistics().refresh()
         self.get_window_keymaps().refresh()
 
@@ -275,8 +253,6 @@ class View:
         self.print_grid_border()
         self.print_next_border()
         self.print_stored_border()
-        self.print_logo()
-        self.print_logo_border()
         self.print_statistics_border()
         self.print_keymaps()
         self.print_keymaps_border()
@@ -296,10 +272,12 @@ class View:
             for column in range(GRID_WIDTH):
                 if grid.is_occupied(x=column, y=line):
                     # On met un bloc
-                    self.get_window_game().addstr(line + 1, column + 1, "█", curses.color_pair(8))
+                    self.get_window_game().addstr(line + 1, column*2 + 1, "██", curses.color_pair(8))
+                    # *2 car les tétrominos font 2 de large
                 else:
                     # On met un espace pour supprimer un éventuel ancien bloc
-                    self.get_window_game().addstr(line + 1, column + 1, " ", curses.color_pair(8))
+                    self.get_window_game().addstr(line + 1, column*2 + 1, "  ", curses.color_pair(8))
+                    # *2 car les tétrominos font 2 de large
 
         self.get_window_game().refresh()
 
@@ -315,9 +293,7 @@ class View:
         # =============================
         # Première ligne
         self.get_window_game().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_game().addstr("══", curses.color_pair(8))
-        self.get_window_game().addstr("════════", curses.color_pair(8))
-        self.get_window_game().addstr("══", curses.color_pair(8))
+        self.get_window_game().addstr("════════════════════════", curses.color_pair(8))
         self.get_window_game().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -327,7 +303,7 @@ class View:
 
         # Dernière ligne
         self.get_window_game().addstr(VIEW_GRID_HEIGHT - 1, 0, "╚", curses.color_pair(8))
-        self.get_window_game().addstr("════════════", curses.color_pair(8))
+        self.get_window_game().addstr("════════════════════════", curses.color_pair(8))
         self.get_window_game().addstr("╝", curses.color_pair(8))
 
         self.get_window_game().refresh()
@@ -347,8 +323,8 @@ class View:
                 if active_tetromino.is_occupied(x=column, y=line):
                     self.get_window_game().addstr(
                         line + active_tetromino.get_y() + 1,
-                        column + active_tetromino.get_x() + 1,
-                        "█",
+                        (column + active_tetromino.get_x())*2 + 1,  # *2 car les tétrominos font 2 de large
+                        "██",
                         curses.A_BOLD | curses.color_pair(5)
                     )
 
@@ -369,15 +345,15 @@ class View:
                 if next_tetromino.is_occupied(x=column, y=line):
                     self.get_window_next().addstr(
                         line + 1,
-                        column + 1,
-                        "█",
+                        column*2 + 1,
+                        "██",  # *2 car les tétrominos font 2 de large
                         curses.A_BOLD | curses.color_pair(5)
                     )
                 else:
                     self.get_window_next().addstr(
                         line + 1,
-                        column + 1,
-                        " ",
+                        column*2 + 1,
+                        "  ",  # *2 car les tétrominos font 2 de large
                         curses.A_BOLD | curses.color_pair(8)
                     )
 
@@ -395,7 +371,7 @@ class View:
         # =============================
         # Première ligne
         self.get_window_next().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_next().addstr("Next", curses.color_pair(8))
+        self.get_window_next().addstr("══Next══", curses.color_pair(8))
         self.get_window_next().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -405,7 +381,7 @@ class View:
 
         # Dernière ligne
         self.get_window_next().addstr(VIEW_NEXT_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_next().addstr("════", curses.color_pair(8))
+        self.get_window_next().addstr("════════", curses.color_pair(8))
         self.get_window_next().addstr("╝", curses.color_pair(8))
 
         self.get_window_next().refresh()
@@ -425,15 +401,15 @@ class View:
                 if stored_tetromino is not None and stored_tetromino.is_occupied(x=column, y=line):
                     self.get_window_stored().addstr(
                         line + 1,
-                        column + 1,
-                        "█",
+                        column*2 + 1,
+                        "██",  # *2 car les tétrominos font 2 de large
                         curses.A_BOLD | curses.color_pair(5)
                     )
                 else:
                     self.get_window_stored().addstr(
                         line + 1,
-                        column + 1,
-                        " ",
+                        column*2 + 1,  # *2 car les tétrominos font 2 de large
+                        "  ",
                         curses.A_BOLD | curses.color_pair(8)
                     )
 
@@ -450,7 +426,9 @@ class View:
         # Affiche la bordure autour du tetromino stocké
         # =============================
         # Première ligne
-        self.get_window_stored().addstr(0, 0, "Stored", curses.color_pair(8))
+        self.get_window_stored().addstr(0, 0, "╔", curses.color_pair(8))
+        self.get_window_stored().addstr("═Stored═", curses.color_pair(8))
+        self.get_window_stored().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
         for line in range(1, VIEW_STORED_HEIGHT - 2):
@@ -459,53 +437,10 @@ class View:
 
         # Dernière ligne
         self.get_window_stored().addstr(VIEW_STORED_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_stored().addstr("════", curses.color_pair(8))
+        self.get_window_stored().addstr("════════", curses.color_pair(8))
         self.get_window_stored().addstr("╝", curses.color_pair(8))
 
         self.get_window_stored().refresh()
-
-    ###############################################################
-    ########################## PRINT_LOGO #########################
-    ###############################################################
-    def print_logo(self):
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Affiche le logo dans la fenêtre logo
-        # =============================
-        self.get_window_logo().addstr(2, 1, ">", curses.color_pair(8))
-        self.get_window_logo().addstr("███", curses.color_pair(6))
-        self.get_window_logo().addstr(3, 3, "█", curses.color_pair(6))
-
-        self.get_window_stored().refresh()
-
-    ###############################################################
-    ##################### PRINT_LOGO_BORDER #######################
-    ###############################################################
-    def print_logo_border(self) -> None:
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Affiche la bordure autour du logo
-        # =============================
-        # Première ligne
-        self.get_window_logo().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_logo().addstr("Logo", curses.color_pair(8))
-        self.get_window_logo().addstr("╗", curses.color_pair(8))
-
-        # Lignes intermédiaires
-        for line in range(1, VIEW_LOGO_HEIGHT - 2):
-            self.get_window_logo().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_logo().addstr(line, VIEW_LOGO_WIDTH - 1, "║", curses.color_pair(8))
-
-        # Dernière ligne
-        self.get_window_logo().addstr(VIEW_LOGO_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_logo().addstr("════", curses.color_pair(8))
-        self.get_window_logo().addstr("╝", curses.color_pair(8))
-
-        self.get_window_logo().refresh()
 
     ###############################################################
     ###################### PRINT_STATISTICS #######################
@@ -536,9 +471,9 @@ class View:
         # =============================
         # Première ligne
         self.get_window_statistics().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_statistics().addstr("════", curses.color_pair(8))
+        self.get_window_statistics().addstr("═════", curses.color_pair(8))
         self.get_window_statistics().addstr("Statistics", curses.color_pair(8))
-        self.get_window_statistics().addstr("════", curses.color_pair(8))
+        self.get_window_statistics().addstr("═════", curses.color_pair(8))
         self.get_window_statistics().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -548,7 +483,7 @@ class View:
 
         # Dernière ligne
         self.get_window_statistics().addstr(VIEW_STATISTICS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_statistics().addstr("══════════════════", curses.color_pair(8))
+        self.get_window_statistics().addstr("════════════════════", curses.color_pair(8))
         self.get_window_statistics().addstr("╝", curses.color_pair(8))
 
         self.get_window_statistics().refresh()
@@ -563,13 +498,16 @@ class View:
         # UTILITÉ :
         # Affiche les raccourcis dans la fenêtre de raccourcis
         # =============================
-        self.get_window_keymaps().addstr(1, 1, "Q: Left")
-        self.get_window_keymaps().addstr(2, 1, "D: Right")
-        self.get_window_keymaps().addstr(3, 1, "S: Down")
+        self.get_window_keymaps().addstr(1, 1, "Arrow-left: Left")
+        self.get_window_keymaps().addstr(2, 1, "Arrow-right: Right")
+        self.get_window_keymaps().addstr(3, 1, "Arrow-down: Down")
 
-        self.get_window_keymaps().addstr(5, 1, "J: Rotate left")
-        self.get_window_keymaps().addstr(6, 1, "L: Rotate right")
-        self.get_window_keymaps().addstr(7, 1, "Esc: Quit")
+        self.get_window_keymaps().addstr(4, 1, "Q: Rotate left")
+        self.get_window_keymaps().addstr(5, 1, "D: Rotate right")
+        self.get_window_keymaps().addstr(6, 1, "S: Store actual")
+
+        self.get_window_keymaps().addstr(7, 1, "P: Pause")
+        self.get_window_keymaps().addstr(8, 1, "Esc: Quit")
 
         self.get_window_keymaps().refresh()
 
@@ -585,9 +523,9 @@ class View:
         # =============================
         # Première ligne
         self.get_window_keymaps().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_keymaps().addstr("═════", curses.color_pair(8))
+        self.get_window_keymaps().addstr("══════", curses.color_pair(8))
         self.get_window_keymaps().addstr("Keybinds", curses.color_pair(8))
-        self.get_window_keymaps().addstr("═════", curses.color_pair(8))
+        self.get_window_keymaps().addstr("══════", curses.color_pair(8))
         self.get_window_keymaps().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -597,7 +535,7 @@ class View:
 
         # Dernière ligne
         self.get_window_keymaps().addstr(VIEW_KEYBINDS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_keymaps().addstr("══════════════════", curses.color_pair(8))
+        self.get_window_keymaps().addstr("════════════════════", curses.color_pair(8))
         self.get_window_keymaps().addstr("╝", curses.color_pair(8))
 
         self.get_window_keymaps().refresh()
@@ -606,39 +544,23 @@ class View:
     ###################### GET_PLAYER_INPUT #######################
     ###############################################################
     def get_player_input(self) -> PlayerAction:
-        player_input = self.get_window_logo().getch()
+        player_input = self.get_window_next().getch()
         if player_input == curses.ERR:
             return PlayerAction.NOTHING
-        if player_input == 81 or player_input == 113 or player_input == curses.KEY_LEFT:  # Q ou q
+        if player_input == curses.KEY_LEFT:
             return PlayerAction.MOVE_ACTIVE_TETROMINO_LEFT
-        elif player_input == 68 or player_input == 100 or player_input == curses.KEY_RIGHT:  # D ou d
+        elif player_input == curses.KEY_RIGHT:
             return PlayerAction.MOVE_ACTIVE_TETROMINO_RIGHT
-        elif player_input == 83 or player_input == 115 or player_input == curses.KEY_DOWN:  # S ou s
+        elif player_input == curses.KEY_DOWN:
             return PlayerAction.MOVE_ACTIVE_TETROMINO_DOWN
-        elif player_input == 74 or player_input == 106:  # J ou j
+        elif player_input == 81 or player_input == 113:  # Q ou q
             return PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT
-        elif player_input == 76 or player_input == 108:  # L ou l
+        elif player_input == 68 or player_input == 100:  # D ou d
             return PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
         elif player_input == 27:  # Esc
             return PlayerAction.QUIT_GAME
         else:
             return PlayerAction.MISSCLIC
-
-    ###############################################################
-    ########################## WAIT_ESC ###########################
-    ###############################################################
-    def wait_esc(self) -> None:
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Attend que l'utilisateur appuie sur Esc
-        # =============================
-        from time import sleep
-        while self.get_window_logo().getch() != 27:
-            # pour une raison curse (lul), le code est + rapide si on getch() sur une petite fenêtre
-            sleep(0.03)
-
 
 ###############################################################
 ###################### SET_COLORSCHEME ########################
