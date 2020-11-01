@@ -15,6 +15,10 @@
 from modules.classes.model.Model import Model
 from modules.classes.view.View import View
 
+from modules.classes.commons.PlayerAction import PlayerAction
+from modules.classes.commons.Direction import Direction
+from modules.classes.commons.Rotation import Rotation
+
 
 class Controller:
     ###############################################################
@@ -35,9 +39,7 @@ class Controller:
     ########################## __INIT__ ###########################
     ###############################################################
     def __init__(
-            self,
-            model: Model = None,
-            view: View = None
+            self
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -47,13 +49,8 @@ class Controller:
         # - son model (_model)
         # - sa vue (_view)
         # =============================
-        if model is None:
-            model = Model()
-        if view is None:
-            view = View()
-
-        self.set_model(model)
-        self.set_view(view)
+        self.set_model(Model())
+        self.set_view(View())
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -72,3 +69,69 @@ class Controller:
 
     def set_view(self, view: View) -> None:
         self._view = view
+
+    ###############################################################
+    ############################ SETUP ############################
+    ###############################################################
+    def setup(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Setup la vue (le modèle est déjà setup avec son __init__)
+        # =============================
+        self.get_view().setup_static_windows()
+
+    ###############################################################
+    ########################### DO_TICK ###########################
+    ###############################################################
+    def do_tick(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Execute l'ensemble des actions d'un tick
+        # =============================
+        # Gestion des actions du joueur
+        player_action = PlayerAction.MISSCLIC
+        # On gère le(s) missclic
+        while player_action != PlayerAction.NOTHING:
+            player_action = self.get_view().get_player_input()
+
+            while player_action == PlayerAction.MISSCLIC:
+                player_action = self.get_view().get_player_input()
+
+            if player_action == PlayerAction.QUIT_GAME:
+                exit()
+            # Déplacements
+            elif (
+                    player_action == PlayerAction.MOVE_ACTIVE_TETROMINO_RIGHT
+                    and self.get_model().can_active_tetromino_move(Direction.RIGHT)
+            ):
+                self.get_model().get_active_tetromino().move(Direction.RIGHT)
+            elif (
+                    player_action == PlayerAction.MOVE_ACTIVE_TETROMINO_LEFT
+                    and self.get_model().can_active_tetromino_move(Direction.LEFT)
+            ):
+                self.get_model().get_active_tetromino().move(Direction.LEFT)
+            elif (
+                    player_action == PlayerAction.MOVE_ACTIVE_TETROMINO_DOWN
+                    and self.get_model().can_active_tetromino_move(Direction.DOWN)
+            ):
+                self.get_model().get_active_tetromino().move(Direction.DOWN)
+            # Rotations
+            elif player_action == PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT:
+                self.get_model().get_active_tetromino().rotate(Rotation.RIGHT)
+            elif player_action == PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT:
+                self.get_model().get_active_tetromino().rotate(Rotation.LEFT)
+
+        # Gestion des actions normales du modèle :
+        self.get_model().do_tick()
+
+        # Actualisation de la vue :
+        self.get_view().print_grid(self.get_model().get_grid())
+        self.get_view().print_active_tetromino(self.get_model().get_active_tetromino())
+        self.get_view().print_next(self.get_model().get_next_tetromino())
+        self.get_view().print_stored(self.get_model().get_stored_tetromino())
+        self.get_view().print_statistics(self.get_model().get_statistics())
+
