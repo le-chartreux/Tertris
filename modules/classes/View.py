@@ -8,19 +8,37 @@
 # + __slots__
 # + HINTS
 # + __init__()
+# + __del__()
 # + GETTERS
 # + SETTERS
+# + set_backgrounds()
+# + refresh_all()
+# + setup_static_window()
+# + print_grid()
+# + print_grid_border()
+# + print_active_tetromino()
+# + print_next()
+# + print_next_border()
+# + print_stored()
+# + print_stored_border()
+# + print_statistics()
+# + print_statistics_border()
+# + print_keybinds()
+# + print_keybinds_border()
+# + get_player_input()
+# + set_colorscheme() <- fonction
 # ==========================================================
 
 import curses
+from math import floor, ceil  # Utilisé pour le calcul de nombre de ═ à mettre dans les bordures
 
 from typing import Optional
 
-from modules.classes.commons.ActiveTetromino import ActiveTetromino
-from modules.classes.commons.Tetromino import Tetromino
-from modules.classes.commons.Statistics import Statistics
-from modules.classes.commons.PlayerAction import PlayerAction
-from modules.classes.commons.Grid import Grid
+from modules.classes.ActiveTetromino import ActiveTetromino
+from modules.classes.Tetromino import Tetromino
+from modules.classes.Statistics import Statistics
+from modules.classes.PlayerAction import PlayerAction
+from modules.classes.Grid import Grid
 
 from modules.settings import (
     GRID_WIDTH,
@@ -62,9 +80,8 @@ class View:
         "_window_game",
         "_window_next",
         "_window_stored",
-        "_window_logo",
         "_window_statistics",
-        "_window_keymaps"
+        "_window_keybinds"
     )
 
     ###############################################################
@@ -74,9 +91,8 @@ class View:
     _window_game: object
     _window_next: object
     _window_stored: object
-    _window_logo: object
     _window_statistics: object
-    _window_keymaps: object
+    _window_keybinds: object
 
     ###############################################################
     ########################## __INIT__ ###########################
@@ -94,14 +110,17 @@ class View:
         # - une fenêtre des statistiques, partie de _window_all (_window_statistics)
         # - une fenêtre des touches, partie de _window_all (_window_keymaps)
         # Et le paramètre pour qu'il soit capable de gérer la partie
+        # -----------------------------
+        # REMARQUES :
+        # - Fermer le programme sans qu'il puisse appeler le destructeur d'une instance peut dérégler le terminal de
+        #   l'utilisateur !
         # =============================
         window_all = curses.initscr()
 
-        curses.curs_set(False)
-        curses.noecho()
-        curses.cbreak()
-        window_all.keypad(True)
-        window_all.nodelay(True)
+        # Paramétrage de curses
+        curses.curs_set(False)  # Ne pas afficher le curseur
+        curses.noecho()  # Ne pas afficher ce que marque l'utilisateur
+        curses.cbreak()  # Ne pas attendre que l'utilisateur appui sur Entrée pour récupérer son entrée
 
         self.set_window_all(window_all)
 
@@ -141,7 +160,7 @@ class View:
             )
         )
 
-        self.set_window_keymaps(
+        self.set_window_keybinds(
             curses.newwin(
                 VIEW_KEYBINDS_HEIGHT,
                 VIEW_KEYBINDS_WIDTH,
@@ -150,8 +169,10 @@ class View:
             )
         )
 
-        self.get_window_next().nodelay(True)
-        self.get_window_next().keypad(True)
+        # Paramétrage de _window_all pour les entrées texte
+        self.get_window_all().nodelay(True)  # Ne pas attendre l'entrée d'un utilisateur à l'appel d'un getch()
+        self.get_window_all().keypad(True)  # Permettre la compatibilité avec les touches spéciales (arrow-up par ex)
+
         # Gestion des couleurs
         set_colorscheme()
         self.set_backgrounds()
@@ -160,6 +181,12 @@ class View:
     ########################### __DEL__ ###########################
     ###############################################################
     def __del__(self):
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Détruit proprement l'instance et remet le terminal de l'utilisateur dans son état original
+        # =============================
         curses.curs_set(True)
         curses.nocbreak()
         curses.echo()
@@ -183,8 +210,8 @@ class View:
     def get_window_statistics(self) -> object:
         return self._window_statistics
 
-    def get_window_keymaps(self) -> object:
-        return self._window_keymaps
+    def get_window_keybinds(self) -> object:
+        return self._window_keybinds
 
     ###############################################################
     ########################### SETTERS ###########################
@@ -204,8 +231,8 @@ class View:
     def set_window_statistics(self, window_statistics) -> None:
         self._window_statistics = window_statistics
 
-    def set_window_keymaps(self, window_keymaps) -> None:
-        self._window_keymaps = window_keymaps
+    def set_window_keybinds(self, window_keymaps) -> None:
+        self._window_keybinds = window_keymaps
 
     ###############################################################
     ####################### SET_BACKGROUNDS #######################
@@ -217,15 +244,15 @@ class View:
         # UTILITÉ :
         # Met les fonds d'écran des différentes fenêtres de la bonne couleur
         # -----------------------------
-        # PRÉCONDITION :
-        # set_colorscheme() a déjà été appelé
+        # PRÉCONDITIONS :
+        # - set_colorscheme() a déjà été appelé
         # =============================
         self.get_window_all().bkgd(' ', curses.color_pair(8))
         self.get_window_game().bkgd(' ', curses.color_pair(8))
         self.get_window_next().bkgd(' ', curses.color_pair(8))
         self.get_window_stored().bkgd(' ', curses.color_pair(8))
         self.get_window_statistics().bkgd(' ', curses.color_pair(8))
-        self.get_window_keymaps().bkgd(' ', curses.color_pair(8))
+        self.get_window_keybinds().bkgd(' ', curses.color_pair(8))
 
         self.refresh_all()
 
@@ -233,12 +260,21 @@ class View:
     ######################## REFRESH_ALL ##########################
     ###############################################################
     def refresh_all(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Actualise toutes les fenêtres
+        # -----------------------------
+        # PRÉCONDITIONS :
+        # - Toutes les fenêtres existent encore !
+        # =============================
         self.get_window_all().refresh()
         self.get_window_game().refresh()
         self.get_window_next().refresh()
         self.get_window_stored().refresh()
         self.get_window_statistics().refresh()
-        self.get_window_keymaps().refresh()
+        self.get_window_keybinds().refresh()
 
     ###############################################################
     ##################### SETUP_STATIC_WINDOWS ####################
@@ -254,8 +290,8 @@ class View:
         self.print_next_border()
         self.print_stored_border()
         self.print_statistics_border()
-        self.print_keymaps()
-        self.print_keymaps_border()
+        self.print_keybinds()
+        self.print_keybinds_border()
 
     ###############################################################
     ########################## PRINT_GRID #########################
@@ -293,7 +329,8 @@ class View:
         # =============================
         # Première ligne
         self.get_window_game().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_game().addstr("════════════════════════", curses.color_pair(8))
+        for _ in range(1, VIEW_GRID_WIDTH - 2):
+            self.get_window_game().addstr("═", curses.color_pair(8))
         self.get_window_game().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -303,7 +340,8 @@ class View:
 
         # Dernière ligne
         self.get_window_game().addstr(VIEW_GRID_HEIGHT - 1, 0, "╚", curses.color_pair(8))
-        self.get_window_game().addstr("════════════════════════", curses.color_pair(8))
+        for _ in range(1, VIEW_GRID_WIDTH - 2):
+            self.get_window_game().addstr("═", curses.color_pair(8))
         self.get_window_game().addstr("╝", curses.color_pair(8))
 
         self.get_window_game().refresh()
@@ -371,7 +409,11 @@ class View:
         # =============================
         # Première ligne
         self.get_window_next().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_next().addstr("══Next══", curses.color_pair(8))
+        for _ in range(ceil((VIEW_NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+            self.get_window_next().addstr("═", curses.color_pair(8))
+        self.get_window_next().addstr("Next", curses.color_pair(8))
+        for _ in range(floor((VIEW_NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+            self.get_window_next().addstr("═", curses.color_pair(8))
         self.get_window_next().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -381,7 +423,8 @@ class View:
 
         # Dernière ligne
         self.get_window_next().addstr(VIEW_NEXT_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_next().addstr("════════", curses.color_pair(8))
+        for _ in range(1, VIEW_NEXT_WIDTH - 1):
+            self.get_window_next().addstr("═", curses.color_pair(8))
         self.get_window_next().addstr("╝", curses.color_pair(8))
 
         self.get_window_next().refresh()
@@ -427,7 +470,11 @@ class View:
         # =============================
         # Première ligne
         self.get_window_stored().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_stored().addstr("═Stored═", curses.color_pair(8))
+        for _ in range(ceil((VIEW_STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+            self.get_window_stored().addstr("═", curses.color_pair(8))
+        self.get_window_stored().addstr("Stored", curses.color_pair(8))
+        for _ in range(floor((VIEW_STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+            self.get_window_stored().addstr("═", curses.color_pair(8))
         self.get_window_stored().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -437,7 +484,8 @@ class View:
 
         # Dernière ligne
         self.get_window_stored().addstr(VIEW_STORED_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_stored().addstr("════════", curses.color_pair(8))
+        for _ in range(1, VIEW_STORED_WIDTH - 1):
+            self.get_window_stored().addstr("═", curses.color_pair(8))
         self.get_window_stored().addstr("╝", curses.color_pair(8))
 
         self.get_window_stored().refresh()
@@ -471,9 +519,11 @@ class View:
         # =============================
         # Première ligne
         self.get_window_statistics().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_statistics().addstr("═════", curses.color_pair(8))
+        for _ in range(ceil((VIEW_STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+            self.get_window_statistics().addstr("═", curses.color_pair(8))
         self.get_window_statistics().addstr("Statistics", curses.color_pair(8))
-        self.get_window_statistics().addstr("═════", curses.color_pair(8))
+        for _ in range(floor((VIEW_STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+            self.get_window_statistics().addstr("═", curses.color_pair(8))
         self.get_window_statistics().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
@@ -483,38 +533,39 @@ class View:
 
         # Dernière ligne
         self.get_window_statistics().addstr(VIEW_STATISTICS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_statistics().addstr("════════════════════", curses.color_pair(8))
+        for _ in range(1, VIEW_STATISTICS_WIDTH - 1):
+            self.get_window_statistics().addstr("═", curses.color_pair(8))
         self.get_window_statistics().addstr("╝", curses.color_pair(8))
 
         self.get_window_statistics().refresh()
 
     ###############################################################
-    ######################## PRINT_KEYMAPS ########################
+    ####################### PRINT_KEYBINDS ########################
     ###############################################################
-    def print_keymaps(self) -> None:
+    def print_keybinds(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
         # Affiche les raccourcis dans la fenêtre de raccourcis
         # =============================
-        self.get_window_keymaps().addstr(1, 1, "Arrow-left: Left")
-        self.get_window_keymaps().addstr(2, 1, "Arrow-right: Right")
-        self.get_window_keymaps().addstr(3, 1, "Arrow-down: Down")
+        self.get_window_keybinds().addstr(1, 1, "Arrow-left: Left")
+        self.get_window_keybinds().addstr(2, 1, "Arrow-right: Right")
+        self.get_window_keybinds().addstr(3, 1, "Arrow-down: Down")
 
-        self.get_window_keymaps().addstr(4, 1, "Q: Rotate left")
-        self.get_window_keymaps().addstr(5, 1, "D: Rotate right")
-        self.get_window_keymaps().addstr(6, 1, "S: Store actual")
+        self.get_window_keybinds().addstr(4, 1, "Q: Rotate left")
+        self.get_window_keybinds().addstr(5, 1, "D: Rotate right")
+        self.get_window_keybinds().addstr(6, 1, "S: Store actual")
 
-        self.get_window_keymaps().addstr(7, 1, "P: Pause")
-        self.get_window_keymaps().addstr(8, 1, "Esc: Quit")
+        self.get_window_keybinds().addstr(7, 1, "P: Pause")
+        self.get_window_keybinds().addstr(8, 1, "Esc: Quit")
 
-        self.get_window_keymaps().refresh()
+        self.get_window_keybinds().refresh()
 
     ###############################################################
-    ##################### PRINT_KEYMAPS_BORDER ####################
+    #################### PRINT_KEYBINDS_BORDER ####################
     ###############################################################
-    def print_keymaps_border(self) -> None:
+    def print_keybinds_border(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
@@ -522,29 +573,32 @@ class View:
         # Affiche la bordure autour des raccourcis
         # =============================
         # Première ligne
-        self.get_window_keymaps().addstr(0, 0, "╔", curses.color_pair(8))
-        self.get_window_keymaps().addstr("══════", curses.color_pair(8))
-        self.get_window_keymaps().addstr("Keybinds", curses.color_pair(8))
-        self.get_window_keymaps().addstr("══════", curses.color_pair(8))
-        self.get_window_keymaps().addstr("╗", curses.color_pair(8))
+        self.get_window_keybinds().addstr(0, 0, "╔", curses.color_pair(8))
+        for _ in range(ceil((VIEW_KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+            self.get_window_keybinds().addstr("═", curses.color_pair(8))
+        self.get_window_keybinds().addstr("Keybinds", curses.color_pair(8))
+        for _ in range(floor((VIEW_KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+            self.get_window_keybinds().addstr("═", curses.color_pair(8))
+        self.get_window_keybinds().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
         for line in range(1, VIEW_KEYBINDS_HEIGHT - 2):
-            self.get_window_keymaps().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_keymaps().addstr(line, VIEW_KEYBINDS_WIDTH - 1, "║", curses.color_pair(8))
+            self.get_window_keybinds().addstr(line, 0, "║", curses.color_pair(8))
+            self.get_window_keybinds().addstr(line, VIEW_KEYBINDS_WIDTH - 1, "║", curses.color_pair(8))
 
         # Dernière ligne
-        self.get_window_keymaps().addstr(VIEW_KEYBINDS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        self.get_window_keymaps().addstr("════════════════════", curses.color_pair(8))
-        self.get_window_keymaps().addstr("╝", curses.color_pair(8))
+        self.get_window_keybinds().addstr(VIEW_KEYBINDS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
+        for _ in range(1, VIEW_KEYBINDS_WIDTH - 1):
+            self.get_window_keybinds().addstr("═", curses.color_pair(8))
+        self.get_window_keybinds().addstr("╝", curses.color_pair(8))
 
-        self.get_window_keymaps().refresh()
+        self.get_window_keybinds().refresh()
 
     ###############################################################
     ###################### GET_PLAYER_INPUT #######################
     ###############################################################
     def get_player_input(self) -> PlayerAction:
-        player_input = self.get_window_next().getch()
+        player_input = self.get_window_all().getch()
         if player_input == curses.ERR:
             return PlayerAction.NOTHING
         if player_input == curses.KEY_LEFT:
