@@ -14,10 +14,12 @@
 
 import curses
 
+from typing import Optional
+
 from modules.classes.commons.ActiveTetromino import ActiveTetromino
 from modules.classes.commons.Tetromino import Tetromino
 from modules.classes.commons.Statistics import Statistics
-
+from modules.classes.commons.PlayerAction import PlayerAction
 from modules.classes.commons.Grid import Grid
 
 from modules.settings import (
@@ -162,6 +164,8 @@ class View:
             )
         )
 
+        self.get_window_logo().nodelay(True)
+        self.get_window_logo().keypad(True)
         # Gestion des couleurs
         set_colorscheme()
         self.set_backgrounds()
@@ -172,7 +176,6 @@ class View:
     def __del__(self):
         curses.curs_set(True)
         curses.nocbreak()
-        self.get_window_all().keypad(False)
         curses.echo()
         curses.endwin()
 
@@ -260,6 +263,25 @@ class View:
         self.get_window_keymaps().refresh()
 
     ###############################################################
+    ##################### SETUP_STATIC_WINDOWS ####################
+    ###############################################################
+    def setup_static_windows(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Charge les fenêtres qui ne bougent pas
+        # =============================
+        self.print_grid_border()
+        self.print_next_border()
+        self.print_stored_border()
+        self.print_logo()
+        self.print_logo_border()
+        self.print_statistics_border()
+        self.print_keymaps()
+        self.print_keymaps_border()
+
+    ###############################################################
     ########################## PRINT_GRID #########################
     ###############################################################
     def print_grid(self, grid: Grid) -> None:
@@ -274,7 +296,7 @@ class View:
             for column in range(GRID_WIDTH):
                 if grid.is_occupied(x=column, y=line):
                     # On met un bloc
-                    self.get_window_game().addstr(line + 1, column + 1, "█", curses.color_pair(5))
+                    self.get_window_game().addstr(line + 1, column + 1, "█", curses.color_pair(8))
                 else:
                     # On met un espace pour supprimer un éventuel ancien bloc
                     self.get_window_game().addstr(line + 1, column + 1, " ", curses.color_pair(8))
@@ -351,6 +373,13 @@ class View:
                         "█",
                         curses.A_BOLD | curses.color_pair(5)
                     )
+                else:
+                    self.get_window_next().addstr(
+                        line + 1,
+                        column + 1,
+                        " ",
+                        curses.A_BOLD | curses.color_pair(8)
+                    )
 
         self.get_window_next().refresh()
 
@@ -384,7 +413,7 @@ class View:
     ###############################################################
     ######################## PRINT_STORED #########################
     ###############################################################
-    def print_stored(self, stored_tetromino: Tetromino):
+    def print_stored(self, stored_tetromino: Optional[Tetromino]):
         # =============================
         # INFORMATIONS :
         # -----------------------------
@@ -393,12 +422,19 @@ class View:
         # =============================
         for line in range(4):
             for column in range(4):
-                if stored_tetromino.is_occupied(x=column, y=line):
+                if stored_tetromino is not None and stored_tetromino.is_occupied(x=column, y=line):
                     self.get_window_stored().addstr(
                         line + 1,
                         column + 1,
                         "█",
                         curses.A_BOLD | curses.color_pair(5)
+                    )
+                else:
+                    self.get_window_stored().addstr(
+                        line + 1,
+                        column + 1,
+                        " ",
+                        curses.A_BOLD | curses.color_pair(8)
                     )
 
         self.get_window_stored().refresh()
@@ -527,12 +563,12 @@ class View:
         # UTILITÉ :
         # Affiche les raccourcis dans la fenêtre de raccourcis
         # =============================
-        self.get_window_keymaps().addstr(1, 1, "Arrow-left: Left")
-        self.get_window_keymaps().addstr(2, 1, "Arrow-right: Right")
-        self.get_window_keymaps().addstr(3, 1, "Arrow-down: Down")
+        self.get_window_keymaps().addstr(1, 1, "Q: Left")
+        self.get_window_keymaps().addstr(2, 1, "D: Right")
+        self.get_window_keymaps().addstr(3, 1, "S: Down")
 
-        self.get_window_keymaps().addstr(5, 1, "S: Rotate left")
-        self.get_window_keymaps().addstr(6, 1, "F: Rotate right")
+        self.get_window_keymaps().addstr(5, 1, "J: Rotate left")
+        self.get_window_keymaps().addstr(6, 1, "L: Rotate right")
         self.get_window_keymaps().addstr(7, 1, "Esc: Quit")
 
         self.get_window_keymaps().refresh()
@@ -569,8 +605,24 @@ class View:
     ###############################################################
     ###################### GET_PLAYER_INPUT #######################
     ###############################################################
-    def get_player_input(self) -> str:
-        pass
+    def get_player_input(self) -> PlayerAction:
+        player_input = self.get_window_logo().getch()
+        if player_input == curses.ERR:
+            return PlayerAction.NOTHING
+        if player_input == 81 or player_input == 113 or player_input == curses.KEY_LEFT:  # Q ou q
+            return PlayerAction.MOVE_ACTIVE_TETROMINO_LEFT
+        elif player_input == 68 or player_input == 100 or player_input == curses.KEY_RIGHT:  # D ou d
+            return PlayerAction.MOVE_ACTIVE_TETROMINO_RIGHT
+        elif player_input == 83 or player_input == 115 or player_input == curses.KEY_DOWN:  # S ou s
+            return PlayerAction.MOVE_ACTIVE_TETROMINO_DOWN
+        elif player_input == 74 or player_input == 106:  # J ou j
+            return PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT
+        elif player_input == 76 or player_input == 108:  # L ou l
+            return PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
+        elif player_input == 27:  # Esc
+            return PlayerAction.QUIT_GAME
+        else:
+            return PlayerAction.MISSCLIC
 
     ###############################################################
     ########################## WAIT_ESC ###########################
