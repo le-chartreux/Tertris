@@ -11,7 +11,7 @@
 # + GETTERS
 # + SETTERS
 # + send_query()
-# + next_tick()
+# + do_tick()
 # ==========================================================
 
 from typing import Optional
@@ -75,7 +75,7 @@ class Model:
             grid = Grid()
 
         if active_tetromino is None:
-            active_tetromino = ActiveTetromino(0, 0, tetromino=random_next_tetromino())
+            active_tetromino = ActiveTetromino(4, 0, tetromino=random_next_tetromino())
 
         if next_tetromino is None:
             next_tetromino = random_next_tetromino()
@@ -126,9 +126,9 @@ class Model:
         self._statistics = statistics
 
     ###############################################################
-    ########################## NEXT_TICK ##########################
+    ########################### DO_TICK ###########################
     ###############################################################
-    def next_tick(self):
+    def do_tick(self):
         # =============================
         # INFORMATIONS :
         # -----------------------------
@@ -163,18 +163,18 @@ class Model:
             column = 0
             while column < 4 and possible:
                 possible = (
-                    (
-                            0 <= self.get_active_tetromino().get_x() + column + direction.value.get_x() < GRID_WIDTH
-                            and
-                            0 <= self.get_active_tetromino().get_y() + line + direction.value.get_y() < GRID_HEIGHT
-                    )
-                    and not (
-                        self.get_grid().is_occupied(
-                            self.get_active_tetromino().get_x() + direction.value.get_x(),
-                            self.get_active_tetromino().get_y() + direction.value.get_y()
-                        )
+                    not self.get_active_tetromino().is_occupied(x=column, y=line)  # Soit il n'y a pas de bloc
+                    or  # ou
+                    (  # Soit le bloc va aller dans les bordures de la grille ...
+                        0 <= self.get_active_tetromino().get_x() + column + direction.value.get_x() < GRID_WIDTH
                         and
-                        self.get_active_tetromino().get_shape()[line][column]
+                        0 <= self.get_active_tetromino().get_y() + line + direction.value.get_y() < GRID_HEIGHT
+                    )
+                    and not (  # ... et l'emplacement futur n'est pas occupé
+                        self.get_grid().is_occupied(
+                            self.get_active_tetromino().get_x() + direction.value.get_x() + column,
+                            self.get_active_tetromino().get_y() + direction.value.get_y() + line
+                        )
                     )
                 )
                 column += 1

@@ -94,12 +94,16 @@ class Grid:
         # =============================
         for line in range(4):
             for column in range(4):
-                self.get_shape()[
-                        line + int(active_tetromino.get_y())
-                    ][
-                        column + int(active_tetromino.get_x())
-                    ] = self.is_occupied(
-                        x=column + int(active_tetromino.get_x()),
-                        y=line + int(active_tetromino.get_y())
-                    ) and active_tetromino.is_occupied(x=column, y=line)
+                if (
+                        0 <= active_tetromino.get_x() + column < GRID_WIDTH
+                        and 0 <= active_tetromino.get_y() + line < GRID_HEIGHT
+                ):
+                    self.get_shape()[
+                            line + int(active_tetromino.get_y())
+                        ][
+                            column + int(active_tetromino.get_x())
+                        ] = self.is_occupied(
+                            x=column + int(active_tetromino.get_x()),
+                            y=line + int(active_tetromino.get_y())
+                        ) or active_tetromino.is_occupied(x=column, y=line)
 
