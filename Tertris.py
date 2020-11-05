@@ -11,7 +11,8 @@ try:
         sleep(0.05)
 
 
-except:  # Pour avoir le message d'erreur et ne pas mess le terminal de l'utilisateur
+except Exception:  # Pour avoir le message d'erreur et ne pas détruire le terminal de l'utilisateur car ça a crash
+    # sans le restorer
     error_output = open("error_output.txt", "w")
     error_output.write(format_exc())
     error_output.close()
