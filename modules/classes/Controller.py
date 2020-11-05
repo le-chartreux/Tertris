@@ -107,7 +107,7 @@ class Controller:
         # Retourne s’il faut continuer ou non
         # =============================
 
-        # Gestion des actions du joueur
+        # Gestion des actions du joueur : tant qu'il n'y a plus rien, on effectue les actions
         player_action = PlayerAction.MISSCLIC
         while player_action != PlayerAction.NOTHING:
             player_action = self.get_view().get_player_input()

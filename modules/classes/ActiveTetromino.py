@@ -41,28 +41,21 @@ class ActiveTetromino(Tetromino):
     ###############################################################
     def __init__(
             self,
+            tetromino: Tetromino,
             x: float = 4,
-            y: float = -1,  # -1 car la première ligne du tetromino est toujours vide
-            shape: Optional[List[List[bool]]] = None,
-            tetromino: Optional[Tetromino] = None
+            y: float = -1  # -1 car la première ligne du tetromino est toujours vide
     ) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
         # Crée un objet ActiveTetromino, caractérisé par :
-        # - sa forme (_shape)
+        # - sa forme (_shape), hérité de Tetromino
         # - la position sur l'axe X de son coin haut-gauche (_x)
         # - la position sur l'axe Y de son coin haut-gauche (_y)
         # =============================
-        if shape is not None:
-            super().__init__(shape)
-        elif tetromino is not None:
-            super().__init__(tetromino.get_shape())
-        else:
-            raise AttributeError("Erreur: il manque l'attribut shape ou tetromino pour créer un ActiveTetromino")
-
-        self._position = Position(x, y)
+        super().__init__(tetromino.get_shape())
+        self._position = Position(x, y)  # On n'utilise pas le setter pour initialiser la position
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -109,7 +102,7 @@ class ActiveTetromino(Tetromino):
         # Création de la nouvelle forme :
         new_shape = []
         for line in range(4):
-            new_shape.append([False, False, False, False])
+            new_shape.append([None, None, None, None])
 
         # Rotation
         if rotation == Rotation.LEFT:

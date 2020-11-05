@@ -11,12 +11,14 @@
 # + GETTERS
 # + SETTERS
 # + is_occupied()
+# + get_element()
 # + add_active_tetromino()
 # ==========================================================
 
-from typing import List
+from typing import List, Optional
 
 from modules.classes.ActiveTetromino import ActiveTetromino
+from modules.classes.TetrominoType import TetrominoType
 
 from modules.settings import GRID_HEIGHT, GRID_WIDTH
 
@@ -32,14 +34,14 @@ class Grid:
     ###############################################################
     ############################ HINTS ############################
     ###############################################################
-    _shape: List[List[bool]]
+    _shape: List[List[Optional[TetrominoType]]]
 
     ###############################################################
     ########################## __INIT__ ###########################
     ###############################################################
     def __init__(
             self,
-            shape: List[List[bool]] = None
+            shape: List[List[Optional[TetrominoType]]] = None
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -53,22 +55,28 @@ class Grid:
     ###############################################################
     ########################### GETTERS ###########################
     ###############################################################
-    def get_shape(self) -> List[List[bool]]:
+    def get_shape(self) -> List[List[Optional[TetrominoType]]]:
         return self._shape
 
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_shape(self, shape: List[List[bool]]) -> None:
+    def set_shape(self, shape: List[List[Optional[TetrominoType]]] = None) -> None:
         if shape is None:
             # On crée un tableau à deux dimensions rempli de False
             self._shape = []
             for line in range(GRID_HEIGHT):
                 self._shape.append([])
                 for _ in range(GRID_WIDTH):
-                    self._shape[line].append(False)
+                    self._shape[line].append(None)
         else:
             self._shape = shape
+
+    ###############################################################
+    ######################### GET_ELEMENT #########################
+    ###############################################################
+    def get_element(self, x: int, y: int) -> Optional[TetrominoType]:
+        return self.get_shape()[y][x]
 
     ###############################################################
     ######################### IS_OCCUPIED #########################
@@ -80,7 +88,7 @@ class Grid:
         # UTILITÉ :
         # Retourne si la case est occupée par un bloc
         # =============================
-        return self.get_shape()[y][x]
+        return self.get_shape()[y][x] is not None
 
     ###############################################################
     ######################## IS_LINE_FULL #########################
@@ -113,9 +121,9 @@ class Grid:
         while line != 0:
             self.get_shape()[line] = self.get_shape()[line - 1]
             line -= 1
-        # On remplie la ligne la plus en haut de False pour la vider
+        # On remplie la ligne la plus en haut de None pour la vider
         for column in range(GRID_WIDTH):
-            self.get_shape()[0][column] = False
+            self.get_shape()[0][column] = None
 
     ###############################################################
     #################### ADD_ACTIVE_TETROMINO #####################
@@ -132,12 +140,10 @@ class Grid:
                 if (
                         0 <= active_tetromino.get_x() + column < GRID_WIDTH
                         and 0 <= active_tetromino.get_y() + line < GRID_HEIGHT
+                        and active_tetromino.is_occupied(x=column, y=line)
                 ):
                     self.get_shape()[
                             line + int(active_tetromino.get_y())
                         ][
                             column + int(active_tetromino.get_x())
-                        ] = self.is_occupied(
-                            x=column + int(active_tetromino.get_x()),
-                            y=line + int(active_tetromino.get_y())
-                        ) or active_tetromino.is_occupied(x=column, y=line)
+                        ] = active_tetromino.get_shape()[line][column]

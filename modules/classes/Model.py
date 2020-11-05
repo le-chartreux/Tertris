@@ -242,8 +242,9 @@ class Model:
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Retourne si le tétromino actuel peut effectuer la rotation
+        # Retourne si le tétromino actif peut effectuer la rotation
         # =============================
+        # On crée une copie du tétromino actif pour ne pas modifier le vrai actif
         possible = True
         new_shape = [
             self.get_active_tetromino().get_shape()[0][:],
@@ -253,9 +254,9 @@ class Model:
         ]
 
         tetromino_after_rotation = ActiveTetromino(
+            Tetromino(new_shape),
             self.get_active_tetromino().get_x(),
             self.get_active_tetromino().get_y(),
-            shape=new_shape
         )
         tetromino_after_rotation.rotate(rotation)
 

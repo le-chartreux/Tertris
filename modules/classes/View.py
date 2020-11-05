@@ -27,6 +27,7 @@
 # + print_keybinds_border()
 # + get_player_input()
 # + set_colorscheme() <- fonction
+# + get_color_pair() <- fonction
 # ==========================================================
 
 import curses
@@ -36,6 +37,7 @@ from typing import Optional
 
 from modules.classes.ActiveTetromino import ActiveTetromino
 from modules.classes.Tetromino import Tetromino
+from modules.classes.TetrominoType import TetrominoType
 from modules.classes.Statistics import Statistics
 from modules.classes.PlayerAction import PlayerAction
 from modules.classes.Grid import Grid
@@ -308,7 +310,12 @@ class View:
             for column in range(GRID_WIDTH):
                 if grid.is_occupied(x=column, y=line):
                     # On met un bloc
-                    self.get_window_game().addstr(line + 1, column*2 + 1, "██", curses.color_pair(8))
+                    self.get_window_game().addstr(
+                        line + 1,
+                        column*2 + 1,
+                        "██",
+                        curses.color_pair(get_color_pair(grid.get_element(column, line)))
+                    )
                     # *2 car les tétrominos font 2 de large
                 else:
                     # On met un espace pour supprimer un éventuel ancien bloc
@@ -363,7 +370,7 @@ class View:
                         line + active_tetromino.get_y() + 1,
                         (column + active_tetromino.get_x())*2 + 1,  # *2 car les tétrominos font 2 de large
                         "██",
-                        curses.A_BOLD | curses.color_pair(5)
+                        curses.color_pair(get_color_pair(active_tetromino.get_tetromino_type()))
                     )
 
         self.get_window_game().refresh()
@@ -385,7 +392,7 @@ class View:
                         line + 1,
                         column*2 + 1,
                         "██",  # *2 car les tétrominos font 2 de large
-                        curses.A_BOLD | curses.color_pair(5)
+                        curses.color_pair(get_color_pair(next_tetromino.get_tetromino_type()))
                     )
                 else:
                     self.get_window_next().addstr(
@@ -439,22 +446,23 @@ class View:
         # UTILITÉ :
         # Affiche le tétromino suivant dans la fenêtre stored
         # =============================
-        for line in range(4):
-            for column in range(4):
-                if stored_tetromino is not None and stored_tetromino.is_occupied(x=column, y=line):
-                    self.get_window_stored().addstr(
-                        line + 1,
-                        column*2 + 1,
-                        "██",  # *2 car les tétrominos font 2 de large
-                        curses.A_BOLD | curses.color_pair(5)
-                    )
-                else:
-                    self.get_window_stored().addstr(
-                        line + 1,
-                        column*2 + 1,  # *2 car les tétrominos font 2 de large
-                        "  ",
-                        curses.A_BOLD | curses.color_pair(8)
-                    )
+        if stored_tetromino is not None:
+            for line in range(4):
+                for column in range(4):
+                    if stored_tetromino is not None and stored_tetromino.is_occupied(x=column, y=line):
+                        self.get_window_stored().addstr(
+                            line + 1,
+                            column*2 + 1,
+                            "██",  # *2 car les tétrominos font 2 de large
+                            curses.color_pair(get_color_pair(stored_tetromino.get_tetromino_type()))
+                        )
+                    else:
+                        self.get_window_stored().addstr(
+                            line + 1,
+                            column*2 + 1,  # *2 car les tétrominos font 2 de large
+                            "  ",
+                            curses.A_BOLD | curses.color_pair(8)
+                        )
 
         self.get_window_stored().refresh()
 
@@ -629,8 +637,28 @@ def set_colorscheme() -> None:
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_WHITE)  # I
     curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_WHITE)  # O
     curses.init_pair(3, curses.COLOR_MAGENTA, curses.COLOR_WHITE)  # T
-    curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_WHITE)  # L
+    curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_WHITE)  # L
     curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_WHITE)  # J
     curses.init_pair(6, curses.COLOR_RED, curses.COLOR_WHITE)  # Z
     curses.init_pair(7, curses.COLOR_GREEN, curses.COLOR_WHITE)   # S
     curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_WHITE)  # Background & texts
+
+
+###############################################################
+####################### GET_COLOR_PAIR ########################
+###############################################################
+def get_color_pair(tetromino_type: TetrominoType) -> int:
+    if tetromino_type == TetrominoType.I:
+        return 1
+    elif tetromino_type == TetrominoType.O:
+        return 2
+    elif tetromino_type == TetrominoType.T:
+        return 3
+    elif tetromino_type == TetrominoType.L:
+        return 4
+    elif tetromino_type == TetrominoType.J:
+        return 5
+    elif tetromino_type == TetrominoType.Z:
+        return 6
+    elif tetromino_type == TetrominoType.S:
+        return 7
