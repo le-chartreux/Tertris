@@ -10,11 +10,13 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
-# + have_to_go_down()
+# + has_to_go_down()
 # + do_tick()
 # + can_active_tetromino_move()
 # + can_active_tetromino_rotate()
+# + can_player_store_active_tetromino()
 # + store_active_tetromino()
+# + is_game_lose()
 # ==========================================================
 
 from time import time
@@ -44,7 +46,8 @@ class Model:
         "_stored_tetromino",
         "_statistics",
         "_last_down",
-        "_can_player_store"
+        "_player_already_store",
+        "_first_down_new_tetromino"
     )
 
     ###############################################################
@@ -56,7 +59,8 @@ class Model:
     _stored_tetromino: Optional[Tetromino]
     _statistics: Statistics
     _last_down: float
-    _can_player_store: bool
+    _player_already_store: bool
+    _first_down_new_tetromino: bool
 
     ###############################################################
     ########################## __INIT__ ###########################
@@ -67,7 +71,10 @@ class Model:
             active_tetromino: ActiveTetromino = None,
             next_tetromino: Tetromino = None,
             stored_tetromino: Optional[Tetromino] = None,
-            statistics: Statistics = None
+            statistics: Statistics = None,
+            last_down: float = None,
+            player_already_store: bool = False,
+            first_down_new_tetromino: bool = True
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -80,11 +87,9 @@ class Model:
         # - le tetromino stocké (_stored_tetromino)
         # - les statistiques de la partie (_statistics)
         # - la dernière fois que l'action de baisser le tétromino actif a été faite (_last_down)
-        # - si le joueur peut stocker son tétromino maintenant (_can_player_store)
+        # - si le joueur a déjà stocké son tétromino à ce tick (_player_already_store)
+        # - si c'est le tétromino actif n'as pas encore été baissé (_first_down_new_tetromino)
         # =============================
-        self._last_down = time()
-        self._can_player_store = True
-
         if grid is None:
             grid = Grid()
 
@@ -95,13 +100,19 @@ class Model:
             next_tetromino = random_next_tetromino()
 
         if statistics is None:
-            statistics = Statistics()
+            statistics = Statistics(level=0)
+
+        if last_down is None:
+            last_down = time()
 
         self.set_grid(grid)
         self.set_active_tetromino(active_tetromino)
         self.set_next_tetromino(next_tetromino)
         self.set_stored_tetromino(stored_tetromino)
         self.set_statistics(statistics)
+        self.set_last_down(last_down)
+        self.set_player_already_store(player_already_store)
+        self.set_first_down_new_tetromino(first_down_new_tetromino)
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -124,8 +135,11 @@ class Model:
     def get_last_down(self) -> float:
         return self._last_down
 
-    def get_can_player_switch(self) -> bool:
-        return self._can_player_store
+    def get_player_already_store(self) -> bool:
+        return self._player_already_store
+
+    def get_first_down_new_tetromino(self) -> bool:
+        return self._first_down_new_tetromino
 
     ###############################################################
     ########################### SETTERS ###########################
@@ -145,16 +159,19 @@ class Model:
     def set_statistics(self, statistics: Statistics) -> None:
         self._statistics = statistics
 
-    def set_last_down(self, new_last_down: float) -> None:
-        self._last_down = new_last_down
+    def set_last_down(self, last_down: float) -> None:
+        self._last_down = last_down
 
-    def set_can_player_switch(self, can_player_switch: bool) -> None:
-        self._can_player_store = can_player_switch
+    def set_player_already_store(self, player_already_store: bool) -> None:
+        self._player_already_store = player_already_store
+
+    def set_first_down_new_tetromino(self, first_down_new_tetromino: bool) -> None:
+        self._first_down_new_tetromino = first_down_new_tetromino
 
     ###############################################################
-    ####################### HAVE_TO_GO_DOWN #######################
+    ######################## HAS_TO_GO_DOWN #######################
     ###############################################################
-    def have_to_go_down(self) -> bool:
+    def has_to_go_down(self) -> bool:
         # Oui si plus de (0.8 - (level - 1)*0.007)**(level - 1) secondes se sont écoulées depuis le derniers vers le bas
         # (cf le guideline de Tetris)
         level = self.get_statistics().get_level()
@@ -170,25 +187,57 @@ class Model:
         # UTILITÉ :
         # Effectue la séquence d'évènement qui se joue à chaque tick
         # dans le modèle :
-        # - Regarder si le tétromino actif peut faire un mouvement vers le bas
-        # - Si oui et qu'il faut qu'il descende : le faire
-        # - Si non :
-        #   l'ajouter à la grille
-        #   passer au prochain tétromino
-        #   générer un nouveau prochain tétromino
-        #   autoriser le joueur à switcher à nouveau
-        #   regarder si des lignes ont été complétées
-        #   ajouter les lignes complétées et les points engendrés aux statistiques
+        # - Regarder si le tétromino actif doit faire un mouvement vers le bas
+        # - Si oui et qu'il peut :
+        #   - Le descende
+        # - Si non et que la partie est perdue :
+        #   - Découper le tétromino actif pour qu'il puisse rentrer dans la grille à l'affichage final
+        #   - Passer au prochain tétromino (juste pour que le joueur puisse voir quel aurait été le suivant)
+        # - Sinon :
+        #   - Ajouter le tetromino actif à la grille
+        #   - Passer au prochain tétromino
+        #   - Générer un nouveau prochain tétromino
+        #   - Passer _player_already_store à False
+        #   - Regarder si des lignes ont été complétées
+        #   - Ajouter les lignes complétées et les points engendrés aux statistiques
         # =============================
-        if self.have_to_go_down():
+        if self.has_to_go_down():
             self.set_last_down(time())
             if self.can_active_tetromino_move(Direction.DOWN):
                 self.get_active_tetromino().move(Direction.DOWN)
+                self.set_first_down_new_tetromino(False)
+            elif self.is_game_lost():
+
+                # Découpage du tétromino actif pour qu'il puisse rentrer dans l'affichage :
+
+                # On monte le tétromino de sa hauteur
+                # (comme ça on est sûr qu'il n'est plus en collision avec un bloc)
+                for _ in range(self.get_active_tetromino().get_height()):
+                    self.get_active_tetromino().move(Direction.UP)
+
+                # On regarde jusqu'où il peut descendre
+                number_of_down = 0
+                while self.can_active_tetromino_move(Direction.DOWN):
+                    number_of_down += 1
+                    self.get_active_tetromino().move(Direction.DOWN)
+
+                # On le redescend complement
+                for _ in range(self.get_active_tetromino().get_height() - number_of_down + 1):
+                    self.get_active_tetromino().move(Direction.DOWN)
+
+                # On le découpe sur les parties qui ne s'afficheront pas
+                for _ in range(self.get_active_tetromino().get_height() - number_of_down + 1):
+                    del self.get_active_tetromino().get_shape()[0]
+
+                self.set_next_tetromino(random_next_tetromino())
+
             else:
                 self.get_grid().add_active_tetromino(self.get_active_tetromino())
                 self.set_active_tetromino(ActiveTetromino(tetromino=self.get_next_tetromino()))
                 self.set_next_tetromino(random_next_tetromino())
-                self.set_can_player_switch(True)
+                self.set_first_down_new_tetromino(True)
+
+                self.set_player_already_store(False)
 
                 # On regarde si des lignes ont été remplies :
                 number_of_completed_lines = 0
@@ -212,16 +261,18 @@ class Model:
         line = 0
 
         possible = True
-        while line < 4 and possible:
+        while line < self.get_active_tetromino().get_height() and possible:
             column = 0
-            while column < 4 and possible:
+            while column < self.get_active_tetromino().get_width() and possible:
                 possible = (
                     not self.get_active_tetromino().is_occupied(x=column, y=line)  # Soit il n'y a pas de bloc
                     or  # ou
                     (  # Soit le bloc va aller dans les bordures de la grille ...
                         0 <= self.get_active_tetromino().get_x() + column + direction.value.get_x() < GRID_WIDTH
                         and
-                        0 <= self.get_active_tetromino().get_y() + line + direction.value.get_y() < GRID_HEIGHT
+                        # Pas le 0 <= car le seul cas où on monte est quand on veut découper le tétromino actif à la fin
+                        # de la partie et on peut que ça valide à ce moment là
+                        self.get_active_tetromino().get_y() + line + direction.value.get_y() < GRID_HEIGHT
                     )
                     and not (  # ... et l'emplacement futur n'est pas occupé
                         self.get_grid().is_occupied(
@@ -235,7 +286,7 @@ class Model:
         return possible
 
     ###############################################################
-    ################# CAN_ACTIVE_TETROMINO_MOVE ###################
+    ################ CAN_ACTIVE_TETROMINO_ROTATE ##################
     ###############################################################
     def can_active_tetromino_rotate(self, rotation: Rotation) -> bool:
         # =============================
@@ -244,26 +295,20 @@ class Model:
         # UTILITÉ :
         # Retourne si le tétromino actif peut effectuer la rotation
         # =============================
-        # On crée une copie du tétromino actif pour ne pas modifier le vrai actif
         possible = True
-        new_shape = [
-            self.get_active_tetromino().get_shape()[0][:],
-            self.get_active_tetromino().get_shape()[1][:],
-            self.get_active_tetromino().get_shape()[2][:],
-            self.get_active_tetromino().get_shape()[3][:],
-        ]
 
+        # On crée une copie du tétromino actif pour ne pas modifier le vrai actif
         tetromino_after_rotation = ActiveTetromino(
-            Tetromino(new_shape),
+            Tetromino(self.get_active_tetromino().copy_shape()),
             self.get_active_tetromino().get_x(),
             self.get_active_tetromino().get_y(),
         )
         tetromino_after_rotation.rotate(rotation)
 
         line = 0
-        while line < 4 and possible:
+        while line < self.get_active_tetromino().get_height() and possible:
             column = 0
-            while column < 4 and possible:
+            while column < self.get_active_tetromino().get_width() and possible:
                 possible = (
                     not tetromino_after_rotation.is_occupied(x=column, y=line)  # Soit il n'y a pas de bloc
                     or  # ou
@@ -274,13 +319,39 @@ class Model:
                     )
                     and not (  # ... et son emplacement n'est pas occupé
                         self.get_grid().is_occupied(
-                            int(tetromino_after_rotation.get_x() + column),
-                            int(tetromino_after_rotation.get_y() + line)
+                            tetromino_after_rotation.get_x() + column,
+                            tetromino_after_rotation.get_y() + line
                         )
                     )
                 )
                 column += 1
             line += 1
+        return possible
+
+    ###############################################################
+    ############# CAN_PLAYER_STORE_ACTIVE_TETROMINO ###############
+    ###############################################################
+    def can_player_store_active_tetromino(self) -> bool:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # - Retourne si le joueur peut stocker le tétromino actif, donc que :
+        #   - _can_player_switch est vrai
+        #   - le tétromino stocké a la place de spawn
+        # =============================
+        possible = not self.get_player_already_store()
+        # S'il n'y a pas de tétromino stocké, le tétromino stocké peut forcément être posé (puisqu'il ne sera pos posé)
+        if possible and self.get_stored_tetromino() is None:
+            return True
+
+        # On sauvegarde la position
+        position_sav = self.get_active_tetromino().get_position()
+        # On intervertit les deux tétrominos et on regarde si ça marche puis on remet dans l'état original
+        self.store_active_tetromino()
+        possible = possible and self.can_active_tetromino_move(Direction.HERE)
+        self.store_active_tetromino()
+        self.get_active_tetromino().set_position(position_sav.get_x(), position_sav.get_y())  # On restaure la position
         return possible
 
     ###############################################################
@@ -315,6 +386,20 @@ class Model:
             y_new_active_tetromino -= 1
 
         self.set_active_tetromino(ActiveTetromino(y=y_new_active_tetromino, tetromino=tetromino_to_swap_with))
+
+    ###############################################################
+    ######################## IS_GAME_LOSE #########################
+    ###############################################################
+    def is_game_lost(self) -> bool:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # - Retourne si la partie est finie :
+        #   - True si le tétromino actif ne peut pas bouger et qu'il avait spawn au dernier DOWN
+        #   - False sinon
+        # =============================
+        return not self.can_active_tetromino_move(Direction.DOWN) and self.get_first_down_new_tetromino()
 
 
 ###############################################################

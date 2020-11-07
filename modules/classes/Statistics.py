@@ -25,7 +25,8 @@ class Statistics:
         "_level",
         "_score",
         "_lines_completed",
-        "_begin_time"
+        "_begin_time",
+        "_paused_time"
     )
 
     ###############################################################
@@ -35,6 +36,7 @@ class Statistics:
     _score: int
     _lines_completed: int
     _begin_time: float
+    _paused_time: float
 
     ###############################################################
     ########################## __INIT__ ###########################
@@ -44,7 +46,8 @@ class Statistics:
             level: int = 0,
             score: int = 0,
             lines_completed: int = 0,
-            begin_time: float = time.time()
+            begin_time: float = time.time(),
+            paused_time: float = 0
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -60,6 +63,7 @@ class Statistics:
         self.set_score(score)
         self.set_lines_completed(lines_completed)
         self.set_begin_time(begin_time)
+        self.set_paused_time(paused_time)
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -76,6 +80,9 @@ class Statistics:
     def get_begin_time(self) -> float:
         return self._begin_time
 
+    def get_paused_time(self) -> float:
+        return self._paused_time
+
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
@@ -88,8 +95,11 @@ class Statistics:
     def set_lines_completed(self, lines_completed: int) -> None:
         self._lines_completed = lines_completed
 
-    def set_begin_time(self, begin_time) -> None:
+    def set_begin_time(self, begin_time: float) -> None:
         self._begin_time = begin_time
+
+    def set_paused_time(self, paused_time: float) -> None:
+        self._paused_time = paused_time
 
     ###############################################################
     ############################ ADDERS ###########################
@@ -103,6 +113,9 @@ class Statistics:
     def add_lines_completed(self, lines_completed_to_add: int) -> None:
         self.set_lines_completed(self.get_lines_completed() + lines_completed_to_add)
 
+    def add_paused_time(self, paused_time_to_add: float) -> None:
+        self.set_paused_time(self.get_paused_time() + paused_time_to_add)
+
     ###############################################################
     ######################### GET_DURATION ########################
     ###############################################################
@@ -111,12 +124,12 @@ class Statistics:
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Retourne la durée, en secondes, depuis le temps de début
+        # Retourne la durée, en secondes, depuis le temps de début, auquel est soustrait le temps de pause
         # =============================
         if end_time is None:
-            return int(time.time() - self.get_begin_time())
+            return int(time.time() - self.get_begin_time() - self.get_paused_time())
         else:
-            return int(end_time - self.get_begin_time())
+            return int(end_time - self.get_begin_time() - self.get_paused_time())
 
     ###############################################################
     #################### GET_POINTS_FOR_LINES #####################

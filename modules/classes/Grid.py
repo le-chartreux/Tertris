@@ -88,7 +88,11 @@ class Grid:
         # UTILITÉ :
         # Retourne si la case est occupée par un bloc
         # =============================
-        return self.get_shape()[y][x] is not None
+        return (
+                y >= 0  # Utilisé à la fin d'une partie, au découpage du tétromino actif
+                and
+                self.get_shape()[y][x] is not None
+        )
 
     ###############################################################
     ######################## IS_LINE_FULL #########################
@@ -135,15 +139,15 @@ class Grid:
         # UTILITÉ :
         # Ajoute le tétromino actuel dans la grille
         # =============================
-        for line in range(4):
-            for column in range(4):
+        for line in range(active_tetromino.get_height()):
+            for column in range(active_tetromino.get_width()):
                 if (
                         0 <= active_tetromino.get_x() + column < GRID_WIDTH
                         and 0 <= active_tetromino.get_y() + line < GRID_HEIGHT
                         and active_tetromino.is_occupied(x=column, y=line)
                 ):
                     self.get_shape()[
-                            line + int(active_tetromino.get_y())
+                            line + active_tetromino.get_y()
                         ][
-                            column + int(active_tetromino.get_x())
+                            column + active_tetromino.get_x()
                         ] = active_tetromino.get_shape()[line][column]

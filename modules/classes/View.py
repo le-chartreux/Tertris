@@ -363,8 +363,8 @@ class View:
         # UTILITÉ :
         # Affiche le tétromino actif dans la fenêtre de jeu
         # =============================
-        for line in range(4):
-            for column in range(4):
+        for line in range(active_tetromino.get_height()):
+            for column in range(active_tetromino.get_width()):
                 if active_tetromino.is_occupied(x=column, y=line):
                     self.get_window_game().addstr(
                         line + active_tetromino.get_y() + 1,
@@ -385,9 +385,10 @@ class View:
         # UTILITÉ :
         # Affiche le tétromino suivant dans la fenêtre next
         # =============================
-        for line in range(4):
-            for column in range(4):
+        for line in range(next_tetromino.get_height()):
+            for column in range(next_tetromino.get_width()):
                 if next_tetromino.is_occupied(x=column, y=line):
+                    # On affiche un "pixel"
                     self.get_window_next().addstr(
                         line + 1,
                         column*2 + 1,
@@ -395,6 +396,7 @@ class View:
                         curses.color_pair(get_color_pair(next_tetromino.get_tetromino_type()))
                     )
                 else:
+                    # On affiche du vide pour effacer un éventuel résidu de bloc du suivant précédent
                     self.get_window_next().addstr(
                         line + 1,
                         column*2 + 1,
@@ -447,8 +449,8 @@ class View:
         # Affiche le tétromino suivant dans la fenêtre stored
         # =============================
         if stored_tetromino is not None:
-            for line in range(4):
-                for column in range(4):
+            for line in range(stored_tetromino.get_height()):
+                for column in range(stored_tetromino.get_width()):
                     if stored_tetromino is not None and stored_tetromino.is_occupied(x=column, y=line):
                         self.get_window_stored().addstr(
                             line + 1,

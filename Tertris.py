@@ -6,7 +6,7 @@ from modules.classes.Controller import Controller
 try:
     controller = Controller()
     controller.setup()
-    while controller.get_continue_game():
+    while controller.get_continue_execution():
         controller.do_tick()
         sleep(0.05)
 

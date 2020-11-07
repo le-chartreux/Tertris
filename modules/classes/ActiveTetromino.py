@@ -42,8 +42,8 @@ class ActiveTetromino(Tetromino):
     def __init__(
             self,
             tetromino: Tetromino,
-            x: float = 4,
-            y: float = -1  # -1 car la première ligne du tetromino est toujours vide
+            x: int = 4,
+            y: int = -1  # -1 car la première ligne du tetromino est toujours vide
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -55,7 +55,7 @@ class ActiveTetromino(Tetromino):
         # - la position sur l'axe Y de son coin haut-gauche (_y)
         # =============================
         super().__init__(tetromino.get_shape())
-        self._position = Position(x, y)  # On n'utilise pas le setter pour initialiser la position
+        self._position = Position(x, y)  # On n'utilise pas le setter, pour initialiser la position
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -63,23 +63,23 @@ class ActiveTetromino(Tetromino):
     def get_position(self) -> Position:
         return self._position
 
-    def get_x(self) -> float:
+    def get_x(self) -> int:
         return self.get_position().get_x()
 
-    def get_y(self) -> float:
+    def get_y(self) -> int:
         return self.get_position().get_y()
 
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_position(self, x: float, y: float):
+    def set_position(self, x: int, y: int):
         self.set_x(x)
         self.set_y(y)
 
-    def set_x(self, x: float):
+    def set_x(self, x: int):
         self.get_position().set_x(x)
 
-    def set_y(self, y: float):
+    def set_y(self, y: int):
         self.get_position().set_y(y)
 
     ###############################################################
@@ -99,22 +99,30 @@ class ActiveTetromino(Tetromino):
     ########################### ROTATE ############################
     ###############################################################
     def rotate(self, rotation: Rotation):
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Fait pivoter le tétromino de 90° vers la gauche ou vers la droite
+        # =============================
         # Création de la nouvelle forme :
         new_shape = []
-        for line in range(4):
-            new_shape.append([None, None, None, None])
+        for line in range(self.get_height()):
+            new_shape.append([])
+            for column in range(self.get_width()):
+                new_shape[line].append(None)
 
         # Rotation
         if rotation == Rotation.LEFT:
-            for i in range(4):
-                self.get_shape()[i].reverse()
+            for line in range(self.get_height()):
+                self.get_shape()[line].reverse()
         elif rotation == Rotation.RIGHT:
             self.get_shape().reverse()
         else:
             raise ValueError("Error: impossible to rotate the active tetromino: rotation argument incorrect")
 
-        for line in range(4):
-            for column in range(4):
+        for line in range(self.get_height()):
+            for column in range(self.get_width()):
                 new_shape[line][column] = self.get_shape()[column][line]
 
         # Assignation de la nouvelle forme

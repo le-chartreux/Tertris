@@ -17,3 +17,4 @@ class Direction(Enum):
     RIGHT = Position(1, 0)
     UP = Position(0, -1)
     DOWN = Position(0, 1)
+    HERE = Position(0, 0)

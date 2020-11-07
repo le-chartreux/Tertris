@@ -10,6 +10,8 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
+# + get_height()
+# + get_width()
 # + is_occupied()
 # + get_tetromino_type()
 # ==========================================================
@@ -61,6 +63,33 @@ class Tetromino:
         self._shape = shape
 
     ###############################################################
+    ######################## GET_HEIGHT ###########################
+    ###############################################################
+    def get_height(self) -> int:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne la hauteur du tétromino
+        # =============================
+        return len(self.get_shape())
+
+    ###############################################################
+    ######################## GET_HEIGHT ###########################
+    ###############################################################
+    def get_width(self) -> int:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne la largeur
+        # =============================
+        if self.get_height() == 0:  # On fait ça pour éviter un IndexError si le tétromino est vide
+            return 0
+        else:
+            return len(self.get_shape()[0])
+
+    ###############################################################
     ######################### IS_OCCUPIED #########################
     ###############################################################
     def is_occupied(self, x: int, y: int) -> bool:
@@ -76,6 +105,12 @@ class Tetromino:
     ##################### GET_TETROMINO_TYPE ######################
     ###############################################################
     def get_tetromino_type(self) -> TetrominoType:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne le type du tétromino
+        # =============================
         tetromino_type = None
         line = 0
         while line < 4 and tetromino_type is None:
@@ -88,6 +123,21 @@ class Tetromino:
         if tetromino_type is None:
             raise TypeError("Error: impossible to get the type of a tetromino : all of its blocs are None")
         return tetromino_type
+
+    ###############################################################
+    ######################### COPY_SHAPE ##########################
+    ###############################################################
+    def copy_shape(self) -> List[List[Optional[TetrominoType]]]:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne une copie de la forme du tétromino (_shape)
+        # =============================
+        new_shape = []
+        for line in range(self.get_height()):
+            new_shape.append(self.get_shape()[line][:])
+        return new_shape
 
 
 ###############################################################
@@ -140,8 +190,8 @@ def tetromino_factory(tetromino_type: TetrominoType) -> Tetromino:
         return Tetromino(
             [
                 [None, None, None, None],
-                [None, TetrominoType.L, TetrominoType.L, TetrominoType.L],
-                [None, None, None, TetrominoType.L],
+                [None, TetrominoType.J, TetrominoType.J, TetrominoType.J],
+                [None, None, None, TetrominoType.J],
                 [None, None, None, None],
             ]
         )
