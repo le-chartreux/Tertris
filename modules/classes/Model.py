@@ -172,8 +172,15 @@ class Model:
     ######################## HAS_TO_GO_DOWN #######################
     ###############################################################
     def has_to_go_down(self) -> bool:
-        # Oui si plus de (0.8 - (level - 1)*0.007)**(level - 1) secondes se sont écoulées depuis le derniers vers le bas
-        # (cf le guideline de Tetris)
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne si le tétromino actuel doit faire un déplacement vers le bas
+        # --> Oui si plus de (0.8 - (level - 1)*0.007)**(level - 1) secondes
+        #     se sont écoulées depuis le derniers vers le bas
+        #     (cf le guideline de Tetris)
+        # =============================
         level = self.get_statistics().get_level()
         return (time() - self.get_last_down()) > (0.8 - (level - 1)*0.007)**(level - 1)
 
