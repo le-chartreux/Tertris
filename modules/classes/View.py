@@ -89,6 +89,8 @@ class View:
     ###############################################################
     ############################ HINTS ############################
     ###############################################################
+    # Since the curses module puts the _CursesWindow class private, I had
+    # to declare them as objects :/
     _window_all: object
     _window_game: object
     _window_next: object
