@@ -123,7 +123,7 @@ class Grid:
         # On remplace la ligne par la ligne au-dessus, la ligne au-dessus par celle d'encore au-dessus, etc.
         line = line_number
         while line != 0:
-            self.get_shape()[line] = self.get_shape()[line - 1]
+            self.get_shape()[line][:] = self.get_shape()[line - 1][:]
             line -= 1
         # On remplie la ligne la plus en haut de None pour la vider
         for column in range(GRID_WIDTH):
