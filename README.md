@@ -3,7 +3,7 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 
 
 ## LOOK:
-![Example of look - if not show look at informations/look.png](informations/look.png)
+![Example of look - if not show look at informations/look.png](informations/social preview.png)
 
 
 ## HOW TO USE IT ?
