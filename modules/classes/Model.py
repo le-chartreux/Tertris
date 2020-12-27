@@ -12,6 +12,8 @@
 # + SETTERS
 # + has_to_go_down()
 # + do_tick()
+# + treat_game_lost()
+# + treat_tetromino_placed()
 # + can_active_tetromino_move()
 # + can_active_tetromino_rotate()
 # + can_player_store_active_tetromino()
@@ -198,15 +200,9 @@ class Model:
         # - Si oui et qu'il peut :
         #   - Le descende
         # - Si non et que la partie est perdue :
-        #   - Découper le tétromino actif pour qu'il puisse rentrer dans la grille à l'affichage final
-        #   - Passer au prochain tétromino (juste pour que le joueur puisse voir quel aurait été le suivant)
+        #   Exécuter les routines de la perte de la partie
         # - Sinon :
-        #   - Ajouter le tetromino actif à la grille
-        #   - Passer au prochain tétromino
-        #   - Générer un nouveau prochain tétromino
-        #   - Passer _player_already_store à False
-        #   - Regarder si des lignes ont été complétées
-        #   - Ajouter les lignes complétées et les points engendrés aux statistiques
+        #   Exécuter l'ensemble des routines quand un tétromino est placé (donc qu'il touche le sol)
         # =============================
         if self.has_to_go_down():
             self.set_last_down(time())
@@ -214,46 +210,76 @@ class Model:
                 self.get_active_tetromino().move(Direction.DOWN)
                 self.set_first_down_new_tetromino(False)
             elif self.is_game_lost():
-
-                # Découpage du tétromino actif pour qu'il puisse rentrer dans l'affichage :
-
-                # On monte le tétromino de sa hauteur
-                # (comme ça on est sûr qu'il n'est plus en collision avec un bloc)
-                for _ in range(self.get_active_tetromino().get_height()):
-                    self.get_active_tetromino().move(Direction.UP)
-
-                # On regarde jusqu'où il peut descendre
-                number_of_down = 0
-                while self.can_active_tetromino_move(Direction.DOWN):
-                    number_of_down += 1
-                    self.get_active_tetromino().move(Direction.DOWN)
-
-                # On le redescend complement
-                for _ in range(self.get_active_tetromino().get_height() - number_of_down + 1):
-                    self.get_active_tetromino().move(Direction.DOWN)
-
-                # On le découpe sur les parties qui ne s'afficheront pas
-                for _ in range(self.get_active_tetromino().get_height() - number_of_down + 1):
-                    del self.get_active_tetromino().get_shape()[0]
-
-                self.set_next_tetromino(random_next_tetromino())
-
+                self.treat_game_lost()
             else:
-                self.get_grid().add_active_tetromino(self.get_active_tetromino())
-                self.set_active_tetromino(ActiveTetromino(tetromino=self.get_next_tetromino()))
-                self.set_next_tetromino(random_next_tetromino())
-                self.set_first_down_new_tetromino(True)
+                self.treat_tetromino_placed()
 
-                self.set_player_already_store(False)
+    ###############################################################
+    ###################### TREAT_GAME_LOST ########################
+    ###############################################################
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Exécute les routines de la perte de la partie :
+    # - Découpe le tétromino actif pour qu'il puisse rentrer dans la grille à l'affichage final
+    # - Passe au prochain tétromino (juste pour que le joueur puisse voir quel aurait été le suivant)
+    # =============================
+    def treat_game_lost(self):
+        # Découpage du tétromino actif pour qu'il puisse rentrer dans l'affichage :
 
-                # On regarde si des lignes ont été remplies :
-                number_of_completed_lines = 0
-                for line in range(GRID_HEIGHT):
-                    if self.get_grid().is_line_full(line):
-                        self.get_grid().drop_lines_upper(line)
-                        number_of_completed_lines += 1
-                self.get_statistics().add_lines_completed(number_of_completed_lines)
-                self.get_statistics().add_points_for_lines(number_of_completed_lines)
+        # On monte le tétromino de sa hauteur
+        # (comme ça on est sûr qu'il n'est plus en collision avec un bloc)
+        for _ in range(self.get_active_tetromino().get_height()):
+            self.get_active_tetromino().move(Direction.UP)
+
+        # On regarde jusqu'où il peut descendre
+        number_of_down = 0
+        while self.can_active_tetromino_move(Direction.DOWN):
+            number_of_down += 1
+            self.get_active_tetromino().move(Direction.DOWN)
+
+        # On le redescend complement
+        for _ in range(self.get_active_tetromino().get_height() - number_of_down + 1):
+            self.get_active_tetromino().move(Direction.DOWN)
+
+        # On le découpe sur les parties qui ne s'afficheront pas
+        for _ in range(self.get_active_tetromino().get_height() - number_of_down + 1):
+            del self.get_active_tetromino().get_shape()[0]
+
+        self.set_next_tetromino(random_next_tetromino())
+
+    ###############################################################
+    ################## TREAT_TETROMINO_PLACED ###################
+    ###############################################################
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Execute l'ensemble des routines quand un tétromino est placé (donc qu'il touche le sol)
+    #   - Ajoute le tetromino actif à la grille
+    #   - Passe au prochain tétromino
+    #   - Génère un nouveau prochain tétromino
+    #   - Passe _player_already_store à False
+    #   - Regarde si des lignes ont été complétées
+    #   - Ajoute les lignes complétées et les points engendrés aux statistiques
+    # =============================
+    def treat_tetromino_placed(self):
+        self.get_grid().add_active_tetromino(self.get_active_tetromino())
+        self.set_active_tetromino(ActiveTetromino(tetromino=self.get_next_tetromino()))
+        self.set_next_tetromino(random_next_tetromino())
+        self.set_first_down_new_tetromino(True)
+
+        self.set_player_already_store(False)
+
+        # On regarde si des lignes ont été remplies :
+        number_of_completed_lines = 0
+        for line in range(GRID_HEIGHT):
+            if self.get_grid().is_line_full(line):
+                self.get_grid().drop_lines_upper(line)
+                number_of_completed_lines += 1
+        self.get_statistics().add_lines_completed(number_of_completed_lines)
+        self.get_statistics().add_points_for_lines(number_of_completed_lines)
 
     ###############################################################
     ################# CAN_ACTIVE_TETROMINO_MOVE ###################

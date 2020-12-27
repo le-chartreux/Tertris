@@ -1,4 +1,3 @@
-from time import sleep
 from traceback import format_exc
 
 from modules.classes.Controller import Controller
@@ -6,9 +5,7 @@ from modules.classes.Controller import Controller
 try:
     controller = Controller()
     controller.setup()
-    while controller.get_continue_execution():
-        controller.do_tick()
-        sleep(0.05)
+    controller.play()
 
 
 except Exception:  # Pour avoir le message d'erreur et ne pas détruire le terminal de l'utilisateur car ça a crash
