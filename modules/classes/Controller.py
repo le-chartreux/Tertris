@@ -20,7 +20,7 @@
 from time import time, sleep
 
 from modules.classes.Model import Model
-from modules.classes.View import View
+from modules.classes.view.GameView import GameView
 
 from modules.classes.PlayerAction import PlayerAction
 from modules.classes.Direction import Direction
@@ -41,7 +41,7 @@ class Controller:
     ############################ HINTS ############################
     ###############################################################
     _model: Model
-    _view: View
+    _view: GameView
     _continue_execution: bool
 
     ###############################################################
@@ -60,7 +60,7 @@ class Controller:
         # - s’il doit continuer à s'exécuter (_continue_program)
         # =============================
         self.set_model(Model())
-        self.set_view(View())
+        self.set_view(GameView())
         self._continue_execution = True
 
     ###############################################################
@@ -69,7 +69,7 @@ class Controller:
     def get_model(self) -> Model:
         return self._model
 
-    def get_view(self) -> View:
+    def get_view(self) -> GameView:
         return self._view
 
     def get_continue_execution(self) -> bool:
@@ -81,7 +81,7 @@ class Controller:
     def set_model(self, model: Model) -> None:
         self._model = model
 
-    def set_view(self, view: View) -> None:
+    def set_view(self, view: GameView) -> None:
         self._view = view
 
     def set_continue_execution(self, continue_program: bool) -> None:

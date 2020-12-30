@@ -8,7 +8,7 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 
 ## HOW TO USE IT ?
 1. Download the project
-2. Set the window's size of your terminal at least 53x25 characters (otherwise the board game will not be able to be printed correctly)
+2. Set the window's size of your terminal at least 53x28 characters (otherwise the board game will not be able to be printed correctly)
 3. Run `Tertris.py` with Python3 from a terminal (`python3 Tertris.py` when your current directory is this game)
 4. Enjoy :)
 
