@@ -211,26 +211,68 @@ class TitleView:
         # Affiche le logo
         # =============================
         # Première ligne
-        self.get_window_logo().addstr(0, 11, '▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▜', curses.color_pair(9))
+        self.get_window_logo().addstr(0, 11, "▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌", curses.color_pair(9))
         # Deuxième ligne
-        self.get_window_logo().addstr(1, 11, '▌', curses.color_pair(9))
-        self.get_window_logo().addstr(2, 11,  '▛▀▀▀▜▐▀▀▀▀▜ ▛▀▀▀▀▌▛▀▀▀▜', curses.color_pair(11))
+        self.get_window_logo().addstr(1, 0, "▄", curses.color_pair(10))
+        self.get_window_logo().addstr(1, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(1, 11,  "▛▀▀▀▀▜▐▀▀▀▀▜ ▛▀▀▀▀▌▛▀▀▀▀▜▐▀▀▀▀▜ ▛▜▐▀▀▀▀▀▌", curses.color_pair(11))
+        self.get_window_logo().addstr(1, 53, "▌", curses.color_pair(9))
 
-        for line in range(GRID_HEIGHT):
-            for column in range(GRID_WIDTH):
-                if grid.is_occupied(x=column, y=line):
-                    # On met un bloc
-                    self.get_window_game().addstr(
-                        line + 1,
-                        column*2 + 1,
-                        "██",
-                        curses.color_pair(get_color_pair(grid.get_element(column, line)))
-                    )
-                    # *2 car les tétrominos font 2 de large
-                else:
-                    # On met un espace pour supprimer un éventuel ancien bloc
-                    self.get_window_game().addstr(line + 1, column*2 + 1, "  ", curses.color_pair(8))
-                    # *2 car les tétrominos font 2 de large
+        # Troisième ligne
+        self.get_window_logo().addstr(2, 0, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(2, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(2, 11, "▙▄▖▗▄▟▐   ▗▘ ▌▗▄▖▐ ▙▄▖▗▄▟▐ ▄▄ ▌ ▙▟▐    ▐ ", curses.color_pair(11))
+        self.get_window_logo().addstr(2, 53, "▌", curses.color_pair(9))
+
+        # Quatrième ligne
+        self.get_window_logo().addstr(3, 1, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(3, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(3, 11, "  ▌▐  ▐ ▐▀▀  ▌▐▗▘▌   ▌▐  ▐ ▌▞▐  ▄▄▐  ▐▀▌ ", curses.color_pair(11))
+        self.get_window_logo().addstr(3, 53, "▌", curses.color_pair(9))
+
+        # Cinquième ligne
+        self.get_window_logo().addstr(4, 2, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(4, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(4, 11, "  ▌▐  ▐ ▝▀▜  ▌▐▘▞    ▌▐  ▐ ▛▗▘  ▌▐ ▌  ▌  ", curses.color_pair(11))
+        self.get_window_logo().addstr(4, 53, "▌", curses.color_pair(9))
+
+        # Sixième ligne
+        self.get_window_logo().addstr(5, 3, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(5, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(5, 11, "  ▌▐  ▐   ▌  ▌▐▚▝▖   ▌▐  ▐ ▛▖▚  ▌▐ ▐  ▐  ", curses.color_pair(11))
+        self.get_window_logo().addstr(5, 53, "▌", curses.color_pair(9))
+
+        # Septième ligne
+        self.get_window_logo().addstr(6, 4, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(6, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(6, 11, "  ▌▐  ▐ ▐▀   ▌▐ ▌▐   ▌▐  ▐ ▌▐ ▌ ▌▐  ▌  ▌ ", curses.color_pair(11))
+        self.get_window_logo().addstr(6, 53, "▌", curses.color_pair(9))
+
+        # Huitième ligne
+        self.get_window_logo().addstr(7, 5, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(7, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(7, 11, "  ▌▐  ▐ ▐    ▌▐ ▐ ▌  ▌▐  ▐ ▌ ▌▐ ▌▐  ▐  ▐ ", curses.color_pair(11))
+        self.get_window_logo().addstr(7, 53, "▌", curses.color_pair(9))
+
+        # Neuvième ligne
+        self.get_window_logo().addstr(8, 6, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(8, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(8, 11, "  ▌▐  ▐ ▐▄▄▖ ▌▐  ▌▐  ▌▐  ▐ ▌ ▐ ▌▌▐▐▄▄▌  ▌", curses.color_pair(11))
+        self.get_window_logo().addstr(8, 53, "▌", curses.color_pair(9))
+
+        # Dixième ligne
+        self.get_window_logo().addstr(9, 6, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(9, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(9, 11, "  ▌▐  ▐    ▐ ▌▐  ▐ ▌ ▌▐  ▐ ▌  ▌▐▌▐▐     ▌", curses.color_pair(11))
+        self.get_window_logo().addstr(9, 53, "▌", curses.color_pair(9))
+
+        # Onzième ligne
+        self.get_window_logo().addstr(10, 6, "▀█▄", curses.color_pair(10))
+        self.get_window_logo().addstr(10, 11, "▌", curses.color_pair(9))
+        self.get_window_logo().addstr(10, 11, "  ▙▟  ▐▄▄▄▄▄▌▙▟   ▙▟ ▙▟  ▐▄▌  ▐▄█▟▐▄▄▄▄▄▌", curses.color_pair(11))
+        self.get_window_logo().addstr(10, 53, "▌", curses.color_pair(9))
+
+
 
         self.get_window_game().refresh()
 
