@@ -7,10 +7,9 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 
 
 ## HOW TO USE IT ?
-1. Download the project
-2. Set the window's size of your terminal at least 53x25 characters (otherwise the board game will not be able to be printed correctly)
-3. Run `Tertris.py` with Python3 from a terminal (`python3 Tertris.py` when your current directory is this game)
-4. Enjoy :)
+1. Go to the [releases page](https://github.com/VMoM/Tertris/releases)
+2. Chose a release (prefer the latest)
+3. Follow the guide of the release you chose
 
 
 ## LANGUAGE:
@@ -28,12 +27,3 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 - The [Wikipedia's page of the Tetris' guideline](https://tetris.wiki/Tetris_Guideline) that I will try to follow (this is only partially the case now).
 - The [curses' how to use guide](https://docs.python.org/3/howto/curses.html) I used.
 - The [official GitHub page of Tertris](https://github.com/vmom/tertris).
-
-
-
-
-
-
-
-
-
