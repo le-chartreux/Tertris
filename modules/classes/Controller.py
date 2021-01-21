@@ -21,6 +21,7 @@ from time import time, sleep
 
 from modules.classes.Model import Model
 from modules.classes.view.GameView import GameView
+from modules.classes.view.TitleView import TitleView
 
 from modules.classes.PlayerAction import PlayerAction
 from modules.classes.Direction import Direction
@@ -33,16 +34,20 @@ class Controller:
     ###############################################################
     __slots__ = (
         "_model",
-        "_view",
-        "_continue_execution"
+        "_game_view",
+        "_title_view",
+        "_continue_execution",
+        "_loaded_view"
     )
 
     ###############################################################
     ############################ HINTS ############################
     ###############################################################
     _model: Model
-    _view: GameView
+    _title_view: TitleView
+    _game_view: GameView
     _continue_execution: bool
+    _loaded_view: # TODO implementer
 
     ###############################################################
     ########################## __INIT__ ###########################
@@ -56,11 +61,10 @@ class Controller:
         # UTILITÉ :
         # Crée un objet Controller, caractérisé par :
         # - son model (_model)
-        # - sa vue (_view)
         # - s’il doit continuer à s'exécuter (_continue_program)
         # =============================
         self.set_model(Model())
-        self.set_view(GameView())
+        self.set_loaded_view(ViewName.NO_VIEW)
         self._continue_execution = True
 
     ###############################################################
@@ -69,11 +73,17 @@ class Controller:
     def get_model(self) -> Model:
         return self._model
 
-    def get_view(self) -> GameView:
-        return self._view
+    def get_game_view(self) -> GameView:
+        return self._game_view
+
+    def get_title_view(self) -> TitleView:
+        return self._title_view
 
     def get_continue_execution(self) -> bool:
         return self._continue_execution
+
+    def get_loaded_view(self):
+        return self._loaded_view
 
     ###############################################################
     ########################### SETTERS ###########################
@@ -81,23 +91,43 @@ class Controller:
     def set_model(self, model: Model) -> None:
         self._model = model
 
-    def set_view(self, view: GameView) -> None:
-        self._view = view
+    def set_game_view(self, game_view: GameView) -> None:
+        self._game_view = game_view
+
+    def set_title_view(self, title_view: TitleView):
+        self._title_view = title_view
 
     def set_continue_execution(self, continue_program: bool) -> None:
         self._continue_execution = continue_program
 
+    def set_loaded_view(self, view_to_load) -> None:
+        self._loaded_view = view_to_load
+
     ###############################################################
-    ############################ SETUP ############################
+    ###################### SETUP_TITLE_VIEW #######################
     ###############################################################
-    def setup(self) -> None:
+    def print_title_view(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Setup la vue (le modèle est déjà setup avec son __init__)
+        # Setup la vue de titre (le modèle est déjà setup avec son __init__)
         # =============================
-        self.get_view().setup_static_windows()
+        self.set_title_view(TitleView())
+        self.get_title_view().setup_static_windows()
+
+    ###############################################################
+    ####################### SETUP_GAME_VIEW #######################
+    ###############################################################
+    def setup_game_view(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Setup la vue de jeu
+        # =============================
+        self.set_game_view(GameView())
+        self.get_game_view().setup_static_windows()
 
     ###############################################################
     ############################ PLAY #############################
@@ -135,11 +165,11 @@ class Controller:
             self.get_model().do_tick()
 
             # Actualisation de la vue :
-            self.get_view().print_grid(self.get_model().get_grid())
-            self.get_view().print_active_tetromino(self.get_model().get_active_tetromino())
-            self.get_view().print_next(self.get_model().get_next_tetromino())
-            self.get_view().print_stored(self.get_model().get_stored_tetromino())
-            self.get_view().print_statistics(self.get_model().get_statistics())
+            self.get_game_view().print_grid(self.get_model().get_grid())
+            self.get_game_view().print_active_tetromino(self.get_model().get_active_tetromino())
+            self.get_game_view().print_next(self.get_model().get_next_tetromino())
+            self.get_game_view().print_stored(self.get_model().get_stored_tetromino())
+            self.get_game_view().print_statistics(self.get_model().get_statistics())
 
     ###############################################################
     ################## TREAT_INPUT_GAME_LOST ######################
@@ -154,7 +184,7 @@ class Controller:
         # La seule chose qu'il peut faire est quitter
         player_action = PlayerAction.MISSCLIC
         while player_action != PlayerAction.NOTHING:
-            player_action = self.get_view().get_player_input()
+            player_action = self.get_game_view().get_player_input()
             if player_action == PlayerAction.QUIT_GAME:
                 self.set_continue_execution(False)
 
@@ -172,11 +202,11 @@ class Controller:
         # Tant qu'il peut y avoir des actions dans le buffer, on effectue les actions demandées si elles sont possibles
         player_action = PlayerAction.MISSCLIC
         while player_action != PlayerAction.NOTHING:
-            player_action = self.get_view().get_player_input()
+            player_action = self.get_game_view().get_player_input()
 
             # On gère le(s) missclic
             while player_action == PlayerAction.MISSCLIC:
-                player_action = self.get_view().get_player_input()
+                player_action = self.get_game_view().get_player_input()
 
             # Déplacements
             if (
@@ -219,9 +249,9 @@ class Controller:
             # Pause
             elif player_action == PlayerAction.PAUSE_GAME:
                 begin_of_the_pause = time()
-                player_action = self.get_view().get_player_input()
+                player_action = self.get_game_view().get_player_input()
                 while player_action != PlayerAction.PAUSE_GAME and player_action != PlayerAction.QUIT_GAME:
-                    player_action = self.get_view().get_player_input()
+                    player_action = self.get_game_view().get_player_input()
                     sleep(0.1)
                 self.get_model().get_statistics().add_paused_time(time() - begin_of_the_pause)
 
