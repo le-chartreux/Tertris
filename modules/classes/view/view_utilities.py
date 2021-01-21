@@ -35,6 +35,7 @@ def set_colorscheme() -> None:
     curses.init_pair(10, curses.COLOR_BLACK, curses.COLOR_WHITE)  # >
     curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_BLUE)  # lettres
 
+
 ###############################################################
 ####################### GET_COLOR_PAIR ########################
 ###############################################################
