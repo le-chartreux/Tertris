@@ -298,24 +298,7 @@ class TitleView:
         # UTILITÉ :
         # Affiche les texts en bas de l'écran
         # =============================
-        # Première ligne
-        self.get_window_game().addstr(0, 0, "╔", curses.color_pair(8))
-        for _ in range(1, VIEW_GRID_WIDTH - 2):
-            self.get_window_game().addstr("═", curses.color_pair(8))
-        self.get_window_game().addstr("╗", curses.color_pair(8))
-
-        # Lignes intermédiaires
-        for line in range(1, VIEW_GRID_HEIGHT - 1):
-            self.get_window_game().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_game().addstr(line, VIEW_GRID_WIDTH - 2, "║", curses.color_pair(8))
-
-        # Dernière ligne
-        self.get_window_game().addstr(VIEW_GRID_HEIGHT - 1, 0, "╚", curses.color_pair(8))
-        for _ in range(1, VIEW_GRID_WIDTH - 2):
-            self.get_window_game().addstr("═", curses.color_pair(8))
-        self.get_window_game().addstr("╝", curses.color_pair(8))
-
-        self.get_window_game().refresh()
+        pass
 
     ###############################################################
     ###################### GET_PLAYER_INPUT #######################
