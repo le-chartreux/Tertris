@@ -23,10 +23,8 @@
 
 import curses
 
-from typing import Optional
-
-from modules.classes.PlayerAction import PlayerAction
-from modules.classes.view.view_utilities import set_colorscheme, get_color_pair
+from modules.PlayerAction import PlayerAction
+from modules.view.view_utilities import set_colorscheme
 
 from modules.settings import (
     TITLE_VIEW_LOGO_BEGIN_X,
@@ -36,7 +34,7 @@ from modules.settings import (
 )
 
 
-class TitleView:
+class TitleView:  # TODO : gérer l'héritage de View
     ###############################################################
     ########################## __SLOTS__ ##########################
     ###############################################################

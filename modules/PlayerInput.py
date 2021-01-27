@@ -9,6 +9,7 @@ from enum import Enum, auto
 
 import curses  # nécessaire pour les constantes de curses
 
+
 class PlayerInput(Enum):
     NOTHING = curses.ERR
 

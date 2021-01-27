@@ -3,12 +3,25 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe abstraite de vue dont découle GameView et TitleView
+# -----------------------------
+# CONTENU :
+# + __slots__
+# + HINTS
+# + __init__()
+# + __del__()
+# + GETTERS
+# + SETTERS
+# + setup()
+# + set_backgrounds()
+# + refresh_all()
+# + print_without_parameter_windows()
+# + get_player_input()
 # ==========================================================
 
 import curses
 
-from modules.classes.view.view_utilities import set_colorscheme
-from modules.classes.PlayerInput import PlayerInput
+from modules.view.view_utilities import set_colorscheme, setup_curses, revert_curses
+from modules.PlayerInput import PlayerInput
 
 
 class View:
@@ -38,11 +51,11 @@ class View:
         # UTILITÉ :
         # Crée un objet View, caractérisé par :
         # - une fenêtre de tout le terminal (_window_all)
-        # Et paramètre curses
         # -----------------------------
         # REMARQUES :
         # - Fermer le programme sans qu'il puisse appeler le destructeur d'une instance peut dérégler le terminal de
         #   l'utilisateur !
+        # - Les instances de View et de ses filles doivent toujours être des singletons !
         # =============================
         self.set_window_all(curses.initscr())
 
@@ -56,7 +69,7 @@ class View:
         # UTILITÉ :
         # Détruit proprement l'instance et remet le terminal de l'utilisateur dans son état original
         # =============================
-        self.revert_curses()
+        revert_curses()
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -81,42 +94,13 @@ class View:
         # Paramètre tout ce qui est nécessaire pour pouvoir correctement utiliser la vue
         # =============================
         # On setup curses
-        self.setup_curses()
+        setup_curses()
         # Paramétrage de _window_all pour les entrées texte
         self.get_window_all().nodelay(True)  # Ne pas attendre l'entrée d'un utilisateur à l'appel d'un getch()
         self.get_window_all().keypad(True)  # Permettre la compatibilité avec les touches spéciales (arrow-up par ex)
         # Gestion des couleurs
         set_colorscheme()
         self.set_backgrounds()
-
-    ###############################################################
-    ######################## SETUP_CURSES #########################
-    ###############################################################
-    def setup_curses(self) -> None:
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Paramètre tout ce qui est nécessaire pour pouvoir correctement utiliser curses
-        # =============================
-        curses.curs_set(False)  # Ne pas afficher le curseur
-        curses.noecho()  # Ne pas afficher ce que marque l'utilisateur
-        curses.cbreak()  # Ne pas attendre que l'utilisateur appui sur Entrée pour récupérer son entrée
-
-    ###############################################################
-    ####################### REVERT_CURSES #########################
-    ###############################################################
-    def revert_curses(self) -> None:
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Remet curses dans son état original et le ferme
-        # =============================
-        curses.curs_set(True)
-        curses.nocbreak()
-        curses.echo()
-        curses.endwin()
 
     ###############################################################
     ####################### SET_BACKGROUNDS #######################
@@ -151,14 +135,14 @@ class View:
         self.get_window_all().refresh()
 
     ###############################################################
-    ##################### SETUP_STATIC_WINDOWS ####################
+    ############## PRINT_WITHOUT_PARAMETER_WINDOWS ################
     ###############################################################
-    def setup_static_windows(self) -> None:
+    def print_without_parameter_windows(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Charge les fenêtres qui ne bougent pas
+        # Affiche toutes les fenêtres qui n'ont pas besoin de paramètres
         # =============================
         pass
 
@@ -166,4 +150,4 @@ class View:
     ###################### GET_PLAYER_INPUT #######################
     ###############################################################
     def get_player_input(self) -> PlayerInput:
-        return self.get_window_all().getch()
+        return PlayerInput(self.get_window_all().getch())

@@ -2,23 +2,55 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir les fonctions communes utiles aux vues (devrait disparaitre et
-#  finir dans une classe abstraite View quand j'aurai factorisé les vues)
+# Définir les fonctions communes utiles aux vues
 # -----------------------------
 # CONTENU :
+# + setup_curses()
+# + revert_curses()
 # + set_colorscheme()
 # + get_color_pair()
 # ==========================================================
 
 import curses
 
-from modules.classes.TetrominoType import TetrominoType
+from modules.TetrominoType import TetrominoType
+
+
+###############################################################
+######################## SETUP_CURSES #########################
+###############################################################
+def setup_curses() -> None:
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Paramètre tout ce qui est nécessaire pour pouvoir correctement utiliser curses
+    # =============================
+    curses.curs_set(False)  # Ne pas afficher le curseur
+    curses.noecho()  # Ne pas afficher ce que marque l'utilisateur
+    curses.cbreak()  # Ne pas attendre que l'utilisateur appui sur Entrée pour récupérer son entrée
+
+
+###############################################################
+####################### REVERT_CURSES #########################
+###############################################################
+def revert_curses() -> None:
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Remet curses dans son état original et le ferme
+    # =============================
+    curses.curs_set(True)
+    curses.nocbreak()
+    curses.echo()
+    curses.endwin()
 
 
 ###############################################################
 ###################### SET_COLORSCHEME ########################
 ###############################################################
-def set_colorscheme() -> None:
+def set_colorscheme() -> None:  # TODO : améliorer ça
     curses.start_color()
     # GameView
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_WHITE)  # I

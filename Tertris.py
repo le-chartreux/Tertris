@@ -4,8 +4,7 @@ from modules.Controller import Controller
 
 try:
     controller = Controller()
-    controller.setup()
-    controller.play()
+    controller.run()
 
 
 except Exception:  # Pour avoir le message d'erreur et ne pas détruire le terminal de l'utilisateur car ça a crash

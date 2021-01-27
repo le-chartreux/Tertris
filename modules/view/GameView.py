@@ -35,13 +35,14 @@ from math import floor, ceil  # Utilisé pour le calcul de nombre de ═ à mett
 
 from typing import Optional
 
-from modules.classes.ActiveTetromino import ActiveTetromino
-from modules.classes.Tetromino import Tetromino
-from modules.classes.Statistics import Statistics
-from modules.classes.PlayerAction import PlayerAction
-from modules.classes.Grid import Grid
+from modules.view.View import View
 
-from modules.classes.view.view_utilities import set_colorscheme, get_color_pair
+from modules.ActiveTetromino import ActiveTetromino
+from modules.Tetromino import Tetromino
+from modules.Statistics import Statistics
+from modules.Grid import Grid
+
+from modules.view.view_utilities import get_color_pair
 
 from modules.settings import (
     GRID_WIDTH,
@@ -74,12 +75,11 @@ from modules.settings import (
 )
 
 
-class GameView:
+class GameView(View):
     ###############################################################
     ########################## __SLOTS__ ##########################
     ###############################################################
     __slots__ = (
-        "_window_all",
         "_window_game",
         "_window_next",
         "_window_stored",
@@ -92,7 +92,6 @@ class GameView:
     ###############################################################
     # Since the curses module puts the _CursesWindow class private, I had
     # to declare them as objects :/
-    _window_all: object
     _window_game: object
     _window_next: object
     _window_stored: object
@@ -109,25 +108,17 @@ class GameView:
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Crée un objet GameView, caractérisé par :
-        # - une fenêtre de tout le terminal (_window_all)
-        # - une fenêtre du jeu, partie de _window_all (_window_game)
-        # - une fenêtre des statistiques, partie de _window_all (_window_statistics)
-        # - une fenêtre des touches, partie de _window_all (_window_keymaps)
-        # Et le paramètre pour qu'il soit capable de gérer la partie
+        # Crée un objet GameView, héritant de View, ajoutant :
+        # - une fenêtre du jeu (_window_game)
+        # - une fenêtre indiquant le prochain tétromino (_window_next)
+        # - une fenêtre indiquant le tétromino stocké (_window_stored)
+        # - une fenêtre des statistiques (_window_statistics)
+        # - une fenêtre des touches (_window_keymaps)
         # -----------------------------
         # REMARQUES :
-        # - Fermer le programme sans qu'il puisse appeler le destructeur d'une instance peut dérégler le terminal de
-        #   l'utilisateur !
+        # - Se referer aux remarques de View
         # =============================
-        window_all = curses.initscr()
-
-        # Paramétrage de curses
-        curses.curs_set(False)  # Ne pas afficher le curseur
-        curses.noecho()  # Ne pas afficher ce que marque l'utilisateur
-        curses.cbreak()  # Ne pas attendre que l'utilisateur appui sur Entrée pour récupérer son entrée
-
-        self.set_window_all(window_all)
+        View.__init__(self)
 
         self.set_window_game(
             curses.newwin(
@@ -174,35 +165,9 @@ class GameView:
             )
         )
 
-        # Paramétrage de _window_all pour les entrées texte
-        self.get_window_all().nodelay(True)  # Ne pas attendre l'entrée d'un utilisateur à l'appel d'un getch()
-        self.get_window_all().keypad(True)  # Permettre la compatibilité avec les touches spéciales (arrow-up par ex)
-
-        # Gestion des couleurs
-        set_colorscheme()
-        self.set_backgrounds()
-
-    ###############################################################
-    ########################### __DEL__ ###########################
-    ###############################################################
-    def __del__(self):
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Détruit proprement l'instance et remet le terminal de l'utilisateur dans son état original
-        # =============================
-        curses.curs_set(True)
-        curses.nocbreak()
-        curses.echo()
-        curses.endwin()
-
     ###############################################################
     ########################### GETTERS ###########################
     ###############################################################
-    def get_window_all(self) -> object:
-        return self._window_all
-
     def get_window_game(self) -> object:
         return self._window_game
 
@@ -221,9 +186,6 @@ class GameView:
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_window_all(self, window_all) -> None:
-        self._window_all = window_all
-
     def set_window_game(self, window_game) -> None:
         self._window_game = window_game
 
@@ -252,7 +214,7 @@ class GameView:
         # PRÉCONDITIONS :
         # - set_colorscheme() a déjà été appelé
         # =============================
-        self.get_window_all().bkgd(' ', curses.color_pair(8))
+        View.set_backgrounds(self)
         self.get_window_game().bkgd(' ', curses.color_pair(8))
         self.get_window_next().bkgd(' ', curses.color_pair(8))
         self.get_window_stored().bkgd(' ', curses.color_pair(8))
@@ -274,7 +236,7 @@ class GameView:
         # PRÉCONDITIONS :
         # - Toutes les fenêtres existent encore !
         # =============================
-        self.get_window_all().refresh()
+        View.refresh_all(self)
         self.get_window_game().refresh()
         self.get_window_next().refresh()
         self.get_window_stored().refresh()
@@ -282,14 +244,14 @@ class GameView:
         self.get_window_keybinds().refresh()
 
     ###############################################################
-    ##################### SETUP_STATIC_WINDOWS ####################
+    ############## PRINT_WITHOUT_PARAMETER_WINDOWS ################
     ###############################################################
-    def setup_static_windows(self) -> None:
+    def print_without_parameter_windows(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Charge les fenêtres qui ne bougent pas
+        # Affiche toutes les fenêtres qui n'ont pas besoin de paramètres
         # =============================
         self.print_grid_border()
         self.print_next_border()
@@ -606,29 +568,3 @@ class GameView:
         self.get_window_keybinds().addstr("╝", curses.color_pair(8))
 
         self.get_window_keybinds().refresh()
-
-    ###############################################################
-    ###################### GET_PLAYER_INPUT #######################
-    ###############################################################
-    def get_player_input(self) -> PlayerAction:
-        player_input = self.get_window_all().getch()
-        if player_input == curses.ERR:
-            return PlayerAction.NOTHING
-        if player_input == curses.KEY_LEFT:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_LEFT
-        elif player_input == curses.KEY_RIGHT:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_RIGHT
-        elif player_input == curses.KEY_DOWN:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_DOWN
-        elif player_input == 81 or player_input == 113:  # Q ou q
-            return PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT
-        elif player_input == 68 or player_input == 100:  # D ou d
-            return PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
-        elif player_input == 27:  # Esc
-            return PlayerAction.QUIT_GAME
-        elif player_input == 80 or player_input == 112:  # P ou p
-            return PlayerAction.PAUSE_GAME
-        elif player_input == 83 or player_input == 115:  # S ou s
-            return PlayerAction.STORE_ACTIVE_TETROMINO
-        else:
-            return PlayerAction.MISSCLIC
