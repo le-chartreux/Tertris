@@ -1,6 +1,6 @@
 from traceback import format_exc
 
-from modules.classes.Controller import Controller
+from modules.Controller import Controller
 
 try:
     controller = Controller()
