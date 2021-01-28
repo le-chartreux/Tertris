@@ -74,6 +74,8 @@ def set_colorscheme() -> None:  # TODO : améliorer ça
     curses.init_pair(9, curses.COLOR_RED, curses.COLOR_BLUE)  # bordure T logo
     curses.init_pair(10, curses.COLOR_BLACK, curses.COLOR_WHITE)  # >
     curses.init_pair(11, curses.COLOR_BLACK, curses.COLOR_BLUE)  # lettres
+    curses.init_pair(12, curses.COLOR_BLACK, curses.COLOR_BLACK)  # lettres sur fond noir
+    curses.init_pair(13, curses.COLOR_BLACK, curses.COLOR_WHITE)  # lettres sur fond blanc
 
 
 ###############################################################

@@ -222,21 +222,83 @@ class TitleView(View):
         )
 
         # Ligne 1
+        # début du >
         self.get_window_logo().addstr(
             1, 0,
             "▄".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # bordure gauche
         self.get_window_logo().addstr(
             1, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # début du T
         self.get_window_logo().addstr(
             1, 12,
-            "▛▀▀▀▀▜▐▀▀▀▀▜ ▛▀▀▀▀▌▛▀▀▀▀▜▐▀▀▀▀▜ ▛▜▐▀▀▀▀▀▌".encode(locale.getpreferredencoding()),
+            "▛▀▀▀▀▜".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du E
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
+        self.get_window_logo().addstr(
+            "▀▀▀▀▜".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            " ",
+            curses.color_pair(11)
+        )
+        # début du R
+        self.get_window_logo().addstr(
+            "▛▀▀▀▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # début du T
+        self.get_window_logo().addstr(
+            "▛▀▀▀▀▜".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du deuxième R
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            "▀▀▀▀▜".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            " ",
+            curses.color_pair(11)
+        )
+        # début du I
+        self.get_window_logo().addstr(
+            "▛▜".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du S
+        self.get_window_logo().addstr(
+            "▐",
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            "▀▀▀▀▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # bordure droite
         self.get_window_logo().addstr(
             1, 53,
             "▌".encode(locale.getpreferredencoding()),
@@ -244,21 +306,83 @@ class TitleView(View):
         )
 
         # Ligne 2
+        # début du >
         self.get_window_logo().addstr(
             2, 0,
             "▀█▄".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # bordure gauche
         self.get_window_logo().addstr(
             2, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # début du T
         self.get_window_logo().addstr(
             2, 12,
-            "▙▄▖▗▄▟▐   ▗▘ ▌▗▄▖▐ ▙▄▖▗▄▟▐ ▄▄ ▌ ▙▟▐    ▐ ".encode(locale.getpreferredencoding()),
+            "▙▄▖▗▄▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du E
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
+        self.get_window_logo().addstr(
+            "   ▗".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▘ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # début du R
+        self.get_window_logo().addstr(
+            "▌▗▄▖▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # début du deuxième T
+        self.get_window_logo().addstr(
+            "▙▄▖▗▄▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du deuxième R
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            " ▄▄ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # début du I
+        self.get_window_logo().addstr(
+            "▙▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du S
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            "    ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # bordure droite
         self.get_window_logo().addstr(
             2, 53,
             "▌".encode(locale.getpreferredencoding()),
@@ -266,11 +390,13 @@ class TitleView(View):
         )
 
         # Ligne 3
+        # début du >
         self.get_window_logo().addstr(
             3, 2,
             "▀█▄".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # bordure gauche
         self.get_window_logo().addstr(
             3, 11,
             "▌".encode(locale.getpreferredencoding()),
@@ -278,16 +404,91 @@ class TitleView(View):
         )
         self.get_window_logo().addstr(
             3, 12,
-            "  ▌▐  ▐ ▐▀▀  ▌▐▗▘▌   ▌▐  ▐ ▌▞▐  ▄▄▐  ▐▀▌ ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
+        # début du T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du E
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            " ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▀▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            "  ",
+            curses.color_pair(11)
+        )
+        # début du R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▗".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            "▘".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▌   ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # début du deuxième T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # début du deuxième R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▌▟".encode(locale.getpreferredencoding()),  # on devrait afficher ▌▞ mais ça pose problème
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # I et début du S
+        self.get_window_logo().addstr(
+            "  ▄▄▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        self.get_window_logo().addstr(
+            "▀▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # bordure droite
         self.get_window_logo().addstr(
             3, 53,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(6)
         )
 
-        # Ligne 4
+        # Ligne 4 TODO continuer le coloriage
         self.get_window_logo().addstr(
             4, 4,
             "▀█▄".encode(locale.getpreferredencoding()),
