@@ -8,41 +8,52 @@
 # + __slots__
 # + HINTS
 # + __init__()
-# + __del__()
 # + GETTERS
 # + SETTERS
 # + set_backgrounds()
 # + refresh_all()
+# + print_without_parameter_windows()
 # + print_logo()
-# + print_buttons(active_button: int = 1)
+# + print_buttons()
 # + print_bottom_texts()
-# + get_player_input()
-# + set_colorscheme() <- fonction
-# + get_color_pair() <- fonction
+# + get_button_name()
 # ==========================================================
 
 import curses
+import locale
 
-from modules.PlayerAction import PlayerAction
-from modules.view.view_utilities import set_colorscheme
+from modules.view.View import View
+from modules.ButtonName import ButtonName
+
+from modules.Direction import Direction
 
 from modules.settings import (
     TITLE_VIEW_LOGO_BEGIN_X,
     TITLE_VIEW_LOGO_BEGIN_Y,
     TITLE_VIEW_LOGO_WIDTH,
-    TITLE_VIEW_LOGO_HEIGHT
+    TITLE_VIEW_LOGO_HEIGHT,
+
+    TITLE_VIEW_BUTTONS_BEGIN_X,
+    TITLE_VIEW_BUTTONS_BEGIN_Y,
+    TITLE_VIEW_BUTTONS_WIDTH,
+    TITLE_VIEW_BUTTONS_HEIGHT,
+
+    TITLE_VIEW_TEXTS_BEGIN_X,
+    TITLE_VIEW_TEXTS_BEGIN_Y,
+    TITLE_VIEW_TEXTS_WIDTH,
+    TITLE_VIEW_TEXTS_HEIGHT
 )
 
 
-class TitleView:  # TODO : gérer l'héritage de View
+class TitleView(View):
     ###############################################################
     ########################## __SLOTS__ ##########################
     ###############################################################
     __slots__ = (
-        "_window_all",
         "_window_logo",
         "_window_buttons",
-        "_window_bottom_texts"
+        "_window_bottom_texts",
+        "_highlighted_button"
     )
 
     ###############################################################
@@ -50,42 +61,34 @@ class TitleView:  # TODO : gérer l'héritage de View
     ###############################################################
     # Since the curses module puts the _CursesWindow class private, I had
     # to declare them as objects :/
-    _window_all: object
     _window_logo: object
     _window_buttons: object
     _window_bottom_texts: object
+    _highlighted_button: ButtonName
 
     ###############################################################
     ########################## __INIT__ ###########################
     ###############################################################
     def __init__(
-            self
+            self,
+            highlighted_button: ButtonName = ButtonName.START
     ) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Crée un objet TitleView, caractérisé par :
-        # - une fenêtre de tout le terminal (_window_all)
+        # Crée un objet TitleView, héritant de View, ajoutant :
         # - une fenêtre contenant le logo (_window_logo)
         # - une fenêtre contenant les boutons de l'écran titre (_window_buttons)
         # - une fenêtre contenant les textes en bas de l'écran titre (_window_bottom_texts)
         # Et le paramètre pour qu'il soit capable de gérer la partie
         # -----------------------------
         # REMARQUES :
-        # - Fermer le programme sans qu'il puisse appeler le destructeur d'une instance peut dérégler le terminal de
-        #   l'utilisateur !
+        # - Se referer aux remarques de View
         # =============================
-        window_all = curses.initscr()
+        View.__init__(self)
 
-        # Paramétrage de curses
-        curses.curs_set(False)  # Ne pas afficher le curseur
-        curses.noecho()  # Ne pas afficher ce que marque l'utilisateur
-        curses.cbreak()  # Ne pas attendre que l'utilisateur appui sur Entrée pour récupérer son entrée
-
-        self.set_window_all(window_all)
-
-        self.set_window_game(
+        self.set_window_logo(
             curses.newwin(
                 TITLE_VIEW_LOGO_HEIGHT,
                 TITLE_VIEW_LOGO_WIDTH,
@@ -94,35 +97,29 @@ class TitleView:  # TODO : gérer l'héritage de View
             )
         )
 
-        # Paramétrage de _window_all pour les entrées texte
-        self.get_window_all().nodelay(True)  # Ne pas attendre l'entrée d'un utilisateur à l'appel d'un getch()
-        self.get_window_all().keypad(True)  # Permettre la compatibilité avec les touches spéciales (arrow-up par ex)
+        self.set_window_buttons(
+            curses.newwin(
+                TITLE_VIEW_BUTTONS_HEIGHT,
+                TITLE_VIEW_BUTTONS_WIDTH,
+                TITLE_VIEW_BUTTONS_BEGIN_Y,
+                TITLE_VIEW_BUTTONS_BEGIN_X
+            )
+        )
 
-        # Gestion des couleurs
-        set_colorscheme()
-        self.set_backgrounds()
+        self.set_window_texts(
+            curses.newwin(
+                TITLE_VIEW_TEXTS_HEIGHT,
+                TITLE_VIEW_TEXTS_WIDTH,
+                TITLE_VIEW_TEXTS_BEGIN_Y,
+                TITLE_VIEW_TEXTS_BEGIN_X
+            )
+        )
 
-    ###############################################################
-    ########################### __DEL__ ###########################
-    ###############################################################
-    def __del__(self):
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Détruit proprement l'instance et remet le terminal de l'utilisateur dans son état original
-        # =============================
-        curses.curs_set(True)
-        curses.nocbreak()
-        curses.echo()
-        curses.endwin()
+        self.set_highlighted_button(highlighted_button)
 
     ###############################################################
     ########################### GETTERS ###########################
     ###############################################################
-    def get_window_all(self) -> object:
-        return self._window_all
-
     def get_window_logo(self) -> object:
         return self._window_logo
 
@@ -132,20 +129,23 @@ class TitleView:  # TODO : gérer l'héritage de View
     def get_window_bottom_texts(self) -> object:
         return self._window_bottom_texts
 
+    def get_highlighted_button(self) -> ButtonName:
+        return self._highlighted_button
+
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_window_all(self, window_all) -> None:
-        self._window_all = window_all
-
-    def set_window_game(self, window_logo) -> None:
+    def set_window_logo(self, window_logo) -> None:
         self._window_logo = window_logo
 
-    def set_window_next(self, window_buttons) -> None:
+    def set_window_buttons(self, window_buttons) -> None:
         self._window_buttons = window_buttons
 
-    def set_window_stored(self, window_bottom_texts) -> None:
+    def set_window_texts(self, window_bottom_texts) -> None:
         self._window_bottom_texts = window_bottom_texts
+
+    def set_highlighted_button(self, highlighted_button: ButtonName):
+        self._highlighted_button = highlighted_button
 
     ###############################################################
     ####################### SET_BACKGROUNDS #######################
@@ -160,7 +160,7 @@ class TitleView:  # TODO : gérer l'héritage de View
         # PRÉCONDITIONS :
         # - set_colorscheme() a déjà été appelé
         # =============================
-        self.get_window_all().bkgd(' ', curses.color_pair(8))
+        View.set_backgrounds(self)
         self.get_window_logo().bkgd(' ', curses.color_pair(8))
         self.get_window_buttons().bkgd(' ', curses.color_pair(8))
         self.get_window_bottom_texts().bkgd(' ', curses.color_pair(8))
@@ -180,23 +180,24 @@ class TitleView:  # TODO : gérer l'héritage de View
         # PRÉCONDITIONS :
         # - Toutes les fenêtres existent
         # =============================
-        self.get_window_all().refresh()
+        View.refresh_all(self)
         self.get_window_logo().refresh()
         self.get_window_buttons().refresh()
         self.get_window_bottom_texts().refresh()
 
     ###############################################################
-    ##################### SETUP_STATIC_WINDOWS ####################
+    ############## PRINT_WITHOUT_PARAMETER_WINDOWS ################
     ###############################################################
-    def setup_static_windows(self) -> None:
+    def print_without_parameter_windows(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Charge les fenêtres qui ne bougent pas (donc toutes sauf les boutons)
+        # Affiche toutes les fenêtres qui n'ont pas besoin de paramètres
         # =============================
         self.print_logo()
         self.print_bottom_texts()
+        self.print_buttons()
 
     ###############################################################
     ########################## PRINT_LOGO #########################
@@ -208,83 +209,306 @@ class TitleView:  # TODO : gérer l'héritage de View
         # UTILITÉ :
         # Affiche le logo
         # =============================
-        # Première ligne
-        self.get_window_logo().addstr(0, 11, "▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌", curses.color_pair(9))
-        # Deuxième ligne
-        self.get_window_logo().addstr(1, 0, "▄", curses.color_pair(10))
-        self.get_window_logo().addstr(1, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(1, 11,  "▛▀▀▀▀▜▐▀▀▀▀▜ ▛▀▀▀▀▌▛▀▀▀▀▜▐▀▀▀▀▜ ▛▜▐▀▀▀▀▀▌", curses.color_pair(11))
-        self.get_window_logo().addstr(1, 53, "▌", curses.color_pair(9))
+        # Ligne 0
+        self.get_window_logo().addstr(
+            0, 11,
+            "▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            0, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Troisième ligne
-        self.get_window_logo().addstr(2, 0, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(2, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(2, 11, "▙▄▖▗▄▟▐   ▗▘ ▌▗▄▖▐ ▙▄▖▗▄▟▐ ▄▄ ▌ ▙▟▐    ▐ ", curses.color_pair(11))
-        self.get_window_logo().addstr(2, 53, "▌", curses.color_pair(9))
+        # Ligne 1
+        self.get_window_logo().addstr(
+            1, 0,
+            "▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            1, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            1, 12,
+            "▛▀▀▀▀▜▐▀▀▀▀▜ ▛▀▀▀▀▌▛▀▀▀▀▜▐▀▀▀▀▜ ▛▜▐▀▀▀▀▀▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            1, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Quatrième ligne
-        self.get_window_logo().addstr(3, 1, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(3, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(3, 11, "  ▌▐  ▐ ▐▀▀  ▌▐▗▘▌   ▌▐  ▐ ▌▞▐  ▄▄▐  ▐▀▌ ", curses.color_pair(11))
-        self.get_window_logo().addstr(3, 53, "▌", curses.color_pair(9))
+        # Ligne 2
+        self.get_window_logo().addstr(
+            2, 0,
+            "▀█▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            2, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            2, 12,
+            "▙▄▖▗▄▟▐   ▗▘ ▌▗▄▖▐ ▙▄▖▗▄▟▐ ▄▄ ▌ ▙▟▐    ▐ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            2, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Cinquième ligne
-        self.get_window_logo().addstr(4, 2, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(4, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(4, 11, "  ▌▐  ▐ ▝▀▜  ▌▐▘▞    ▌▐  ▐ ▛▗▘  ▌▐ ▌  ▌  ", curses.color_pair(11))
-        self.get_window_logo().addstr(4, 53, "▌", curses.color_pair(9))
+        # Ligne 3
+        self.get_window_logo().addstr(
+            3, 2,
+            "▀█▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            3, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            3, 12,
+            "  ▌▐  ▐ ▐▀▀  ▌▐▗▘▌   ▌▐  ▐ ▌▞▐  ▄▄▐  ▐▀▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            3, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Sixième ligne
-        self.get_window_logo().addstr(5, 3, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(5, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(5, 11, "  ▌▐  ▐   ▌  ▌▐▚▝▖   ▌▐  ▐ ▛▖▚  ▌▐ ▐  ▐  ", curses.color_pair(11))
-        self.get_window_logo().addstr(5, 53, "▌", curses.color_pair(9))
+        # Ligne 4
+        self.get_window_logo().addstr(
+            4, 4,
+            "▀█▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            4, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            4, 12,
+            "  ▌▐  ▐ ▝▀▜  ▌▐▘▞    ▌▐  ▐ ▛▗▘  ▌▐ ▌  ▌  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            4, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Septième ligne
-        self.get_window_logo().addstr(6, 4, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(6, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(6, 11, "  ▌▐  ▐ ▐▀   ▌▐ ▌▐   ▌▐  ▐ ▌▐ ▌ ▌▐  ▌  ▌ ", curses.color_pair(11))
-        self.get_window_logo().addstr(6, 53, "▌", curses.color_pair(9))
+        # Ligne 5
+        self.get_window_logo().addstr(
+            5, 6,
+            "▀█▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            5, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            5, 12,
+            "  ▌▐  ▐   ▌  ▌▐▚▝▖   ▌▐  ▐ ▛▖▚  ▌▐ ▐  ▐  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            5, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Huitième ligne
-        self.get_window_logo().addstr(7, 5, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(7, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(7, 11, "  ▌▐  ▐ ▐    ▌▐ ▐ ▌  ▌▐  ▐ ▌ ▌▐ ▌▐  ▐  ▐ ", curses.color_pair(11))
-        self.get_window_logo().addstr(7, 53, "▌", curses.color_pair(9))
+        # Ligne 6
+        self.get_window_logo().addstr(
+            6, 6,
+            "▄█▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            6, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            6, 12,
+            "  ▌▐  ▐ ▐▀   ▌▐ ▌▐   ▌▐  ▐ ▌▐ ▌ ▌▐  ▌  ▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            6, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Neuvième ligne
-        self.get_window_logo().addstr(8, 6, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(8, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(8, 11, "  ▌▐  ▐ ▐▄▄▖ ▌▐  ▌▐  ▌▐  ▐ ▌ ▐ ▌▌▐▐▄▄▌  ▌", curses.color_pair(11))
-        self.get_window_logo().addstr(8, 53, "▌", curses.color_pair(9))
+        # Ligne 7
+        self.get_window_logo().addstr(
+            7, 4,
+            "▄█▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            7, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            7, 12,
+            "  ▌▐  ▐ ▐    ▌▐ ▐ ▌  ▌▐  ▐ ▌ ▌▐ ▌▐  ▐  ▐ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            7, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Dixième ligne
-        self.get_window_logo().addstr(9, 6, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(9, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(9, 11, "  ▌▐  ▐    ▐ ▌▐  ▐ ▌ ▌▐  ▐ ▌  ▌▐▌▐▐     ▌", curses.color_pair(11))
-        self.get_window_logo().addstr(9, 53, "▌", curses.color_pair(9))
+        # Ligne 8
+        self.get_window_logo().addstr(
+            8, 2,
+            "▄█▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            8, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            8, 12,
+            "  ▌▐  ▐ ▐▄▄▖ ▌▐  ▌▐  ▌▐  ▐ ▌ ▐ ▌▌▐▐▄▄▌  ▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            8, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        # Onzième ligne
-        self.get_window_logo().addstr(10, 6, "▀█▄", curses.color_pair(10))
-        self.get_window_logo().addstr(10, 11, "▌", curses.color_pair(9))
-        self.get_window_logo().addstr(10, 11, "  ▙▟  ▐▄▄▄▄▄▌▙▟   ▙▟ ▙▟  ▐▄▌  ▐▄█▟▐▄▄▄▄▄▌", curses.color_pair(11))
-        self.get_window_logo().addstr(10, 53, "▌", curses.color_pair(9))
+        # Ligne 9
+        self.get_window_logo().addstr(
+            9, 0,
+            "▄█▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            9, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            9, 12,
+            "  ▌▐  ▐    ▐ ▌▐  ▐ ▌ ▌▐  ▐ ▌  ▌▐▌▐▐     ▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            9, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
+        # Ligne 10
+        self.get_window_logo().addstr(
+            10, 0,
+            "▀".encode(locale.getpreferredencoding()),
+            curses.color_pair(10)
+        )
+        self.get_window_logo().addstr(
+            10, 11,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            10, 12,
+            "  ▙▟  ▐▄▄▄▄▄▌▙▟   ▙▟ ▙▟  ▐▄▌  ▐▄█▟▐▄▄▄▄▄▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        self.get_window_logo().addstr(
+            10, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
+        # Ligne 11
+        self.get_window_logo().addstr(
+            11, 11,
+            "▙▄▄▄▄▄▄▄▄▄▄▄▄▄▖             ▄▄▄▄▄▄▄▄▄▄▄▄▄▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            11, 53,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
 
-        self.get_window_game().refresh()
+        # Lignes 12 à 22
+        for line in range(12, 23):
+            self.get_window_logo().addstr(
+                line, 25,
+                "▌             ".encode(locale.getpreferredencoding()),
+                curses.color_pair(9)
+            )
+            self.get_window_logo().addstr(
+                line, 39,
+                "▌".encode(locale.getpreferredencoding()),
+                curses.color_pair(6)
+            )
+
+        # Ligne 23
+        self.get_window_logo().addstr(
+            23, 25,
+            "▙▄▄▄▄▄▄▄▄▄▄▄▄▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(9)
+        )
+        self.get_window_logo().addstr(
+            23, 39,
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(6)
+        )
+
+        self.get_window_logo().refresh()
 
     ###############################################################
-    ##################### PRINT_BOTTOM_TEXTS ######################
+    ######################## PRINT_BUTTONS ########################
     ###############################################################
-    def print_buttons(self, active_button: int) -> None:
+    def print_buttons(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
         # Affiche les boutons, avec l'actif en surbrillance
         # =============================
-        pass
+        color_for_start = curses.color_pair(11)
+        color_for_options = curses.color_pair(11)
+        color_for_high_scores = curses.color_pair(11)
+        color_for_quit = curses.color_pair(11)
+        if self._highlighted_button == ButtonName.START:
+            color_for_start = curses.color_pair(4)
+        elif self._highlighted_button == ButtonName.OPTIONS:
+            color_for_options = curses.color_pair(4)
+        elif self._highlighted_button == ButtonName.HIGH_SCORES:
+            color_for_high_scores = curses.color_pair(4)
+        elif self._highlighted_button == ButtonName.QUIT:
+            color_for_quit = curses.color_pair(4)
+
+        self.get_window_buttons().addstr(0, 3, "START", color_for_start)
+        self.get_window_buttons().addstr(2, 2, "OPTIONS", color_for_options)
+        self.get_window_buttons().addstr(4, 0, "HIGH SCORES", color_for_high_scores)
+        self.get_window_buttons().addstr(6, 3, "QUIT", color_for_quit)
+
+        self.get_window_buttons().refresh()
 
     ###############################################################
     ##################### PRINT_BOTTOM_TEXTS ######################
@@ -296,30 +520,68 @@ class TitleView:  # TODO : gérer l'héritage de View
         # UTILITÉ :
         # Affiche les texts en bas de l'écran
         # =============================
-        pass
+        self.get_window_bottom_texts().addstr(
+            0, 0,
+            "Tertris is a Tetris © clone made by VMoM, under MIT License".encode(locale.getpreferredencoding()),
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            1, 12,
+            "Tetris © 1985~2021 Tetris Holding.".encode(locale.getpreferredencoding()),
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            2, 4,
+            "Tetris logos, Tetris theme song and Tetriminos are",
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            3, 15,
+            "trademarks of Tetris Holding.",
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            4, 4,
+            "The Tetris trade dress is owned by Tetris Holding.",
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            5, 14,
+            "Licensed to The Tetris Company.",
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            6, 10,
+            "Tetris Game Design by Alexey Pajitnov.",
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            7, 13,
+            "Tetris Logo Design by Roger Dean.",
+            curses.color_pair(4)
+        )
+        self.get_window_bottom_texts().addstr(
+            8, 19,
+            "All Rights Reserved.",
+            curses.color_pair(4)
+        )
 
-    ###############################################################
-    ###################### GET_PLAYER_INPUT #######################
-    ###############################################################
-    def get_player_input(self) -> PlayerAction:
-        player_input = self.get_window_all().getch()
-        if player_input == curses.ERR:
-            return PlayerAction.NOTHING
-        if player_input == curses.KEY_LEFT:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_LEFT
-        elif player_input == curses.KEY_RIGHT:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_RIGHT
-        elif player_input == curses.KEY_DOWN:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_DOWN
-        elif player_input == 81 or player_input == 113:  # Q ou q
-            return PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT
-        elif player_input == 68 or player_input == 100:  # D ou d
-            return PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
-        elif player_input == 27:  # Esc
-            return PlayerAction.QUIT_GAME
-        elif player_input == 80 or player_input == 112:  # P ou p
-            return PlayerAction.PAUSE_GAME
-        elif player_input == 83 or player_input == 115:  # S ou s
-            return PlayerAction.STORE_ACTIVE_TETROMINO
+        self.get_window_bottom_texts().refresh()
+
+    def get_button_name(self, direction: Direction) -> ButtonName:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne le nom du bouton selon la direction
+        # =============================
+        if direction == Direction.DOWN:
+            return ButtonName(
+                (self.get_highlighted_button().value + 1) % 4
+            )
+        elif direction == Direction.UP:
+            return ButtonName(
+                3 if (self.get_highlighted_button().value - 1 < 0) else (self.get_highlighted_button().value - 1)
+            )
         else:
-            return PlayerAction.MISSCLIC
+            return self.get_highlighted_button()

@@ -14,6 +14,8 @@
 # + get_width()
 # + is_occupied()
 # + get_tetromino_type()
+# + copy_shape()
+# + tetromino_factory() <- fonction
 # ==========================================================
 
 from typing import List, Optional

@@ -27,4 +27,9 @@ class PlayerInput(Enum):
 
     KEY_ESC = 27
 
-    KEY_UNUSED = auto()
+    # selon le terminal, la touche Entrée envoi un signal différent
+    KEY_ENTER_1 = curses.KEY_ENTER
+    KEY_ENTER_2 = 10
+    KEY_ENTER_3 = 13
+
+    KEY_UNUSED = -9999

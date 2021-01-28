@@ -12,6 +12,7 @@
 # ==========================================================
 
 import curses
+import locale
 
 from modules.TetrominoType import TetrominoType
 
@@ -26,7 +27,8 @@ def setup_curses() -> None:
     # UTILITÉ :
     # Paramètre tout ce qui est nécessaire pour pouvoir correctement utiliser curses
     # =============================
-    curses.curs_set(False)  # Ne pas afficher le curseur
+    locale.setlocale(locale.LC_ALL, "")
+    curses.curs_set(0)  # Ne pas afficher le curseur
     curses.noecho()  # Ne pas afficher ce que marque l'utilisateur
     curses.cbreak()  # Ne pas attendre que l'utilisateur appui sur Entrée pour récupérer son entrée
 
@@ -41,7 +43,7 @@ def revert_curses() -> None:
     # UTILITÉ :
     # Remet curses dans son état original et le ferme
     # =============================
-    curses.curs_set(True)
+    curses.curs_set(1)
     curses.nocbreak()
     curses.echo()
     curses.endwin()
@@ -51,6 +53,12 @@ def revert_curses() -> None:
 ###################### SET_COLORSCHEME ########################
 ###############################################################
 def set_colorscheme() -> None:  # TODO : améliorer ça
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Met en place les paires de couleurs
+    # =============================
     curses.start_color()
     # GameView
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_WHITE)  # I
@@ -72,6 +80,12 @@ def set_colorscheme() -> None:  # TODO : améliorer ça
 ####################### GET_COLOR_PAIR ########################
 ###############################################################
 def get_color_pair(tetromino_type: TetrominoType) -> int:
+    # =============================
+    # INFORMATIONS :
+    # -----------------------------
+    # UTILITÉ :
+    # Retourne la couleur du tetromino en fonction de son type
+    # =============================
     if tetromino_type == TetrominoType.I:
         return 1
     elif tetromino_type == TetrominoType.O:

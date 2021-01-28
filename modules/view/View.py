@@ -69,6 +69,8 @@ class View:
         # UTILITÉ :
         # Détruit proprement l'instance et remet le terminal de l'utilisateur dans son état original
         # =============================
+        self.get_window_all().keypad(False)  # désactiver le mode de compatibilité avec le touches spéciales
+        self.get_window_all().clear()
         revert_curses()
 
     ###############################################################
@@ -150,4 +152,7 @@ class View:
     ###################### GET_PLAYER_INPUT #######################
     ###############################################################
     def get_player_input(self) -> PlayerInput:
-        return PlayerInput(self.get_window_all().getch())
+        try:
+            return PlayerInput(self.get_window_all().getch())
+        except ValueError:
+            return PlayerInput.KEY_UNUSED
