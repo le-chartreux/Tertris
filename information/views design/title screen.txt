@@ -1,0 +1,36 @@
+
+
+              ▛▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▌
+   ▄          ▌▛▀▀▀▀▜▐▀▀▀▀▜ ▛▀▀▀▀▌▛▀▀▀▀▜▐▀▀▀▀▜ ▛▜▐▀▀▀▀▀▌▌
+   ▀█▄        ▌▙▄▖▗▄▟▐   ▗▘ ▌▗▄▖▐ ▙▄▖▗▄▟▐ ▄▄ ▌ ▙▟▐    ▐ ▌
+     ▀█▄      ▌  ▌▐  ▐ ▐▀▀  ▌▐▗▘▌   ▌▐  ▐ ▌▞▐  ▄▄▐  ▐▀▌ ▌
+       ▀█▄    ▌  ▌▐  ▐ ▝▀▜  ▌▐▘▞    ▌▐  ▐ ▛▗▘  ▌▐ ▌  ▌  ▌
+         ▀█▄  ▌  ▌▐  ▐   ▌  ▌▐▚▝▖   ▌▐  ▐ ▛▖▚  ▌▐ ▐  ▐  ▌
+         ▄█▀  ▌  ▌▐  ▐ ▐▀   ▌▐ ▌▐   ▌▐  ▐ ▌▐ ▌ ▌▐  ▌  ▌ ▌
+       ▄█▀    ▌  ▌▐  ▐ ▐    ▌▐ ▐ ▌  ▌▐  ▐ ▌ ▌▐ ▌▐  ▐  ▐ ▌
+     ▄█▀      ▌  ▌▐  ▐ ▐▄▄▖ ▌▐  ▌▐  ▌▐  ▐ ▌ ▐ ▌▌▐▐▄▄▌  ▌▌
+   ▄█▀        ▌  ▌▐  ▐    ▐ ▌▐  ▐ ▌ ▌▐  ▐ ▌  ▌▐▌▐▐     ▌▌
+   ▀          ▌  ▙▟  ▐▄▄▄▄▄▌▙▟   ▙▟ ▙▟  ▐▄▌  ▐▄█▟▐▄▄▄▄▄▌▌
+              ▙▄▄▄▄▄▄▄▄▄▄▄▄▄▖             ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+                            ▌             ▌
+                            ▌             ▌
+                            ▌    START    ▌
+                            ▌             ▌
+                            ▌   OPTIONS   ▌
+                            ▌             ▌
+                            ▌ HIGH SCORES ▌
+                            ▌             ▌
+                            ▌    QUIT     ▌
+                            ▌             ▌
+                            ▌             ▌
+                            ▙▄▄▄▄▄▄▄▄▄▄▄▄▄▌
+
+ Tertris is a Tetris © clone made by VMoM, under MIT License
+             Tetris © 1985~2021 Tetris Holding.
+     Tetris logos, Tetris theme song and Tetriminos are
+                trademarks of Tetris Holding.
+     The Tetris trade dress is owned by Tetris Holding.
+               Licensed to The Tetris Company.
+           Tetris Game Design by Alexey Pajitnov.
+              Tetris Logo Design by Roger Dean.
+                    All Rights Reserved.
