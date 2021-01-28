@@ -10,7 +10,10 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
+# + ADDERS
 # + get_duration()
+# + get_points_for_lines()
+# + add_points_for_lines()
 # ==========================================================
 
 import time
