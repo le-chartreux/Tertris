@@ -3,17 +3,6 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe Controller
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + play()
-# + do_tick()
-# + treat_input_game_lost()
-# + treat_input_game_not_lost()
 # ==========================================================
 
 from time import time, sleep

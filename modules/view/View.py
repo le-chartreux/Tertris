@@ -2,20 +2,7 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe abstraite de vue dont découle GameView et TitleView
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + __del__()
-# + GETTERS
-# + SETTERS
-# + setup()
-# + set_backgrounds()
-# + refresh_all()
-# + print_without_parameter_windows()
-# + get_player_input()
+# Définir la classe abstraite de vue dont découlent GameView et TitleView
 # ==========================================================
 
 import curses
@@ -152,6 +139,13 @@ class View:
     ###################### GET_PLAYER_INPUT #######################
     ###############################################################
     def get_player_input(self) -> PlayerInput:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Retourne le premier caractère non-récupéré
+        # que le joueur a tapé au clavier
+        # =============================
         try:
             return PlayerInput(self.get_window_all().getch())
         except ValueError:

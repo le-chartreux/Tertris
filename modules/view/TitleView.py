@@ -3,20 +3,7 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe TitleView, qui gère la partie Vue du MVC
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + set_backgrounds()
-# + refresh_all()
-# + print_without_parameter_windows()
-# + print_logo()
-# + print_buttons()
-# + print_bottom_texts()
-# + get_button_name()
+# quand on est sur l'écran titre
 # ==========================================================
 
 import curses

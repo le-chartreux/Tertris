@@ -3,23 +3,6 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe Model
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + has_to_go_down()
-# + do_tick()
-# + treat_game_lost()
-# + treat_tetromino_placed()
-# + can_active_tetromino_move()
-# + can_active_tetromino_rotate()
-# + can_player_store_active_tetromino()
-# + store_active_tetromino()
-# + is_game_lose()
-# + random_next_tetromino() <- fonction
 # ==========================================================
 
 from time import time

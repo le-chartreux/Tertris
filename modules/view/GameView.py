@@ -2,28 +2,8 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe GameView, qui gère la partie Vue du MVC (quand on a une partie en cours)
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + set_backgrounds()
-# + refresh_all()
-# + print_without_parameter_windows()
-# + print_grid()
-# + print_grid_border()
-# + print_active_tetromino()
-# + print_next()
-# + print_next_border()
-# + print_stored()
-# + print_stored_border()
-# + print_statistics()
-# + print_statistics_border()
-# + print_keybinds()
-# + print_keybinds_border()
+# Définir la classe GameView, qui gère la partie Vue du MVC
+# quand on a une partie en cours
 # ==========================================================
 
 import curses

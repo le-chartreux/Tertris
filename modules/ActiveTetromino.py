@@ -3,15 +3,6 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe ActiveTetromino, le tétromino contrôlé par le joueur
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + move()
-# + rotate()
 # ==========================================================
 
 from modules.Tetromino import Tetromino

@@ -3,19 +3,7 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe Tetromino, qui sert à représenter un tétromino
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + get_height()
-# + get_width()
-# + is_occupied()
-# + get_tetromino_type()
-# + copy_shape()
-# + tetromino_factory() <- fonction
+# Définir un utilitaire de création de Tetromino
 # ==========================================================
 
 from typing import List, Optional

@@ -3,17 +3,6 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe Statistics, qui contient les statistiques de la partie en cours
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + ADDERS
-# + get_duration()
-# + get_points_for_lines()
-# + add_points_for_lines()
 # ==========================================================
 
 import time

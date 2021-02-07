@@ -3,17 +3,6 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir la classe Grid, qui sert à représenter la grille de jeu
-# -----------------------------
-# CONTENU :
-# + __slots__
-# + HINTS
-# + __init__()
-# + GETTERS
-# + SETTERS
-# + get_element()
-# + is_occupied()
-# + is_line_full()
-# + add_active_tetromino()
 # ==========================================================
 
 from typing import List, Optional

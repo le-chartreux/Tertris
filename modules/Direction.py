@@ -4,7 +4,7 @@
 # UTILITÉ DE SON CONTENU :
 # Définir la classe Direction, les directions que peuvent prendre le tétromino actif
 # -----------------------------
-# REMARQUES :
+# REMARQUE :
 # - Les valeurs sont l'addition par rapport à un tableau d’haut en bas et de droite à gauche
 # ==========================================================
 

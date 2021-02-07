@@ -3,12 +3,6 @@
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
 # Définir les fonctions communes utiles aux vues
-# -----------------------------
-# CONTENU :
-# + setup_curses()
-# + revert_curses()
-# + set_colorscheme()
-# + get_color_pair()
 # ==========================================================
 
 import curses
