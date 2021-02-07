@@ -488,20 +488,91 @@ class TitleView(View):
             curses.color_pair(6)
         )
 
-        # Ligne 4 TODO continuer le coloriage
+        # Ligne 4
         self.get_window_logo().addstr(
             4, 4,
             "▀█▄".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # bordure gauche
         self.get_window_logo().addstr(
             4, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            4, 12,
-            "  ▌▐  ▐ ▝▀▜  ▌▐▘▞    ▌▐  ▐ ▛▗▘  ▌▐ ▌  ▌  ".encode(locale.getpreferredencoding()),
+            "  ",
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et E & début du E
+        self.get_window_logo().addstr(
+            "  ▐",
+            curses.color_pair(11)
+        )
+        # E
+        self.get_window_logo().addstr(
+            " ▝▀▜".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre E et R
+        self.get_window_logo().addstr(
+            "  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐▘▞".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre R et T
+        self.get_window_logo().addstr(
+            "    ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et R & début du R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ▛▗".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin R et espace entre R et I
+        self.get_window_logo().addstr(
+            "▘  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # I
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre I et S
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # Début du S
+        self.get_window_logo().addstr(
+            "▌  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin du S et espace entre S et bordure droite
+        self.get_window_logo().addstr(
+            "▌  ".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
         self.get_window_logo().addstr(
@@ -516,16 +587,88 @@ class TitleView(View):
             "▀█▄".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # Bordure gauche
         self.get_window_logo().addstr(
             5, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            5, 12,
-            "  ▌▐  ▐   ▌  ▌▐▚▝▖   ▌▐  ▐ ▛▖▚  ▌▐ ▐  ▐  ".encode(locale.getpreferredencoding()),
+            "  ".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et E & début du E
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # E
+        self.get_window_logo().addstr(
+            "   ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin du E & espace entre E et R
+        self.get_window_logo().addstr(
+            "▌  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐▚▝".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # fin R et espace entre R et T
+        self.get_window_logo().addstr(
+            "▖   ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et R & début de R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ▛▖▚".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre R et I
+        self.get_window_logo().addstr(
+            "  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # I
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre I et S & début de S
+        self.get_window_logo().addstr(
+            " ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre S et bordure droite
+        self.get_window_logo().addstr(
+            "  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # Bordure droite
         self.get_window_logo().addstr(
             5, 53,
             "▌".encode(locale.getpreferredencoding()),
@@ -538,16 +681,108 @@ class TitleView(View):
             "▄█▀".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # Bordure gauche
         self.get_window_logo().addstr(
             6, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            6, 12,
-            "  ▌▐  ▐ ▐▀   ▌▐ ▌▐   ▌▐  ▐ ▌▐ ▌ ▌▐  ▌  ▌ ".encode(locale.getpreferredencoding()),
+            "  ".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et E & debut E
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # E
+        self.get_window_logo().addstr(
+            " ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin E et espace E - R
+        self.get_window_logo().addstr(
+            "▀   ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace R - T
+        self.get_window_logo().addstr(
+            "   ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace R - T & début R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ",
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin R & espace R - I
+        self.get_window_logo().addstr(
+            "▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # I
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace I - S
+        self.get_window_logo().addstr(
+            "  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "▌  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin S et espace S - bordure droite
+        self.get_window_logo().addstr(
+            "▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # Bordure droite
         self.get_window_logo().addstr(
             6, 53,
             "▌".encode(locale.getpreferredencoding()),
@@ -560,16 +795,108 @@ class TitleView(View):
             "▄█▀".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # Bordure gauche
         self.get_window_logo().addstr(
             7, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            7, 12,
-            "  ▌▐  ▐ ▐    ▌▐ ▐ ▌  ▌▐  ▐ ▌ ▌▐ ▌▐  ▐  ▐ ".encode(locale.getpreferredencoding()),
+            "  ".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et E & debut E
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # E
+        self.get_window_logo().addstr(
+            " ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace E - R
+        self.get_window_logo().addstr(
+            "    ",
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ",
+            curses.color_pair(12)
+        )
+        # Fin R et espace R - T
+        self.get_window_logo().addstr(
+            "▌  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace T - R et début du R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace R - I
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # I
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace I - S et début du S
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace S - bordure droite
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # Bordure droite
         self.get_window_logo().addstr(
             7, 53,
             "▌".encode(locale.getpreferredencoding()),
@@ -582,16 +909,108 @@ class TitleView(View):
             "▄█▀".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # Bordure gauche
         self.get_window_logo().addstr(
             8, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            8, 12,
-            "  ▌▐  ▐ ▐▄▄▖ ▌▐  ▌▐  ▌▐  ▐ ▌ ▐ ▌▌▐▐▄▄▌  ▌".encode(locale.getpreferredencoding()),
+            "  ".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et E & debut E
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # E
+        self.get_window_logo().addstr(
+            " ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # E et espace E - R
+        self.get_window_logo().addstr(
+            "▄▄▖ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre R et T
+        self.get_window_logo().addstr(
+            "  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et R et début de R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ",
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌ ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin de R et espace entre R et I
+        self.get_window_logo().addstr(
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # I
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre I et S et début de S
+        self.get_window_logo().addstr(
+            "▐▄▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "▌  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin de S et espace S - bordure droite
+        self.get_window_logo().addstr(
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # Bordure droite
         self.get_window_logo().addstr(
             8, 53,
             "▌".encode(locale.getpreferredencoding()),
@@ -604,14 +1023,100 @@ class TitleView(View):
             "▄█▀".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # Bordure gauche
         self.get_window_logo().addstr(
             9, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            9, 12,
-            "  ▌▐  ▐    ▐ ▌▐  ▐ ▌ ▌▐  ▐ ▌  ▌▐▌▐▐     ▌".encode(locale.getpreferredencoding()),
+            "  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et E & debut E
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # E
+        self.get_window_logo().addstr(
+            "    ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre E et R
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ",
+            curses.color_pair(12)
+        )
+        # Fin R et espace R - T
+        self.get_window_logo().addstr(
+            "▌ ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace T - R et début de R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            " ",
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌  ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # I
+        self.get_window_logo().addstr(
+            "▌▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "     ",
+            curses.color_pair(12)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
         self.get_window_logo().addstr(
@@ -626,16 +1131,98 @@ class TitleView(View):
             "▀".encode(locale.getpreferredencoding()),
             curses.color_pair(10)
         )
+        # Bordure gauche
         self.get_window_logo().addstr(
             10, 11,
             "▌".encode(locale.getpreferredencoding()),
             curses.color_pair(9)
         )
+        # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            10, 12,
-            "  ▙▟  ▐▄▄▄▄▄▌▙▟   ▙▟ ▙▟  ▐▄▌  ▐▄█▟▐▄▄▄▄▄▌".encode(locale.getpreferredencoding()),
+            "  ".encode(locale.getpreferredencoding()),
             curses.color_pair(11)
         )
+        # T
+        self.get_window_logo().addstr(
+            "▙▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre T et E & debut E
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # E
+        self.get_window_logo().addstr(
+            "▄▄▄▄▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin E et espace E - R
+        self.get_window_logo().addstr(
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▙▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "   ",
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▙▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace R - T
+        self.get_window_logo().addstr(
+            " ".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # T
+        self.get_window_logo().addstr(
+            "▙▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace T - R et début de R
+        self.get_window_logo().addstr(
+            "  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # R
+        self.get_window_logo().addstr(
+            "▌  ▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # R et I
+        self.get_window_logo().addstr(
+            "▄█▟".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Espace entre I et S et début S
+        self.get_window_logo().addstr(
+            "▐".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # S
+        self.get_window_logo().addstr(
+            "▄▄▄▄▄".encode(locale.getpreferredencoding()),
+            curses.color_pair(12)
+        )
+        # Fin S et espace S - bordure gauche
+        self.get_window_logo().addstr(
+            "▌".encode(locale.getpreferredencoding()),
+            curses.color_pair(11)
+        )
+        # Bordure gauche
         self.get_window_logo().addstr(
             10, 53,
             "▌".encode(locale.getpreferredencoding()),
