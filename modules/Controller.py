@@ -17,9 +17,9 @@
 # ==========================================================
 
 from time import time, sleep
+from typing import Optional
 
 from modules.Model import Model
-from modules.view.View import View
 from modules.view.GameView import GameView
 from modules.view.TitleView import TitleView
 
@@ -37,7 +37,8 @@ class Controller:
     __slots__ = (
         "_model",
         "_continue_execution",
-        "_loaded_view"
+        "_title_view",
+        "_game_view"
     )
 
     ###############################################################
@@ -45,7 +46,8 @@ class Controller:
     ###############################################################
     _model: Model
     _continue_execution: bool
-    _loaded_view: View
+    _title_view: Optional[TitleView]
+    _game_view: Optional[GameView]
 
     ###############################################################
     ########################## __INIT__ ###########################
@@ -62,12 +64,14 @@ class Controller:
         # - s’il doit continuer à s'exécuter (_continue_program)
         # =============================
         self.set_model(Model())
-        self.set_loaded_view(TitleView())  # TODO : le passer à TitleView quand on pourra
+        self.set_title_view(TitleView())
+        self.set_game_view(None)
+
         self._continue_execution = True
 
         # On met en place la vue
-        self.get_loaded_view().setup()
-        self.get_loaded_view().print_without_parameter_windows()
+        self.get_title_view().setup()
+        self.get_title_view().print_without_parameter_windows()
 
     ###############################################################
     ########################### GETTERS ###########################
@@ -78,8 +82,11 @@ class Controller:
     def get_continue_execution(self) -> bool:
         return self._continue_execution
 
-    def get_loaded_view(self) -> View:
-        return self._loaded_view
+    def get_title_view(self) -> Optional[TitleView]:
+        return self._title_view
+
+    def get_game_view(self) -> Optional[GameView]:
+        return self._game_view
 
     ###############################################################
     ########################### SETTERS ###########################
@@ -90,21 +97,30 @@ class Controller:
     def set_continue_execution(self, continue_program: bool) -> None:
         self._continue_execution = continue_program
 
-    def set_loaded_view(self, view_to_load: View) -> None:
-        self._loaded_view = view_to_load
+    def set_title_view(self, title_view: Optional[TitleView]) -> None:
+        self._title_view = title_view
+
+    def set_game_view(self, game_view: Optional[GameView]) -> None:
+        self._game_view = game_view
 
     ###############################################################
     ###################### SWITCH_LOADED_VIEW #####################
     ###############################################################
-    def switch_loaded_view(self, new_view_type: type):
+    def switch_loaded_view(self):
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
         # Switch la vue : puisque de seule une vue peut exister, il faut supprimer l'autre
         # =============================
-        self.get_loaded_view().__del__()  # il faut obligatoirement supprimer la vue active
-        self._loaded_view = new_view_type()
+        if self.get_title_view() is None:
+            self.get_game_view().__del__()
+            self.set_title_view(TitleView())
+            self.set_game_view(None)
+        elif self.get_game_view() is None:
+            self.get_title_view().__del__()
+            self.set_title_view(None)
+            self.set_game_view(GameView())
 
     ###############################################################
     ############################ RUN ##############################
@@ -130,7 +146,7 @@ class Controller:
         # UTILITÉ :
         # Execute l'ensemble des actions d'un tick.
         # =============================
-        if isinstance(self.get_loaded_view(), GameView):
+        if self.get_game_view() is not None:
             if self.get_model().is_game_lost():
                 # Gestion des input du joueur inter-tick
                 self.treat_action_game_lost()
@@ -143,13 +159,13 @@ class Controller:
                 self.get_model().do_tick()
 
                 # Actualisation de la vue :
-                self.get_loaded_view().print_grid(self.get_model().get_grid())
-                self.get_loaded_view().print_active_tetromino(self.get_model().get_active_tetromino())
-                self.get_loaded_view().print_next(self.get_model().get_next_tetromino())
-                self.get_loaded_view().print_stored(self.get_model().get_stored_tetromino())
-                self.get_loaded_view().print_statistics(self.get_model().get_statistics())
+                self.get_game_view().print_grid(self.get_model().get_grid())
+                self.get_game_view().print_active_tetromino(self.get_model().get_active_tetromino())
+                self.get_game_view().print_next(self.get_model().get_next_tetromino())
+                self.get_game_view().print_stored(self.get_model().get_stored_tetromino())
+                self.get_game_view().print_statistics(self.get_model().get_statistics())
 
-        elif isinstance(self.get_loaded_view(), TitleView):
+        elif self.get_title_view() is not None:
             self.treat_action_title_screen()
 
     ###############################################################
@@ -164,18 +180,18 @@ class Controller:
         # =============================
         player_input = PlayerInput.KEY_UNUSED
         while player_input != PlayerInput.NOTHING:
-            player_input = self.get_loaded_view().get_player_input()
+            player_input = self.get_title_view().get_player_input()
             # On gère les missclic
             while player_input == PlayerInput.KEY_UNUSED:
-                player_input = self.get_loaded_view().get_player_input()
+                player_input = self.get_title_view().get_player_input()
 
             # Entrée
             if player_input in (PlayerInput.KEY_ENTER_1, PlayerInput.KEY_ENTER_2, PlayerInput.KEY_ENTER_3):
-                active_button = self.get_loaded_view().get_highlighted_button()
+                active_button = self.get_title_view().get_highlighted_button()
                 if active_button == ButtonName.START:
-                    self.switch_loaded_view(GameView)
-                    self.get_loaded_view().setup()
-                    self.get_loaded_view().print_without_parameter_windows()
+                    self.switch_loaded_view()
+                    self.get_game_view().setup()
+                    self.get_game_view().print_without_parameter_windows()
                     player_input = PlayerInput.NOTHING
                 elif active_button == ButtonName.OPTIONS:
                     pass  # TODO implémenter la vue d'options
@@ -186,15 +202,15 @@ class Controller:
 
             # Touches directionnelles
             if player_input == PlayerInput.KEY_UP:
-                self.get_loaded_view().set_highlighted_button(
-                    self.get_loaded_view().get_button_name(Direction.UP)
+                self.get_title_view().set_highlighted_button(
+                    self.get_title_view().get_button_name(Direction.UP)
                 )
-                self.get_loaded_view().print_buttons()
+                self.get_title_view().print_buttons()
             elif player_input == PlayerInput.KEY_DOWN:
-                self.get_loaded_view().set_highlighted_button(
-                    self.get_loaded_view().get_button_name(Direction.DOWN)
+                self.get_title_view().set_highlighted_button(
+                    self.get_title_view().get_button_name(Direction.DOWN)
                 )
-                self.get_loaded_view().print_buttons()
+                self.get_title_view().print_buttons()
 
             # Esc
             elif player_input == PlayerInput.KEY_ESC:
@@ -213,7 +229,7 @@ class Controller:
         # La seule chose qu'il peut faire est quitter
         player_input = PlayerInput.KEY_UNUSED
         while player_input != PlayerInput.NOTHING:
-            player_input = self.get_loaded_view().get_player_input()
+            player_input = self.get_game_view().get_player_input()
             if player_input == PlayerInput.KEY_ESC:
                 self.set_continue_execution(False)
 
@@ -230,10 +246,10 @@ class Controller:
         # Tant qu'il peut y avoir des actions dans le buffer, on effectue les actions demandées si elles sont possibles
         player_input = PlayerInput.KEY_UNUSED
         while player_input != PlayerInput.NOTHING:
-            player_input = self.get_loaded_view().get_player_input()
+            player_input = self.get_game_view().get_player_input()
             # On gère les missclic
             while player_input == PlayerInput.KEY_UNUSED:
-                player_input = self.get_loaded_view().get_player_input()
+                player_input = self.get_game_view().get_player_input()
 
             # Déplacements
             if (
@@ -276,9 +292,9 @@ class Controller:
             # Pause
             elif player_input == PlayerInput.KEY_P:
                 begin_of_the_pause = time()
-                player_input = self.get_loaded_view().get_player_input()
+                player_input = self.get_game_view().get_player_input()
                 while player_input != PlayerInput.KEY_P and player_input != PlayerInput.KEY_ESC:
-                    player_input = self.get_loaded_view().get_player_input()
+                    player_input = self.get_game_view().get_player_input()
                     sleep(0.1)
                 # on fait en sorte que le temps de pause ne soit pas comptabilisé
                 self.get_model().get_statistics().add_paused_time(time() - begin_of_the_pause)
