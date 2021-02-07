@@ -14,13 +14,11 @@
 # + rotate()
 # ==========================================================
 
-from typing import List, Optional
+from modules.Tetromino import Tetromino
 
-from modules.classes.Tetromino import Tetromino
-
-from modules.classes.Position import Position
-from modules.classes.Direction import Direction
-from modules.classes.Rotation import Rotation
+from modules.Position import Position
+from modules.Direction import Direction
+from modules.Rotation import Rotation
 
 
 class ActiveTetromino(Tetromino):

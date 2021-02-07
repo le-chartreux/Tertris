@@ -19,20 +19,21 @@
 # + can_player_store_active_tetromino()
 # + store_active_tetromino()
 # + is_game_lose()
+# + random_next_tetromino() <- fonction
 # ==========================================================
 
 from time import time
 from typing import Optional
 from random import choice
 
-from modules.classes.Grid import Grid
-from modules.classes.Tetromino import Tetromino, tetromino_factory
-from modules.classes.ActiveTetromino import ActiveTetromino
-from modules.classes.Statistics import Statistics
-from modules.classes.Rotation import Rotation
+from modules.Grid import Grid
+from modules.Tetromino import Tetromino, tetromino_factory
+from modules.ActiveTetromino import ActiveTetromino
+from modules.Statistics import Statistics
+from modules.Rotation import Rotation
 
-from modules.classes.Direction import Direction
-from modules.classes.TetrominoType import TetrominoType
+from modules.Direction import Direction
+from modules.TetrominoType import TetrominoType
 
 from modules.settings import GRID_WIDTH, GRID_HEIGHT
 
@@ -189,7 +190,7 @@ class Model:
     ###############################################################
     ########################### DO_TICK ###########################
     ###############################################################
-    def do_tick(self):
+    def do_tick(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
@@ -217,15 +218,15 @@ class Model:
     ###############################################################
     ###################### TREAT_GAME_LOST ########################
     ###############################################################
-    # =============================
-    # INFORMATIONS :
-    # -----------------------------
-    # UTILITÉ :
-    # Exécute les routines de la perte de la partie :
-    # - Découpe le tétromino actif pour qu'il puisse rentrer dans la grille à l'affichage final
-    # - Passe au prochain tétromino (juste pour que le joueur puisse voir quel aurait été le suivant)
-    # =============================
-    def treat_game_lost(self):
+    def treat_game_lost(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Exécute les routines de la perte de la partie :
+        # - Découpe le tétromino actif pour qu'il puisse rentrer dans la grille à l'affichage final
+        # - Passe au prochain tétromino (juste pour que le joueur puisse voir quel aurait été le suivant)
+        # =============================
         # Découpage du tétromino actif pour qu'il puisse rentrer dans l'affichage :
 
         # On monte le tétromino de sa hauteur
@@ -252,19 +253,19 @@ class Model:
     ###############################################################
     ################## TREAT_TETROMINO_PLACED ###################
     ###############################################################
-    # =============================
-    # INFORMATIONS :
-    # -----------------------------
-    # UTILITÉ :
-    # Execute l'ensemble des routines quand un tétromino est placé (donc qu'il touche le sol)
-    #   - Ajoute le tetromino actif à la grille
-    #   - Passe au prochain tétromino
-    #   - Génère un nouveau prochain tétromino
-    #   - Passe _player_already_store à False
-    #   - Regarde si des lignes ont été complétées
-    #   - Ajoute les lignes complétées et les points engendrés aux statistiques
-    # =============================
-    def treat_tetromino_placed(self):
+    def treat_tetromino_placed(self) -> None:
+        # =============================
+        # INFORMATIONS :
+        # -----------------------------
+        # UTILITÉ :
+        # Execute l'ensemble des routines quand un tétromino est placé (donc qu'il touche le sol)
+        #   - Ajoute le tetromino actif à la grille
+        #   - Passe au prochain tétromino
+        #   - Génère un nouveau prochain tétromino
+        #   - Passe _player_already_store à False
+        #   - Regarde si des lignes ont été complétées
+        #   - Ajoute les lignes complétées et les points engendrés aux statistiques
+        # =============================
         self.get_grid().add_active_tetromino(self.get_active_tetromino())
         self.set_active_tetromino(ActiveTetromino(tetromino=self.get_next_tetromino()))
         self.set_next_tetromino(random_next_tetromino())

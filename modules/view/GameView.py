@@ -2,18 +2,17 @@
 # INFORMATIONS SUR CE PACKAGE :
 # -----------------------------
 # UTILITÉ DE SON CONTENU :
-# Définir la classe View, qui gère la partie Vue du MVC
+# Définir la classe GameView, qui gère la partie Vue du MVC (quand on a une partie en cours)
 # -----------------------------
 # CONTENU :
 # + __slots__
 # + HINTS
 # + __init__()
-# + __del__()
 # + GETTERS
 # + SETTERS
 # + set_backgrounds()
 # + refresh_all()
-# + setup_static_window()
+# + print_without_parameter_windows()
 # + print_grid()
 # + print_grid_border()
 # + print_active_tetromino()
@@ -25,60 +24,60 @@
 # + print_statistics_border()
 # + print_keybinds()
 # + print_keybinds_border()
-# + get_player_input()
-# + set_colorscheme() <- fonction
-# + get_color_pair() <- fonction
 # ==========================================================
 
 import curses
+import locale  # pour encoder les chaines de caractère non ASCII
+
 from math import floor, ceil  # Utilisé pour le calcul de nombre de ═ à mettre dans les bordures
 
 from typing import Optional
 
-from modules.classes.ActiveTetromino import ActiveTetromino
-from modules.classes.Tetromino import Tetromino
-from modules.classes.TetrominoType import TetrominoType
-from modules.classes.Statistics import Statistics
-from modules.classes.PlayerAction import PlayerAction
-from modules.classes.Grid import Grid
+from modules.view.View import View
+
+from modules.ActiveTetromino import ActiveTetromino
+from modules.Tetromino import Tetromino
+from modules.Statistics import Statistics
+from modules.Grid import Grid
+
+from modules.view.view_utilities import get_color_pair
 
 from modules.settings import (
     GRID_WIDTH,
     GRID_HEIGHT,
 
-    VIEW_GRID_BEGIN_X,
-    VIEW_GRID_BEGIN_Y,
-    VIEW_GRID_WIDTH,
-    VIEW_GRID_HEIGHT,
+    GAME_VIEW_GRID_BEGIN_X,
+    GAME_VIEW_GRID_BEGIN_Y,
+    GAME_VIEW_GRID_WIDTH,
+    GAME_VIEW_GRID_HEIGHT,
 
-    VIEW_NEXT_BEGIN_X,
-    VIEW_NEXT_BEGIN_Y,
-    VIEW_NEXT_WIDTH,
-    VIEW_NEXT_HEIGHT,
+    GAME_VIEW_NEXT_BEGIN_X,
+    GAME_VIEW_NEXT_BEGIN_Y,
+    GAME_VIEW_NEXT_WIDTH,
+    GAME_VIEW_NEXT_HEIGHT,
 
-    VIEW_STORED_BEGIN_X,
-    VIEW_STORED_BEGIN_Y,
-    VIEW_STORED_WIDTH,
-    VIEW_STORED_HEIGHT,
+    GAME_VIEW_STORED_BEGIN_X,
+    GAME_VIEW_STORED_BEGIN_Y,
+    GAME_VIEW_STORED_WIDTH,
+    GAME_VIEW_STORED_HEIGHT,
 
-    VIEW_STATISTICS_BEGIN_X,
-    VIEW_STATISTICS_BEGIN_Y,
-    VIEW_STATISTICS_WIDTH,
-    VIEW_STATISTICS_HEIGHT,
+    GAME_VIEW_STATISTICS_BEGIN_X,
+    GAME_VIEW_STATISTICS_BEGIN_Y,
+    GAME_VIEW_STATISTICS_WIDTH,
+    GAME_VIEW_STATISTICS_HEIGHT,
 
-    VIEW_KEYBINDS_BEGIN_X,
-    VIEW_KEYBINDS_BEGIN_Y,
-    VIEW_KEYBINDS_WIDTH,
-    VIEW_KEYBINDS_HEIGHT
+    GAME_VIEW_KEYBINDS_BEGIN_X,
+    GAME_VIEW_KEYBINDS_BEGIN_Y,
+    GAME_VIEW_KEYBINDS_WIDTH,
+    GAME_VIEW_KEYBINDS_HEIGHT
 )
 
 
-class View:
+class GameView(View):
     ###############################################################
     ########################## __SLOTS__ ##########################
     ###############################################################
     __slots__ = (
-        "_window_all",
         "_window_game",
         "_window_next",
         "_window_stored",
@@ -91,7 +90,6 @@ class View:
     ###############################################################
     # Since the curses module puts the _CursesWindow class private, I had
     # to declare them as objects :/
-    _window_all: object
     _window_game: object
     _window_next: object
     _window_stored: object
@@ -108,100 +106,66 @@ class View:
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Crée un objet View, caractérisé par :
-        # - une fenêtre de tout le terminal (_window_all)
-        # - une fenêtre du jeu, partie de _window_all (_window_game)
-        # - une fenêtre des statistiques, partie de _window_all (_window_statistics)
-        # - une fenêtre des touches, partie de _window_all (_window_keymaps)
-        # Et le paramètre pour qu'il soit capable de gérer la partie
+        # Crée un objet GameView, héritant de View, ajoutant :
+        # - une fenêtre du jeu (_window_game)
+        # - une fenêtre indiquant le prochain tétromino (_window_next)
+        # - une fenêtre indiquant le tétromino stocké (_window_stored)
+        # - une fenêtre des statistiques (_window_statistics)
+        # - une fenêtre des touches (_window_keymaps)
         # -----------------------------
         # REMARQUES :
-        # - Fermer le programme sans qu'il puisse appeler le destructeur d'une instance peut dérégler le terminal de
-        #   l'utilisateur !
+        # - Se referer aux remarques de View
         # =============================
-        window_all = curses.initscr()
-
-        # Paramétrage de curses
-        curses.curs_set(False)  # Ne pas afficher le curseur
-        curses.noecho()  # Ne pas afficher ce que marque l'utilisateur
-        curses.cbreak()  # Ne pas attendre que l'utilisateur appui sur Entrée pour récupérer son entrée
-
-        self.set_window_all(window_all)
+        View.__init__(self)
 
         self.set_window_game(
             curses.newwin(
-                VIEW_GRID_HEIGHT,
-                VIEW_GRID_WIDTH,
-                VIEW_GRID_BEGIN_Y,
-                VIEW_GRID_BEGIN_X
+                GAME_VIEW_GRID_HEIGHT,
+                GAME_VIEW_GRID_WIDTH,
+                GAME_VIEW_GRID_BEGIN_Y,
+                GAME_VIEW_GRID_BEGIN_X
             )
         )
 
         self.set_window_next(
             curses.newwin(
-                VIEW_NEXT_HEIGHT,
-                VIEW_NEXT_WIDTH,
-                VIEW_NEXT_BEGIN_Y,
-                VIEW_NEXT_BEGIN_X
+                GAME_VIEW_NEXT_HEIGHT,
+                GAME_VIEW_NEXT_WIDTH,
+                GAME_VIEW_NEXT_BEGIN_Y,
+                GAME_VIEW_NEXT_BEGIN_X
             )
         )
 
         self.set_window_stored(
             curses.newwin(
-                VIEW_STORED_HEIGHT,
-                VIEW_STORED_WIDTH,
-                VIEW_STORED_BEGIN_Y,
-                VIEW_STORED_BEGIN_X
+                GAME_VIEW_STORED_HEIGHT,
+                GAME_VIEW_STORED_WIDTH,
+                GAME_VIEW_STORED_BEGIN_Y,
+                GAME_VIEW_STORED_BEGIN_X
             )
         )
 
         self.set_window_statistics(
             curses.newwin(
-                VIEW_STATISTICS_HEIGHT,
-                VIEW_STATISTICS_WIDTH,
-                VIEW_STATISTICS_BEGIN_Y,
-                VIEW_STATISTICS_BEGIN_X
+                GAME_VIEW_STATISTICS_HEIGHT,
+                GAME_VIEW_STATISTICS_WIDTH,
+                GAME_VIEW_STATISTICS_BEGIN_Y,
+                GAME_VIEW_STATISTICS_BEGIN_X
             )
         )
 
         self.set_window_keybinds(
             curses.newwin(
-                VIEW_KEYBINDS_HEIGHT,
-                VIEW_KEYBINDS_WIDTH,
-                VIEW_KEYBINDS_BEGIN_Y,
-                VIEW_KEYBINDS_BEGIN_X
+                GAME_VIEW_KEYBINDS_HEIGHT,
+                GAME_VIEW_KEYBINDS_WIDTH,
+                GAME_VIEW_KEYBINDS_BEGIN_Y,
+                GAME_VIEW_KEYBINDS_BEGIN_X
             )
         )
-
-        # Paramétrage de _window_all pour les entrées texte
-        self.get_window_all().nodelay(True)  # Ne pas attendre l'entrée d'un utilisateur à l'appel d'un getch()
-        self.get_window_all().keypad(True)  # Permettre la compatibilité avec les touches spéciales (arrow-up par ex)
-
-        # Gestion des couleurs
-        set_colorscheme()
-        self.set_backgrounds()
-
-    ###############################################################
-    ########################### __DEL__ ###########################
-    ###############################################################
-    def __del__(self):
-        # =============================
-        # INFORMATIONS :
-        # -----------------------------
-        # UTILITÉ :
-        # Détruit proprement l'instance et remet le terminal de l'utilisateur dans son état original
-        # =============================
-        curses.curs_set(True)
-        curses.nocbreak()
-        curses.echo()
-        curses.endwin()
 
     ###############################################################
     ########################### GETTERS ###########################
     ###############################################################
-    def get_window_all(self) -> object:
-        return self._window_all
-
     def get_window_game(self) -> object:
         return self._window_game
 
@@ -220,9 +184,6 @@ class View:
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_window_all(self, window_all) -> None:
-        self._window_all = window_all
-
     def set_window_game(self, window_game) -> None:
         self._window_game = window_game
 
@@ -251,7 +212,7 @@ class View:
         # PRÉCONDITIONS :
         # - set_colorscheme() a déjà été appelé
         # =============================
-        self.get_window_all().bkgd(' ', curses.color_pair(8))
+        View.set_backgrounds(self)
         self.get_window_game().bkgd(' ', curses.color_pair(8))
         self.get_window_next().bkgd(' ', curses.color_pair(8))
         self.get_window_stored().bkgd(' ', curses.color_pair(8))
@@ -273,7 +234,7 @@ class View:
         # PRÉCONDITIONS :
         # - Toutes les fenêtres existent encore !
         # =============================
-        self.get_window_all().refresh()
+        View.refresh_all(self)
         self.get_window_game().refresh()
         self.get_window_next().refresh()
         self.get_window_stored().refresh()
@@ -281,14 +242,14 @@ class View:
         self.get_window_keybinds().refresh()
 
     ###############################################################
-    ##################### SETUP_STATIC_WINDOWS ####################
+    ############## PRINT_WITHOUT_PARAMETER_WINDOWS ################
     ###############################################################
-    def setup_static_windows(self) -> None:
+    def print_without_parameter_windows(self) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
         # UTILITÉ :
-        # Charge les fenêtres qui ne bougent pas
+        # Affiche toutes les fenêtres qui n'ont pas besoin de paramètres
         # =============================
         self.print_grid_border()
         self.print_next_border()
@@ -315,7 +276,7 @@ class View:
                     self.get_window_game().addstr(
                         line + 1,
                         column*2 + 1,
-                        "██",
+                        "██".encode(locale.getpreferredencoding()),
                         curses.color_pair(get_color_pair(grid.get_element(column, line)))
                     )
                     # *2 car les tétrominos font 2 de large
@@ -337,21 +298,49 @@ class View:
         # Affiche la bordure autour de la grille de jeu
         # =============================
         # Première ligne
-        self.get_window_game().addstr(0, 0, "╔", curses.color_pair(8))
-        for _ in range(1, VIEW_GRID_WIDTH - 2):
-            self.get_window_game().addstr("═", curses.color_pair(8))
-        self.get_window_game().addstr("╗", curses.color_pair(8))
+        self.get_window_game().addstr(
+            0, 0,
+            "╔".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(1, GAME_VIEW_GRID_WIDTH - 2):
+            self.get_window_game().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_game().addstr(
+            "╗".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         # Lignes intermédiaires
-        for line in range(1, VIEW_GRID_HEIGHT - 1):
-            self.get_window_game().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_game().addstr(line, VIEW_GRID_WIDTH - 2, "║", curses.color_pair(8))
+        for line in range(1, GAME_VIEW_GRID_HEIGHT - 1):
+            self.get_window_game().addstr(
+                line, 0,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+            self.get_window_game().addstr(
+                line, GAME_VIEW_GRID_WIDTH - 2,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
 
         # Dernière ligne
-        self.get_window_game().addstr(VIEW_GRID_HEIGHT - 1, 0, "╚", curses.color_pair(8))
-        for _ in range(1, VIEW_GRID_WIDTH - 2):
-            self.get_window_game().addstr("═", curses.color_pair(8))
-        self.get_window_game().addstr("╝", curses.color_pair(8))
+        self.get_window_game().addstr(
+            GAME_VIEW_GRID_HEIGHT - 1, 0,
+            "╚".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(1, GAME_VIEW_GRID_WIDTH - 2):
+            self.get_window_game().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_game().addstr(
+            "╝".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         self.get_window_game().refresh()
 
@@ -371,7 +360,7 @@ class View:
                     self.get_window_game().addstr(
                         line + active_tetromino.get_y() + 1,
                         (column + active_tetromino.get_x())*2 + 1,  # *2 car les tétrominos font 2 de large
-                        "██",
+                        "██".encode(locale.getpreferredencoding()),
                         curses.color_pair(get_color_pair(active_tetromino.get_tetromino_type()))
                     )
 
@@ -394,7 +383,7 @@ class View:
                     self.get_window_next().addstr(
                         line + 1,
                         column*2 + 1,
-                        "██",  # *2 car les tétrominos font 2 de large
+                        "██".encode(locale.getpreferredencoding()),
                         curses.color_pair(get_color_pair(next_tetromino.get_tetromino_type()))
                     )
                 else:
@@ -402,7 +391,7 @@ class View:
                     self.get_window_next().addstr(
                         line + 1,
                         column*2 + 1,
-                        "  ",  # *2 car les tétrominos font 2 de large
+                        "  ".encode(locale.getpreferredencoding()),  # *2 car les tétrominos font 2 de large
                         curses.A_BOLD | curses.color_pair(8)
                     )
 
@@ -419,24 +408,58 @@ class View:
         # Affiche la bordure autour du tetromino suivant
         # =============================
         # Première ligne
-        self.get_window_next().addstr(0, 0, "╔", curses.color_pair(8))
-        for _ in range(ceil((VIEW_NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
-            self.get_window_next().addstr("═", curses.color_pair(8))
-        self.get_window_next().addstr("Next", curses.color_pair(8))
-        for _ in range(floor((VIEW_NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
-            self.get_window_next().addstr("═", curses.color_pair(8))
-        self.get_window_next().addstr("╗", curses.color_pair(8))
+        self.get_window_next().addstr(
+            0, 0,
+            "╔".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(ceil((GAME_VIEW_NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+            self.get_window_next().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_next().addstr(
+            "Next",  # que de l'ASCII donc pas besoin de l'encoder
+            curses.color_pair(8)
+        )
+        for _ in range(floor((GAME_VIEW_NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+            self.get_window_next().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_next().addstr(
+            "╗".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         # Lignes intermédiaires
-        for line in range(1, VIEW_NEXT_HEIGHT - 2):
-            self.get_window_next().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_next().addstr(line, VIEW_NEXT_WIDTH - 1, "║", curses.color_pair(8))
+        for line in range(1, GAME_VIEW_NEXT_HEIGHT - 2):
+            self.get_window_next().addstr(
+                line, 0,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+            self.get_window_next().addstr(
+                line, GAME_VIEW_NEXT_WIDTH - 1,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
 
         # Dernière ligne
-        self.get_window_next().addstr(VIEW_NEXT_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        for _ in range(1, VIEW_NEXT_WIDTH - 1):
-            self.get_window_next().addstr("═", curses.color_pair(8))
-        self.get_window_next().addstr("╝", curses.color_pair(8))
+        self.get_window_next().addstr(
+            GAME_VIEW_NEXT_HEIGHT - 2, 0,
+            "╚".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(1, GAME_VIEW_NEXT_WIDTH - 1):
+            self.get_window_next().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_next().addstr(
+            "╝".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         self.get_window_next().refresh()
 
@@ -457,14 +480,14 @@ class View:
                         self.get_window_stored().addstr(
                             line + 1,
                             column*2 + 1,
-                            "██",  # *2 car les tétrominos font 2 de large
+                            "██".encode(locale.getpreferredencoding()),
                             curses.color_pair(get_color_pair(stored_tetromino.get_tetromino_type()))
                         )
                     else:
                         self.get_window_stored().addstr(
                             line + 1,
                             column*2 + 1,  # *2 car les tétrominos font 2 de large
-                            "  ",
+                            "  ",  # que de l'ASCII donc pas besoin de l'encoder
                             curses.A_BOLD | curses.color_pair(8)
                         )
 
@@ -481,24 +504,55 @@ class View:
         # Affiche la bordure autour du tetromino stocké
         # =============================
         # Première ligne
-        self.get_window_stored().addstr(0, 0, "╔", curses.color_pair(8))
-        for _ in range(ceil((VIEW_STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
-            self.get_window_stored().addstr("═", curses.color_pair(8))
-        self.get_window_stored().addstr("Stored", curses.color_pair(8))
-        for _ in range(floor((VIEW_STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
-            self.get_window_stored().addstr("═", curses.color_pair(8))
+        self.get_window_stored().addstr(
+            0, 0,
+            "╔".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(ceil((GAME_VIEW_STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+            self.get_window_stored().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_stored().addstr(
+            "Stored",
+            curses.color_pair(8)
+        )
+        for _ in range(floor((GAME_VIEW_STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+            self.get_window_stored().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
         self.get_window_stored().addstr("╗", curses.color_pair(8))
 
         # Lignes intermédiaires
-        for line in range(1, VIEW_STORED_HEIGHT - 2):
-            self.get_window_stored().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_stored().addstr(line, VIEW_STORED_WIDTH - 1, "║", curses.color_pair(8))
+        for line in range(1, GAME_VIEW_STORED_HEIGHT - 2):
+            self.get_window_stored().addstr(
+                line, 0,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+            self.get_window_stored().addstr(
+                line, GAME_VIEW_STORED_WIDTH - 1,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
 
         # Dernière ligne
-        self.get_window_stored().addstr(VIEW_STORED_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        for _ in range(1, VIEW_STORED_WIDTH - 1):
-            self.get_window_stored().addstr("═", curses.color_pair(8))
-        self.get_window_stored().addstr("╝", curses.color_pair(8))
+        self.get_window_stored().addstr(
+            GAME_VIEW_STORED_HEIGHT - 2, 0,
+            "╚".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(1, GAME_VIEW_STORED_WIDTH - 1):
+            self.get_window_stored().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_stored().addstr(
+            "╝".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         self.get_window_stored().refresh()
 
@@ -530,24 +584,55 @@ class View:
         # Affiche la bordure autour des statistiques de jeu
         # =============================
         # Première ligne
-        self.get_window_statistics().addstr(0, 0, "╔", curses.color_pair(8))
-        for _ in range(ceil((VIEW_STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
-            self.get_window_statistics().addstr("═", curses.color_pair(8))
+        self.get_window_statistics().addstr(
+            0, 0,
+            "╔".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(ceil((GAME_VIEW_STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+            self.get_window_statistics().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
         self.get_window_statistics().addstr("Statistics", curses.color_pair(8))
-        for _ in range(floor((VIEW_STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
-            self.get_window_statistics().addstr("═", curses.color_pair(8))
-        self.get_window_statistics().addstr("╗", curses.color_pair(8))
+        for _ in range(floor((GAME_VIEW_STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+            self.get_window_statistics().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_statistics().addstr(
+            "╗".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         # Lignes intermédiaires
-        for line in range(1, VIEW_STATISTICS_HEIGHT - 2):
-            self.get_window_statistics().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_statistics().addstr(line, VIEW_STATISTICS_WIDTH - 1, "║", curses.color_pair(8))
+        for line in range(1, GAME_VIEW_STATISTICS_HEIGHT - 2):
+            self.get_window_statistics().addstr(
+                line, 0,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+            self.get_window_statistics().addstr(
+                line, GAME_VIEW_STATISTICS_WIDTH - 1,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
 
         # Dernière ligne
-        self.get_window_statistics().addstr(VIEW_STATISTICS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        for _ in range(1, VIEW_STATISTICS_WIDTH - 1):
-            self.get_window_statistics().addstr("═", curses.color_pair(8))
-        self.get_window_statistics().addstr("╝", curses.color_pair(8))
+        self.get_window_statistics().addstr(
+            GAME_VIEW_STATISTICS_HEIGHT - 2, 0,
+            "╚".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(1, GAME_VIEW_STATISTICS_WIDTH - 1):
+            self.get_window_statistics().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_statistics().addstr(
+            "╝".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         self.get_window_statistics().refresh()
 
@@ -585,84 +670,54 @@ class View:
         # Affiche la bordure autour des raccourcis
         # =============================
         # Première ligne
-        self.get_window_keybinds().addstr(0, 0, "╔", curses.color_pair(8))
-        for _ in range(ceil((VIEW_KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
-            self.get_window_keybinds().addstr("═", curses.color_pair(8))
+        self.get_window_keybinds().addstr(
+            0, 0,
+            "╔".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(ceil((GAME_VIEW_KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+            self.get_window_keybinds().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
         self.get_window_keybinds().addstr("Keybinds", curses.color_pair(8))
-        for _ in range(floor((VIEW_KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
-            self.get_window_keybinds().addstr("═", curses.color_pair(8))
-        self.get_window_keybinds().addstr("╗", curses.color_pair(8))
+        for _ in range(floor((GAME_VIEW_KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+            self.get_window_keybinds().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_keybinds().addstr(
+            "╗".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         # Lignes intermédiaires
-        for line in range(1, VIEW_KEYBINDS_HEIGHT - 2):
-            self.get_window_keybinds().addstr(line, 0, "║", curses.color_pair(8))
-            self.get_window_keybinds().addstr(line, VIEW_KEYBINDS_WIDTH - 1, "║", curses.color_pair(8))
+        for line in range(1, GAME_VIEW_KEYBINDS_HEIGHT - 2):
+            self.get_window_keybinds().addstr(
+                line, 0,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+            self.get_window_keybinds().addstr(
+                line, GAME_VIEW_KEYBINDS_WIDTH - 1,
+                "║".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
 
         # Dernière ligne
-        self.get_window_keybinds().addstr(VIEW_KEYBINDS_HEIGHT - 2, 0, "╚", curses.color_pair(8))
-        for _ in range(1, VIEW_KEYBINDS_WIDTH - 1):
-            self.get_window_keybinds().addstr("═", curses.color_pair(8))
-        self.get_window_keybinds().addstr("╝", curses.color_pair(8))
+        self.get_window_keybinds().addstr(
+            GAME_VIEW_KEYBINDS_HEIGHT - 2, 0,
+            "╚".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
+        for _ in range(1, GAME_VIEW_KEYBINDS_WIDTH - 1):
+            self.get_window_keybinds().addstr(
+                "═".encode(locale.getpreferredencoding()),
+                curses.color_pair(8)
+            )
+        self.get_window_keybinds().addstr(
+            "╝".encode(locale.getpreferredencoding()),
+            curses.color_pair(8)
+        )
 
         self.get_window_keybinds().refresh()
-
-    ###############################################################
-    ###################### GET_PLAYER_INPUT #######################
-    ###############################################################
-    def get_player_input(self) -> PlayerAction:
-        player_input = self.get_window_all().getch()
-        if player_input == curses.ERR:
-            return PlayerAction.NOTHING
-        if player_input == curses.KEY_LEFT:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_LEFT
-        elif player_input == curses.KEY_RIGHT:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_RIGHT
-        elif player_input == curses.KEY_DOWN:
-            return PlayerAction.MOVE_ACTIVE_TETROMINO_DOWN
-        elif player_input == 81 or player_input == 113:  # Q ou q
-            return PlayerAction.ROTATE_ACTIVE_TETROMINO_LEFT
-        elif player_input == 68 or player_input == 100:  # D ou d
-            return PlayerAction.ROTATE_ACTIVE_TETROMINO_RIGHT
-        elif player_input == 27:  # Esc
-            return PlayerAction.QUIT_GAME
-        elif player_input == 80 or player_input == 112:  # P ou p
-            return PlayerAction.PAUSE_GAME
-        elif player_input == 83 or player_input == 115:  # S ou s
-            return PlayerAction.STORE_ACTIVE_TETROMINO
-        else:
-            return PlayerAction.MISSCLIC
-
-
-###############################################################
-###################### SET_COLORSCHEME ########################
-###############################################################
-def set_colorscheme() -> None:
-    curses.start_color()
-    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_WHITE)  # I
-    curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_WHITE)  # O
-    curses.init_pair(3, curses.COLOR_MAGENTA, curses.COLOR_WHITE)  # T
-    curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_WHITE)  # L
-    curses.init_pair(5, curses.COLOR_BLUE, curses.COLOR_WHITE)  # J
-    curses.init_pair(6, curses.COLOR_RED, curses.COLOR_WHITE)  # Z
-    curses.init_pair(7, curses.COLOR_GREEN, curses.COLOR_WHITE)   # S
-    curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_WHITE)  # Background & texts
-
-
-###############################################################
-####################### GET_COLOR_PAIR ########################
-###############################################################
-def get_color_pair(tetromino_type: TetrominoType) -> int:
-    if tetromino_type == TetrominoType.I:
-        return 1
-    elif tetromino_type == TetrominoType.O:
-        return 2
-    elif tetromino_type == TetrominoType.T:
-        return 3
-    elif tetromino_type == TetrominoType.L:
-        return 4
-    elif tetromino_type == TetrominoType.J:
-        return 5
-    elif tetromino_type == TetrominoType.Z:
-        return 6
-    elif tetromino_type == TetrominoType.S:
-        return 7

@@ -10,15 +10,16 @@
 # + __init__()
 # + GETTERS
 # + SETTERS
-# + is_occupied()
 # + get_element()
+# + is_occupied()
+# + is_line_full()
 # + add_active_tetromino()
 # ==========================================================
 
 from typing import List, Optional
 
-from modules.classes.ActiveTetromino import ActiveTetromino
-from modules.classes.TetrominoType import TetrominoType
+from modules.ActiveTetromino import ActiveTetromino
+from modules.TetrominoType import TetrominoType
 
 from modules.settings import GRID_HEIGHT, GRID_WIDTH
 
@@ -112,7 +113,7 @@ class Grid:
     ###############################################################
     ###################### DROP_LINES_UPPER #######################
     ###############################################################
-    def drop_lines_upper(self, line_number: int):
+    def drop_lines_upper(self, line_number: int) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
@@ -132,7 +133,7 @@ class Grid:
     ###############################################################
     #################### ADD_ACTIVE_TETROMINO #####################
     ###############################################################
-    def add_active_tetromino(self, active_tetromino: ActiveTetromino):
+    def add_active_tetromino(self, active_tetromino: ActiveTetromino) -> None:
         # =============================
         # INFORMATIONS :
         # -----------------------------
