@@ -343,7 +343,7 @@ class TitleView(View):
             curses.color_pair(12)
         )
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # début du deuxième T
@@ -379,7 +379,7 @@ class TitleView(View):
             curses.color_pair(12)
         )
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # bordure droite
@@ -457,7 +457,7 @@ class TitleView(View):
             curses.color_pair(11)
         )
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(12)
         )
         self.get_window_logo().addstr(
@@ -522,7 +522,7 @@ class TitleView(View):
         )
         # Espace entre E et R
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # R
@@ -532,7 +532,7 @@ class TitleView(View):
         )
         # Espace entre R et T
         self.get_window_logo().addstr(
-            "    ".encode(locale.getpreferredencoding()),
+            "    ",
             curses.color_pair(11)
         )
         # T
@@ -562,7 +562,7 @@ class TitleView(View):
         )
         # Espace entre I et S
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # Début du S
@@ -595,7 +595,7 @@ class TitleView(View):
         )
         # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # T
@@ -610,7 +610,7 @@ class TitleView(View):
         )
         # E
         self.get_window_logo().addstr(
-            "   ".encode(locale.getpreferredencoding()),
+            "   ",
             curses.color_pair(12)
         )
         # Fin du E & espace entre E et R
@@ -645,7 +645,7 @@ class TitleView(View):
         )
         # Espace entre R et I
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # I
@@ -665,7 +665,7 @@ class TitleView(View):
         )
         # Espace entre S et bordure droite
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # Bordure droite
@@ -689,7 +689,7 @@ class TitleView(View):
         )
         # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # T
@@ -719,7 +719,7 @@ class TitleView(View):
         )
         # R
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # R
@@ -729,7 +729,7 @@ class TitleView(View):
         )
         # Espace R - T
         self.get_window_logo().addstr(
-            "   ".encode(locale.getpreferredencoding()),
+            "   ",
             curses.color_pair(11)
         )
         # T
@@ -754,7 +754,7 @@ class TitleView(View):
         )
         # R
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(12)
         )
         # Fin R & espace R - I
@@ -769,7 +769,7 @@ class TitleView(View):
         )
         # Espace I - S
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # S
@@ -803,7 +803,7 @@ class TitleView(View):
         )
         # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # T
@@ -858,7 +858,7 @@ class TitleView(View):
         )
         # R
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(12)
         )
         # R
@@ -873,7 +873,7 @@ class TitleView(View):
         )
         # Espace R - I
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # I
@@ -893,7 +893,7 @@ class TitleView(View):
         )
         # Espace S - bordure droite
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # Bordure droite
@@ -917,7 +917,7 @@ class TitleView(View):
         )
         # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # T
@@ -947,7 +947,7 @@ class TitleView(View):
         )
         # R
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # R
@@ -957,7 +957,7 @@ class TitleView(View):
         )
         # Espace entre R et T
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # T
@@ -982,7 +982,7 @@ class TitleView(View):
         )
         # R
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(12)
         )
         # Fin de R et espace entre R et I
@@ -1031,7 +1031,7 @@ class TitleView(View):
         )
         # Espace entre bordure gauche et T
         self.get_window_logo().addstr(
-            "  ".encode(locale.getpreferredencoding()),
+            "  ",
             curses.color_pair(11)
         )
         # T
@@ -1051,7 +1051,7 @@ class TitleView(View):
         )
         # Espace entre E et R
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # R
@@ -1179,7 +1179,7 @@ class TitleView(View):
         )
         # Espace R - T
         self.get_window_logo().addstr(
-            " ".encode(locale.getpreferredencoding()),
+            " ",
             curses.color_pair(11)
         )
         # T
