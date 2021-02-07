@@ -15,8 +15,8 @@ from typing import Optional
 
 from modules.view.View import View
 
-from modules.ActiveTetromino import ActiveTetromino
-from modules.Tetromino import Tetromino
+from modules.tetromino.ActiveTetromino import ActiveTetromino
+from modules.tetromino.Tetromino import Tetromino
 from modules.Statistics import Statistics
 from modules.Grid import Grid
 

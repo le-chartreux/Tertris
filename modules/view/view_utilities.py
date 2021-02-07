@@ -8,7 +8,7 @@
 import curses
 import locale
 
-from modules.TetrominoType import TetrominoType
+from modules.tetromino.TetrominoType import TetrominoType
 
 
 ###############################################################

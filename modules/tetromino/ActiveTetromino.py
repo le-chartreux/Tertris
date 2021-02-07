@@ -5,7 +5,7 @@
 # Définir la classe ActiveTetromino, le tétromino contrôlé par le joueur
 # ==========================================================
 
-from modules.Tetromino import Tetromino
+from modules.tetromino.Tetromino import Tetromino
 
 from modules.Position import Position
 from modules.Direction import Direction

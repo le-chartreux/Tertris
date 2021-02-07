@@ -10,13 +10,13 @@ from typing import Optional
 from random import choice
 
 from modules.Grid import Grid
-from modules.Tetromino import Tetromino, tetromino_factory
-from modules.ActiveTetromino import ActiveTetromino
+from modules.tetromino.Tetromino import Tetromino, tetromino_factory
+from modules.tetromino.ActiveTetromino import ActiveTetromino
 from modules.Statistics import Statistics
 from modules.Rotation import Rotation
 
 from modules.Direction import Direction
-from modules.TetrominoType import TetrominoType
+from modules.tetromino.TetrominoType import TetrominoType
 
 from modules.settings import GRID_WIDTH, GRID_HEIGHT
 

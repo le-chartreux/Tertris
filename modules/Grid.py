@@ -7,8 +7,8 @@
 
 from typing import List, Optional
 
-from modules.ActiveTetromino import ActiveTetromino
-from modules.TetrominoType import TetrominoType
+from modules.tetromino.ActiveTetromino import ActiveTetromino
+from modules.tetromino.TetrominoType import TetrominoType
 
 from modules.settings import GRID_HEIGHT, GRID_WIDTH
 
