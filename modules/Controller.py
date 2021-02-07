@@ -277,7 +277,7 @@ class Controller:
             elif player_input == PlayerInput.KEY_P:
                 begin_of_the_pause = time()
                 player_input = self.get_loaded_view().get_player_input()
-                while player_input != PlayerAction.PAUSE_GAME.value and player_input != PlayerAction.QUIT_GAME.value:
+                while player_input != PlayerInput.KEY_P and player_input != PlayerInput.KEY_ESC:
                     player_input = self.get_loaded_view().get_player_input()
                     sleep(0.1)
                 # on fait en sorte que le temps de pause ne soit pas comptabilisé
