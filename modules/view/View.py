@@ -6,8 +6,10 @@
 # ==========================================================
 
 import curses
+from typing import Any
 
 from modules.view.view_utilities import set_colorscheme, setup_curses, revert_curses
+from modules.view.ColorPair import ColorPair
 from modules.PlayerInput import PlayerInput
 
 
@@ -23,8 +25,8 @@ class View:
     ############################ HINTS ############################
     ###############################################################
     # Since the curses module puts the _CursesWindow class private, I had
-    # to declare them as objects :/
-    _window_all: object
+    # to declare them as Any :/
+    _window_all: Any
 
     ###############################################################
     ########################## __INIT__ ###########################
@@ -63,13 +65,13 @@ class View:
     ###############################################################
     ########################### GETTERS ###########################
     ###############################################################
-    def get_window_all(self) -> object:
+    def get_window_all(self) -> Any:
         return self._window_all
 
     ###############################################################
     ########################### SETTERS ###########################
     ###############################################################
-    def set_window_all(self, window_all) -> None:
+    def set_window_all(self, window_all: Any) -> None:
         self._window_all = window_all
 
     ###############################################################
@@ -104,7 +106,7 @@ class View:
         # PRÉCONDITIONS :
         # - set_colorscheme() a déjà été appelé
         # =============================
-        self.get_window_all().bkgd(' ', curses.color_pair(8))
+        self.get_window_all().bkgd(' ', curses.color_pair(ColorPair.BLACK_N_WHITE.value))
 
         self.refresh_all()
 
