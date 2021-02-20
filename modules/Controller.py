@@ -236,7 +236,7 @@ class Controller:
         player_input = PlayerInput.KEY_UNUSED
         while player_input != PlayerInput.NOTHING:
             player_input = self.get_game_view().get_player_input()
-            # On gère les missclic
+            # On gère les missclicks
             while player_input == PlayerInput.KEY_UNUSED:
                 player_input = self.get_game_view().get_player_input()
 
