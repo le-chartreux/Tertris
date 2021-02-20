@@ -10,7 +10,7 @@ from typing import List, Optional
 from modules.tetromino.active_tetromino import ActiveTetromino
 from modules.tetromino import TetrominoType
 
-from modules.settings import GRID_HEIGHT, GRID_WIDTH
+import modules.config_general as config
 
 
 class Grid:
@@ -55,9 +55,9 @@ class Grid:
         if shape is None:
             # On crée un tableau à deux dimensions rempli de False
             self._shape = []
-            for line in range(GRID_HEIGHT):
+            for line in range(config.GRID_HEIGHT):
                 self._shape.append([])
-                for _ in range(GRID_WIDTH):
+                for _ in range(config.GRID_WIDTH):
                     self._shape[line].append(None)
         else:
             self._shape = shape
@@ -95,9 +95,9 @@ class Grid:
         # Retourne si la ligne est remplie
         # =============================
         column = 0
-        while column < GRID_WIDTH and self.is_occupied(x=column, y=line_number):
+        while column < config.GRID_WIDTH and self.is_occupied(x=column, y=line_number):
             column += 1
-        return column == GRID_WIDTH
+        return column == config.GRID_WIDTH
 
     ###############################################################
     ###################### DROP_LINES_UPPER #######################
@@ -116,7 +116,7 @@ class Grid:
             self.get_shape()[line][:] = self.get_shape()[line - 1][:]
             line -= 1
         # On remplie la ligne la plus en haut de None pour la vider
-        for column in range(GRID_WIDTH):
+        for column in range(config.GRID_WIDTH):
             self.get_shape()[0][column] = None
 
     ###############################################################
@@ -132,8 +132,8 @@ class Grid:
         for line in range(active_tetromino.get_height()):
             for column in range(active_tetromino.get_width()):
                 if (
-                        0 <= active_tetromino.get_x() + column < GRID_WIDTH
-                        and 0 <= active_tetromino.get_y() + line < GRID_HEIGHT
+                        0 <= active_tetromino.get_x() + column < config.GRID_WIDTH
+                        and 0 <= active_tetromino.get_y() + line < config.GRID_HEIGHT
                         and active_tetromino.is_occupied(x=column, y=line)
                 ):
                     self.get_shape()[

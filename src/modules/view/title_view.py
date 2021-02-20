@@ -17,22 +17,7 @@ from modules.button_name import ButtonName
 
 from modules.direction import Direction
 
-from modules.settings import (
-    TITLE_VIEW_LOGO_BEGIN_X,
-    TITLE_VIEW_LOGO_BEGIN_Y,
-    TITLE_VIEW_LOGO_WIDTH,
-    TITLE_VIEW_LOGO_HEIGHT,
-
-    TITLE_VIEW_BUTTONS_BEGIN_X,
-    TITLE_VIEW_BUTTONS_BEGIN_Y,
-    TITLE_VIEW_BUTTONS_WIDTH,
-    TITLE_VIEW_BUTTONS_HEIGHT,
-
-    TITLE_VIEW_TEXTS_BEGIN_X,
-    TITLE_VIEW_TEXTS_BEGIN_Y,
-    TITLE_VIEW_TEXTS_WIDTH,
-    TITLE_VIEW_TEXTS_HEIGHT
-)
+import modules.view.config as config
 
 
 class TitleView(View):
@@ -80,28 +65,28 @@ class TitleView(View):
 
         self.set_window_logo(
             curses.newwin(
-                TITLE_VIEW_LOGO_HEIGHT,
-                TITLE_VIEW_LOGO_WIDTH,
-                TITLE_VIEW_LOGO_BEGIN_Y,
-                TITLE_VIEW_LOGO_BEGIN_X
+                config.TITLE_VIEW_LOGO_HEIGHT,
+                config.TITLE_VIEW_LOGO_WIDTH,
+                config.TITLE_VIEW_LOGO_BEGIN_Y,
+                config.TITLE_VIEW_LOGO_BEGIN_X
             )
         )
 
         self.set_window_buttons(
             curses.newwin(
-                TITLE_VIEW_BUTTONS_HEIGHT,
-                TITLE_VIEW_BUTTONS_WIDTH,
-                TITLE_VIEW_BUTTONS_BEGIN_Y,
-                TITLE_VIEW_BUTTONS_BEGIN_X
+                config.TITLE_VIEW_BUTTONS_HEIGHT,
+                config.TITLE_VIEW_BUTTONS_WIDTH,
+                config.TITLE_VIEW_BUTTONS_BEGIN_Y,
+                config.TITLE_VIEW_BUTTONS_BEGIN_X
             )
         )
 
         self.set_window_texts(
             curses.newwin(
-                TITLE_VIEW_TEXTS_HEIGHT,
-                TITLE_VIEW_TEXTS_WIDTH,
-                TITLE_VIEW_TEXTS_BEGIN_Y,
-                TITLE_VIEW_TEXTS_BEGIN_X
+                config.TITLE_VIEW_TEXTS_HEIGHT,
+                config.TITLE_VIEW_TEXTS_WIDTH,
+                config.TITLE_VIEW_TEXTS_BEGIN_Y,
+                config.TITLE_VIEW_TEXTS_BEGIN_X
             )
         )
 

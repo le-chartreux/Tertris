@@ -18,7 +18,7 @@ from modules.rotation import Rotation
 from modules.direction import Direction
 from modules.tetromino import TetrominoType
 
-from modules.settings import GRID_WIDTH, GRID_HEIGHT
+import modules.config_general as config
 
 
 class Model:
@@ -258,7 +258,7 @@ class Model:
 
         # On regarde si des lignes ont été remplies :
         number_of_completed_lines = 0
-        for line in range(GRID_HEIGHT):
+        for line in range(config.GRID_HEIGHT):
             if self.get_grid().is_line_full(line):
                 self.get_grid().drop_lines_upper(line)
                 number_of_completed_lines += 1
@@ -285,11 +285,13 @@ class Model:
                     not self.get_active_tetromino().is_occupied(x=column, y=line)  # Soit il n'y a pas de bloc
                     or  # ou
                     (  # Soit le bloc va aller dans les bordures de la grille ...
-                        0 <= self.get_active_tetromino().get_x() + column + direction.value.get_x() < GRID_WIDTH
+                        0 <= (
+                            self.get_active_tetromino().get_x() + column + direction.value.get_x()
+                        ) < config.GRID_WIDTH
                         and
                         # Pas le 0 <= car le seul cas où on monte est quand on veut découper le tétromino actif à la fin
                         # de la partie et on peut que ça valide à ce moment là
-                        self.get_active_tetromino().get_y() + line + direction.value.get_y() < GRID_HEIGHT
+                        self.get_active_tetromino().get_y() + line + direction.value.get_y() < config.GRID_HEIGHT
                     )
                     and not (  # ... et l'emplacement futur n'est pas occupé
                         self.get_grid().is_occupied(
@@ -330,9 +332,9 @@ class Model:
                     not tetromino_after_rotation.is_occupied(x=column, y=line)  # Soit il n'y a pas de bloc
                     or  # ou
                     (  # Soit le bloc est dans les bordures de la grille ...
-                            0 <= tetromino_after_rotation.get_x() + column < GRID_WIDTH
+                            0 <= tetromino_after_rotation.get_x() + column < config.GRID_WIDTH
                             and
-                            0 <= tetromino_after_rotation.get_y() + line < GRID_HEIGHT
+                            0 <= tetromino_after_rotation.get_y() + line < config.GRID_HEIGHT
                     )
                     and not (  # ... et son emplacement n'est pas occupé
                         self.get_grid().is_occupied(
