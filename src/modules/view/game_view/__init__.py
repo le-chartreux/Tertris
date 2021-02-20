@@ -23,7 +23,7 @@ from modules.grid import Grid
 from modules.view.view_utilities import get_color_pair
 import modules.view.color_pairs as color_pairs
 
-import modules.view.config as config
+import modules.view.game_view.config as config
 
 
 class GameView(View):

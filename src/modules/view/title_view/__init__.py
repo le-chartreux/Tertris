@@ -17,7 +17,7 @@ from modules.button_name import ButtonName
 
 from modules.direction import Direction
 
-import modules.view.config as config
+import modules.view.title_view.config as config
 
 
 class TitleView(View):
