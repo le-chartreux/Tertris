@@ -9,7 +9,8 @@ import curses
 import locale
 
 from modules.tetromino.TetrominoType import TetrominoType
-from modules.view.ColorPair import ColorPair
+import modules.view.color_pairs as color_pairs
+
 
 ###############################################################
 ######################## SETUP_CURSES #########################
@@ -46,7 +47,7 @@ def revert_curses() -> None:
 ###############################################################
 ###################### SET_COLORSCHEME ########################
 ###############################################################
-def set_colorscheme() -> None:  # TODO : améliorer ça
+def set_colorscheme() -> None:
     # =============================
     # INFORMATIONS :
     # -----------------------------
@@ -55,25 +56,25 @@ def set_colorscheme() -> None:  # TODO : améliorer ça
     # =============================
     curses.start_color()
 
-    curses.init_pair(ColorPair.I_COLOR.value, curses.COLOR_CYAN, curses.COLOR_WHITE)
-    curses.init_pair(ColorPair.O_COLOR.value, curses.COLOR_YELLOW, curses.COLOR_WHITE)
-    curses.init_pair(ColorPair.T_COLOR.value, curses.COLOR_MAGENTA, curses.COLOR_WHITE)
-    curses.init_pair(ColorPair.L_COLOR.value, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    curses.init_pair(ColorPair.J_COLOR.value, curses.COLOR_BLUE, curses.COLOR_WHITE)
-    curses.init_pair(ColorPair.Z_COLOR.value, curses.COLOR_RED, curses.COLOR_WHITE)
-    curses.init_pair(ColorPair.S_COLOR.value, curses.COLOR_GREEN, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.I_COLOR, curses.COLOR_CYAN, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.O_COLOR, curses.COLOR_YELLOW, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.T_COLOR, curses.COLOR_MAGENTA, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.L_COLOR, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.J_COLOR, curses.COLOR_BLUE, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.Z_COLOR, curses.COLOR_RED, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.S_COLOR, curses.COLOR_GREEN, curses.COLOR_WHITE)
 
-    curses.init_pair(ColorPair.BLACK_N_WHITE.value, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    curses.init_pair(ColorPair.RED_N_BLUE.value, curses.COLOR_RED, curses.COLOR_BLUE)
-    curses.init_pair(ColorPair.BLACK_N_BLUE.value, curses.COLOR_BLACK, curses.COLOR_BLUE)
-    curses.init_pair(ColorPair.BLACK_N_BLACK.value, curses.COLOR_BLACK, curses.COLOR_BLACK)
-    curses.init_pair(ColorPair.RED_N_WHITE.value, curses.COLOR_RED, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.BLACK_N_WHITE, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(color_pairs.RED_N_BLUE, curses.COLOR_RED, curses.COLOR_BLUE)
+    curses.init_pair(color_pairs.BLACK_N_BLUE, curses.COLOR_BLACK, curses.COLOR_BLUE)
+    curses.init_pair(color_pairs.BLACK_N_BLACK, curses.COLOR_BLACK, curses.COLOR_BLACK)
+    curses.init_pair(color_pairs.RED_N_WHITE, curses.COLOR_RED, curses.COLOR_WHITE)
 
 
 ###############################################################
 ####################### GET_COLOR_PAIR ########################
 ###############################################################
-def get_color_pair(tetromino_type: TetrominoType) -> ColorPair:
+def get_color_pair(tetromino_type: TetrominoType) -> int:
     # =============================
     # INFORMATIONS :
     # -----------------------------
@@ -81,16 +82,16 @@ def get_color_pair(tetromino_type: TetrominoType) -> ColorPair:
     # Retourne la couleur du tetromino en fonction de son type
     # =============================
     if tetromino_type == TetrominoType.I:
-        return ColorPair.I_COLOR
+        return color_pairs.I_COLOR
     elif tetromino_type == TetrominoType.O:
-        return ColorPair.O_COLOR
+        return color_pairs.O_COLOR
     elif tetromino_type == TetrominoType.T:
-        return ColorPair.T_COLOR
+        return color_pairs.T_COLOR
     elif tetromino_type == TetrominoType.L:
-        return ColorPair.L_COLOR
+        return color_pairs.L_COLOR
     elif tetromino_type == TetrominoType.J:
-        return ColorPair.J_COLOR
+        return color_pairs.J_COLOR
     elif tetromino_type == TetrominoType.Z:
-        return ColorPair.Z_COLOR
+        return color_pairs.Z_COLOR
     elif tetromino_type == TetrominoType.S:
-        return ColorPair.S_COLOR
+        return color_pairs.S_COLOR

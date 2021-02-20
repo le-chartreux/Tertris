@@ -9,7 +9,7 @@ import curses
 from typing import Any
 
 from modules.view.view_utilities import set_colorscheme, setup_curses, revert_curses
-from modules.view.ColorPair import ColorPair
+import modules.view.color_pairs as color_pairs
 from modules.PlayerInput import PlayerInput
 
 
@@ -106,7 +106,7 @@ class View:
         # PRÉCONDITIONS :
         # - set_colorscheme() a déjà été appelé
         # =============================
-        self.get_window_all().bkgd(' ', curses.color_pair(ColorPair.BLACK_N_WHITE.value))
+        self.get_window_all().bkgd(' ', curses.color_pair(color_pairs.BLACK_N_WHITE))
 
         self.refresh_all()
 
