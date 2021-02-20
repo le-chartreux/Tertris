@@ -1,6 +1,11 @@
 # Tertris
 Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NES,_Nintendo)).
 
+![Playable](https://img.shields.io/badge/playable-yes-success)
+![Commit activity](https://img.shields.io/github/commit-activity/m/VMoM/Tertris)
+![GitHub all releases](https://img.shields.io/github/downloads/VMoM/Tertris/total)
+![GitHub all stars](https://img.shields.io/github/stars/VMoM/Tertris)
+![License](https://img.shields.io/github/license/VMoM/Tertris)
 
 ## LOOK:
 ![Example of look - if not show look at informations/social preview.png](information/social%20preview.png)
@@ -12,15 +17,15 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 3. Follow the guide of the release you chose
 
 
-## LANGUAGE:
-- User interface and code are in english.
-- Comments are only in French for the time being (maybe an English version will come later).
+## LANGUAGES:
+- User interface and code are in english 🇬🇧.
+- Comments are only in French for the time being 🇫🇷 (maybe an English version will come later).
 
 
 ## DISCLAIMERS
-- Tertris uses the [curses library](https://en.wikipedia.org/wiki/Curses_(programming_library)) for Python 3 to print it interface, so **it can only run in Unix-based OS**.
-- Tertris is still in progress, so some features (such as level counting) may not being implemented.
-- Since in the Python 3's version of the curses module the class `_CursesWindow` is private, I had to declare them as objects. In result, your IDE will cry blood if you open `View.py`. 
+- Tertris uses the [curses library](https://en.wikipedia.org/wiki/Curses_(programming_library)) for Python 3 to print it interface, so **it can only run in Unix-based OS** 🐧🍎
+- Tertris is still in progress, so a lot of features (such as level counting) may not being implemented, but it is playable 🎮. 
+
 
 ## OTHER LINKS:
 - The [official Tetris website](https://tetris.com/).
