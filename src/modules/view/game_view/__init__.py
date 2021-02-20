@@ -524,10 +524,10 @@ class GameView(View):
         # UTILITÉ :
         # Affiche les statistiques dans la fenêtre de statistiques
         # =============================
-        self.get_window_statistics().addstr(1, 1, "Level: " + str(statistics.get_level()))
-        self.get_window_statistics().addstr(2, 1, "Score: " + str(statistics.get_score()))
-        self.get_window_statistics().addstr(3, 1, "Lines: " + str(statistics.get_lines_completed()))
-        self.get_window_statistics().addstr(4, 1, "Time: " + str(statistics.get_duration()))
+        self.get_window_statistics().addstr(1, 2, "Level: " + str(statistics.get_level()))
+        self.get_window_statistics().addstr(2, 2, "Score: " + str(statistics.get_score()))
+        self.get_window_statistics().addstr(3, 2, "Lines: " + str(statistics.get_lines_completed()))
+        self.get_window_statistics().addstr(4, 2, "Time: " + str(statistics.get_duration()))
 
         self.get_window_statistics().refresh()
 
@@ -604,16 +604,16 @@ class GameView(View):
         # UTILITÉ :
         # Affiche les raccourcis dans la fenêtre de raccourcis
         # =============================
-        self.get_window_keybinds().addstr(1, 1, "Arrow-left: Left")
-        self.get_window_keybinds().addstr(2, 1, "Arrow-right: Right")
-        self.get_window_keybinds().addstr(3, 1, "Arrow-down: Down")
+        self.get_window_keybinds().addstr(1, 2, "Arrow-left: Left")
+        self.get_window_keybinds().addstr(2, 2, "Arrow-right: Right")
+        self.get_window_keybinds().addstr(3, 2, "Arrow-down: Down")
 
-        self.get_window_keybinds().addstr(4, 1, "Q: Rotate left")
-        self.get_window_keybinds().addstr(5, 1, "D: Rotate right")
-        self.get_window_keybinds().addstr(6, 1, "S: Store actual")
+        self.get_window_keybinds().addstr(4, 2, "Q: Rotate left")
+        self.get_window_keybinds().addstr(5, 2, "D: Rotate right")
+        self.get_window_keybinds().addstr(6, 2, "S: Store actual")
 
-        self.get_window_keybinds().addstr(7, 1, "P: Pause")
-        self.get_window_keybinds().addstr(8, 1, "Esc: Quit")
+        self.get_window_keybinds().addstr(7, 2, "P: Pause")
+        self.get_window_keybinds().addstr(8, 2, "Esc: Quit")
 
         self.get_window_keybinds().refresh()
 
