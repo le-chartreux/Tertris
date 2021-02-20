@@ -1,4 +1,4 @@
-# Tertris
+![Example of look - if not show look at informations/social preview.png](information/readme/logo.png)
 Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NES,_Nintendo)).
 
 ![Playable](https://img.shields.io/badge/playable-yes-success)
@@ -8,7 +8,7 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 ![License](https://img.shields.io/github/license/VMoM/Tertris)
 
 ## LOOK:
-![Example of look - if not show look at informations/social preview.png](information/social%20preview.png)
+![Example of look - if not show look at informations/social preview.png](information/readme/social%20preview.png)
 
 
 ## HOW TO USE IT ?
