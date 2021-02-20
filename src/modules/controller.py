@@ -8,15 +8,15 @@
 from time import time, sleep
 from typing import Optional
 
-from modules.Model import Model
-from modules.view.GameView import GameView
-from modules.view.TitleView import TitleView
+from modules.model import Model
+from modules.view.game_view import GameView
+from modules.view.title_view import TitleView
 
-from modules.PlayerInput import PlayerInput
-from modules.ButtonName import ButtonName
+from modules.player_input import PlayerInput
+from modules.button_name import ButtonName
 
-from modules.Direction import Direction
-from modules.Rotation import Rotation
+from modules.direction import Direction
+from modules.rotation import Rotation
 
 
 class Controller:

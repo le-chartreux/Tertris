@@ -13,12 +13,12 @@ from math import floor, ceil  # Utilisé pour le calcul de nombre de ═ à mett
 
 from typing import Optional, Any
 
-from modules.view.View import View
+from modules.view import View
 
-from modules.tetromino.ActiveTetromino import ActiveTetromino
-from modules.tetromino.Tetromino import Tetromino
-from modules.Statistics import Statistics
-from modules.Grid import Grid
+from modules.tetromino.active_tetromino import ActiveTetromino
+from modules.tetromino import Tetromino
+from modules.statistics import Statistics
+from modules.grid import Grid
 
 from modules.view.view_utilities import get_color_pair
 import modules.view.color_pairs as color_pairs

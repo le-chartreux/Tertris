@@ -8,7 +8,7 @@
 import curses
 import locale
 
-from modules.tetromino.TetrominoType import TetrominoType
+from modules.tetromino import TetrominoType
 import modules.view.color_pairs as color_pairs
 
 

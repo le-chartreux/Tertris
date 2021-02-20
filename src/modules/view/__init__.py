@@ -9,8 +9,8 @@ import curses
 from typing import Any
 
 from modules.view.view_utilities import set_colorscheme, setup_curses, revert_curses
+from modules.player_input import PlayerInput
 import modules.view.color_pairs as color_pairs
-from modules.PlayerInput import PlayerInput
 
 
 class View:

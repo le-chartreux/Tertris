@@ -5,11 +5,11 @@
 # Définir la classe ActiveTetromino, le tétromino contrôlé par le joueur
 # ==========================================================
 
-from modules.tetromino.Tetromino import Tetromino
+from modules.tetromino import Tetromino
 
-from modules.Position import Position
-from modules.Direction import Direction
-from modules.Rotation import Rotation
+from modules.position import Position
+from modules.direction import Direction
+from modules.rotation import Rotation
 
 
 class ActiveTetromino(Tetromino):

@@ -9,14 +9,14 @@ from time import time
 from typing import Optional
 from random import choice
 
-from modules.Grid import Grid
-from modules.tetromino.Tetromino import Tetromino, tetromino_factory
-from modules.tetromino.ActiveTetromino import ActiveTetromino
-from modules.Statistics import Statistics
-from modules.Rotation import Rotation
+from modules.grid import Grid
+from modules.tetromino import Tetromino, tetromino_factory
+from modules.tetromino.active_tetromino import ActiveTetromino
+from modules.statistics import Statistics
+from modules.rotation import Rotation
 
-from modules.Direction import Direction
-from modules.tetromino.TetrominoType import TetrominoType
+from modules.direction import Direction
+from modules.tetromino import TetrominoType
 
 from modules.settings import GRID_WIDTH, GRID_HEIGHT
 

@@ -11,11 +11,11 @@ import locale
 
 from typing import Any
 
-from modules.view.View import View
+from modules.view import View
 import modules.view.color_pairs as color_pairs
-from modules.ButtonName import ButtonName
+from modules.button_name import ButtonName
 
-from modules.Direction import Direction
+from modules.direction import Direction
 
 from modules.settings import (
     TITLE_VIEW_LOGO_BEGIN_X,
