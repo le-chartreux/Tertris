@@ -5,6 +5,7 @@
 # Définir la classe PlayerAction, l'énumération des inputs que peut faire le joueur
 # ==========================================================
 
+# noinspection PyUnresolvedReferences
 from enum import Enum, auto
 
 import curses  # nécessaire pour les constantes de curses

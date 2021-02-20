@@ -9,14 +9,14 @@ from time import time, sleep
 from typing import Optional
 
 from modules.model import Model
+
 from modules.view.game_view import GameView
-from modules.view.title_view import TitleView
-
-from modules.player_input import PlayerInput
-from modules.button_name import ButtonName
-
 from modules.direction import Direction
 from modules.rotation import Rotation
+
+from modules.view.title_view import TitleView
+from modules.player_input import PlayerInput
+import modules.view.title_view.config as config_title_view
 
 
 class Controller:
@@ -177,27 +177,27 @@ class Controller:
             # Entrée
             if player_input in (PlayerInput.KEY_ENTER_1, PlayerInput.KEY_ENTER_2, PlayerInput.KEY_ENTER_3):
                 active_button = self.get_title_view().get_highlighted_button()
-                if active_button == ButtonName.START:
+                if active_button == config_title_view.BUTTON_START:
                     self.switch_loaded_view()
                     self.get_game_view().setup()
                     self.get_game_view().print_without_parameter_windows()
                     player_input = PlayerInput.NOTHING
-                elif active_button == ButtonName.OPTIONS:
+                elif active_button == config_title_view.BUTTON_OPTIONS:
                     pass  # TODO implémenter la vue d'options
-                elif active_button == ButtonName.HIGH_SCORES:
+                elif active_button == config_title_view.BUTTON_HIGH_SCORES:
                     pass  # TODO implémenter la vue des meilleurs scores
-                elif active_button == ButtonName.QUIT:
+                elif active_button == config_title_view.BUTTON_QUIT:
                     self.set_continue_execution(False)
 
             # Touches directionnelles
             if player_input == PlayerInput.KEY_UP:
                 self.get_title_view().set_highlighted_button(
-                    self.get_title_view().get_button_name(Direction.UP)
+                    self.get_title_view().get_button(Direction.UP)
                 )
                 self.get_title_view().print_buttons()
             elif player_input == PlayerInput.KEY_DOWN:
                 self.get_title_view().set_highlighted_button(
-                    self.get_title_view().get_button_name(Direction.DOWN)
+                    self.get_title_view().get_button(Direction.DOWN)
                 )
                 self.get_title_view().print_buttons()
 

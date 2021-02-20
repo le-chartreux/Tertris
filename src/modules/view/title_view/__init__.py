@@ -13,7 +13,6 @@ from typing import Any
 
 from modules.view import View
 import modules.view.color_pairs as color_pairs
-from modules.button_name import ButtonName
 
 from modules.direction import Direction
 
@@ -39,14 +38,14 @@ class TitleView(View):
     _window_logo: Any
     _window_buttons: Any
     _window_bottom_texts: Any
-    _highlighted_button: ButtonName
+    _highlighted_button: int
 
     ###############################################################
     ########################## __INIT__ ###########################
     ###############################################################
     def __init__(
             self,
-            highlighted_button: ButtonName = ButtonName.START
+            highlighted_button: int = config.BUTTON_START
     ) -> None:
         # =============================
         # INFORMATIONS :
@@ -65,28 +64,28 @@ class TitleView(View):
 
         self.set_window_logo(
             curses.newwin(
-                config.TITLE_VIEW_LOGO_HEIGHT,
-                config.TITLE_VIEW_LOGO_WIDTH,
-                config.TITLE_VIEW_LOGO_BEGIN_Y,
-                config.TITLE_VIEW_LOGO_BEGIN_X
+                config.LOGO_HEIGHT,
+                config.LOGO_WIDTH,
+                config.LOGO_BEGIN_Y,
+                config.LOGO_BEGIN_X
             )
         )
 
         self.set_window_buttons(
             curses.newwin(
-                config.TITLE_VIEW_BUTTONS_HEIGHT,
-                config.TITLE_VIEW_BUTTONS_WIDTH,
-                config.TITLE_VIEW_BUTTONS_BEGIN_Y,
-                config.TITLE_VIEW_BUTTONS_BEGIN_X
+                config.BUTTONS_HEIGHT,
+                config.BUTTONS_WIDTH,
+                config.BUTTONS_BEGIN_Y,
+                config.BUTTONS_BEGIN_X
             )
         )
 
         self.set_window_texts(
             curses.newwin(
-                config.TITLE_VIEW_TEXTS_HEIGHT,
-                config.TITLE_VIEW_TEXTS_WIDTH,
-                config.TITLE_VIEW_TEXTS_BEGIN_Y,
-                config.TITLE_VIEW_TEXTS_BEGIN_X
+                config.TEXTS_HEIGHT,
+                config.TEXTS_WIDTH,
+                config.TEXTS_BEGIN_Y,
+                config.TEXTS_BEGIN_X
             )
         )
 
@@ -104,7 +103,7 @@ class TitleView(View):
     def get_window_bottom_texts(self) -> Any:
         return self._window_bottom_texts
 
-    def get_highlighted_button(self) -> ButtonName:
+    def get_highlighted_button(self) -> int:
         return self._highlighted_button
 
     ###############################################################
@@ -119,7 +118,7 @@ class TitleView(View):
     def set_window_texts(self, window_bottom_texts: Any) -> None:
         self._window_bottom_texts = window_bottom_texts
 
-    def set_highlighted_button(self, highlighted_button: ButtonName):
+    def set_highlighted_button(self, highlighted_button: int):
         self._highlighted_button = highlighted_button
 
     ###############################################################
@@ -1257,13 +1256,13 @@ class TitleView(View):
         color_for_options = curses.color_pair(color_pairs.BLACK_N_BLUE)
         color_for_high_scores = curses.color_pair(color_pairs.BLACK_N_BLUE)
         color_for_quit = curses.color_pair(color_pairs.BLACK_N_BLUE)
-        if self._highlighted_button == ButtonName.START:
+        if self._highlighted_button == config.BUTTON_START:
             color_for_start = curses.color_pair(color_pairs.BLACK_N_WHITE)
-        elif self._highlighted_button == ButtonName.OPTIONS:
+        elif self._highlighted_button == config.BUTTON_OPTIONS:
             color_for_options = curses.color_pair(color_pairs.BLACK_N_WHITE)
-        elif self._highlighted_button == ButtonName.HIGH_SCORES:
+        elif self._highlighted_button == config.BUTTON_HIGH_SCORES:
             color_for_high_scores = curses.color_pair(color_pairs.BLACK_N_WHITE)
-        elif self._highlighted_button == ButtonName.QUIT:
+        elif self._highlighted_button == config.BUTTON_QUIT:
             color_for_quit = curses.color_pair(color_pairs.BLACK_N_WHITE)
 
         self.get_window_buttons().addstr(0, 3, "START", color_for_start)
@@ -1331,7 +1330,7 @@ class TitleView(View):
 
         self.get_window_bottom_texts().refresh()
 
-    def get_button_name(self, direction: Direction) -> ButtonName:
+    def get_button(self, direction: Direction) -> int:
         # =============================
         # INFORMATIONS :
         # -----------------------------
@@ -1339,12 +1338,8 @@ class TitleView(View):
         # Retourne le nom du bouton selon la direction
         # =============================
         if direction == Direction.DOWN:
-            return ButtonName(
-                (self.get_highlighted_button().value + 1) % 4
-            )
+            return (self.get_highlighted_button() + 1) % 4
         elif direction == Direction.UP:
-            return ButtonName(
-                3 if (self.get_highlighted_button().value - 1 < 0) else (self.get_highlighted_button().value - 1)
-            )
+            return 3 if (self.get_highlighted_button() - 1 < 0) else (self.get_highlighted_button() - 1)
         else:
             return self.get_highlighted_button()
