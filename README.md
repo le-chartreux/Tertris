@@ -1,11 +1,11 @@
 ![Example of look - if not show look at informations/social preview.png](information/readme/logo.png)
 Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NES,_Nintendo)).
 
-![Playable](https://img.shields.io/badge/playable-yes-success)
-![Commit activity](https://img.shields.io/github/commit-activity/m/VMoM/Tertris)
-![GitHub all releases](https://img.shields.io/github/downloads/VMoM/Tertris/total)
-![GitHub all stars](https://img.shields.io/github/stars/VMoM/Tertris)
-![License](https://img.shields.io/github/license/VMoM/Tertris)
+![Playable](https://img.shields.io/badge/playable-yes-success.svg)
+![Commit activity](https://img.shields.io/github/commit-activity/m/VMoM/Tertris.svg?color=blue&label=commits)
+![GitHub all releases](https://img.shields.io/github/downloads/VMoM/Tertris/total.svg?color=blue)
+![GitHub all stars](https://img.shields.io/github/stars/VMoM/Tertris.svg?color=blue)
+![License](https://img.shields.io/github/license/VMoM/Tertris.svg?color=blue)
 
 ## LOOK:
 ![Example of look - if not show look at informations/social preview.png](information/readme/social%20preview.png)
