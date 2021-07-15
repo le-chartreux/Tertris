@@ -40,6 +40,9 @@ class Shape:
         """
         self._boxes[y][x] = box_value
 
+    def set_boxes(self, boxes: list[list[typing.Optional[m_tetromino_type.TetrominoType]]]) -> None:
+        self._boxes = boxes
+
     def is_occupied(self, x: int, y: int) -> bool:
         """
         :param x: horizontal position of the box we want to know if occupied

@@ -9,12 +9,12 @@ import model.shape as m_shape
 import model.utils as m_utils
 
 
-class ActiveTetromino:
+class ActiveTetromino(m_shape.Shape):
     def __init__(self, tetromino_type: m_tetromino_type.TetrominoType):
+        super(ActiveTetromino, self).__init__(4, 4)
         self._x = 0
         self._y = 0
         self._type = tetromino_type
-        self._shape = m_utils.get_tetromino_shape(self._type)
 
     # GETTER
     def get_x(self) -> int:
@@ -22,9 +22,6 @@ class ActiveTetromino:
 
     def get_y(self) -> int:
         return self._y
-
-    def get_shape(self) -> m_shape.Shape:
-        return self._shape
 
     def get_tetromino_type(self) -> m_tetromino_type.TetrominoType:
         return self._type

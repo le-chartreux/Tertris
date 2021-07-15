@@ -44,7 +44,7 @@ class Model:
         """
         :return: the shape of the actual grid
         """
-        return self._grid.get_shape().get_boxes()
+        return self._grid.get_boxes()
 
     def process(self, message: m_message.Message) -> None:
         """
@@ -81,6 +81,7 @@ class Model:
         """
         Did everything that is needed when the game is running
         """
+        print("tick")
         if self._has_to_go_down():
             self._last_down = time.monotonic()
             if self._can_active_move(m_direction.Direction.DOWN):
@@ -98,7 +99,7 @@ class Model:
 
                 # checks if some lines are completed
                 number_of_completed_lines = 0
-                for line in range(self._grid.get_shape().get_height()):
+                for line in range(self._grid.get_height()):
                     if self._grid.is_line_full(line):
                         self._grid.drop_lines_upper(line)
                         number_of_completed_lines += 1
@@ -131,23 +132,23 @@ class Model:
         line = 0
 
         possible = True
-        while line < self._active_tetromino.get_shape().get_height() and possible:
+        while line < self._active_tetromino.get_height() and possible:
             column = 0
-            while column < self._active_tetromino.get_shape().get_width() and possible:
+            while column < self._active_tetromino.get_width() and possible:
                 possible = (
-                    not self._active_tetromino.get_shape().is_occupied(x=column, y=line)  # There is no bloc
+                    not self._active_tetromino.is_occupied(x=column, y=line)  # There is no bloc
                     or  # or
                     (  # The bloc will go outside of the grid border
                         0 <= (
                             self._active_tetromino.get_x() + column + direction.get_x_variation()
-                        ) < self._grid.get_shape().get_width()
+                        ) < self._grid.get_width()
                         and
                         0 <= (
                                 self._active_tetromino.get_y() + line + direction.get_y_variation()
-                        ) < self._grid.get_shape().get_height()
+                        ) < self._grid.get_height()
                     )
                     and not (  # ... and the futur bloc is empty
-                        self._grid.get_shape().is_occupied(
+                        self._grid.is_occupied(
                             self._active_tetromino.get_x() + direction.get_x_variation() + column,
                             self._active_tetromino.get_y() + direction.get_y_variation() + line
                         )
