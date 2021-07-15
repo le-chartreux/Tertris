@@ -1,14 +1,12 @@
-from traceback import format_exc
+import traceback
 
-from modules.controller import Controller
+import model
+import view
 
+# Everything is in a try-except to get the error message if the program crashs
 try:
-    controller = Controller()
-    controller.run()
-
-
-except Exception:  # Pour avoir le message d'erreur et ne pas détruire le terminal de l'utilisateur car ça a crash
-    # sans le restorer
+    model = model.Model(0)
+except Exception:
     error_output = open("error_output.txt", "w")
-    error_output.write(format_exc())
+    error_output.write(traceback.format_exc())
     error_output.close()
