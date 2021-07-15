@@ -1,11 +1,17 @@
 """
 File that contains various utils for the model
 """
-import common.tetromino_type as p_tetromino_type
+import random
+
+import common.tetromino_type as m_tetromino_type
 import model.shape as p_shape
 
 
-def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_shape.Shape:
+def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_shape.Shape:
+    """
+    :param tetromino_type: type of the tetromino we want the shape
+    :return: the initial shape of the tetromino type given
+    """
     shape = p_shape.Shape(4, 4)
     # (x, y) tuple
     positions: tuple[
@@ -14,7 +20,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
         tuple[int, int],
         tuple[int, int]
     ]
-    if tetromino_type == p_tetromino_type.TetrominoType.I:
+    if tetromino_type == m_tetromino_type.TetrominoType.I:
         """
          0123
         [    ] 0
@@ -28,7 +34,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
             (2, 1),
             (3, 1)
         )
-    elif tetromino_type == p_tetromino_type.TetrominoType.O:
+    elif tetromino_type == m_tetromino_type.TetrominoType.O:
         """
          0123
         [    ] 0
@@ -42,7 +48,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
             (1, 2),
             (2, 2)
         )
-    elif tetromino_type == p_tetromino_type.TetrominoType.T:
+    elif tetromino_type == m_tetromino_type.TetrominoType.T:
         """
          0123
         [    ] 0
@@ -56,7 +62,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
             (2, 2),
             (3, 1)
         )
-    elif tetromino_type == p_tetromino_type.TetrominoType.L:
+    elif tetromino_type == m_tetromino_type.TetrominoType.L:
         """
          0123
         [    ] 0
@@ -70,7 +76,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
             (3, 1),
             (1, 2)
         )
-    elif tetromino_type == p_tetromino_type.TetrominoType.J:
+    elif tetromino_type == m_tetromino_type.TetrominoType.J:
         """
          0123
         [    ] 0
@@ -84,7 +90,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
             (3, 1),
             (1, 3)
         )
-    elif tetromino_type == p_tetromino_type.TetrominoType.Z:
+    elif tetromino_type == m_tetromino_type.TetrominoType.Z:
         """
          0123
         [    ] 0
@@ -98,7 +104,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
             (2, 2),
             (3, 2)
         )
-    elif tetromino_type == p_tetromino_type.TetrominoType.S:
+    elif tetromino_type == m_tetromino_type.TetrominoType.S:
         """
          0123
         [    ] 0
@@ -113,7 +119,7 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
             (1, 2)
         )
     else:
-        if isinstance(tetromino_type, p_tetromino_type.TetrominoType):
+        if isinstance(tetromino_type, m_tetromino_type.TetrominoType):
             raise ValueError(
                 "Error: impossible to create the tetromino shape for the given tetromino: invalid tetromino type (%s)"
                 % tetromino_type.name
@@ -127,3 +133,11 @@ def get_tetromino_shape(tetromino_type: p_tetromino_type.TetrominoType) -> p_sha
 
     for position in positions:
         shape.set_box(tetromino_type, position[0], position[1])
+
+    return shape
+
+
+def random_tetromino() -> m_tetromino_type.TetrominoType:
+    return random.choice([
+        tetromino_type for tetromino_type in m_tetromino_type.TetrominoType.__iter__()
+    ])
