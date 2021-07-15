@@ -12,6 +12,7 @@ import model.utils as m_utils
 class ActiveTetromino(m_shape.Shape):
     def __init__(self, tetromino_type: m_tetromino_type.TetrominoType):
         super(ActiveTetromino, self).__init__(4, 4)
+        self.set_boxes(m_utils.get_tetromino_shape(tetromino_type).get_boxes())
         self._x = 0
         self._y = 0
         self._type = tetromino_type
