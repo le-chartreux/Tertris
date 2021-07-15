@@ -11,6 +11,11 @@ class Message:
             subject: m_message_subject.MessageSubject,
             content: typing.Any = None
     ):
+        """
+        Create a message. A message has a subject, and can have a content. Some types of subject has to have a content:
+        - MOVE_ACTIVE_TETROMINO has to have a Direction objet as content
+        - ROTATE_ACTIVE_TETROMINO has to have a Rotation object as content
+        """
         self._subject = subject
         self._content = content
 
