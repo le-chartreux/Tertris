@@ -28,7 +28,7 @@ class Direction(enum.Enum):
         """
         if self == Direction.UP:
             return -1
-        elif self == Direction.LEFT:
+        elif self == Direction.DOWN:
             return 1
         else:
             return 0
