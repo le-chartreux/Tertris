@@ -20,7 +20,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         tuple[int, int],
         tuple[int, int]
     ]
-    if tetromino_type == m_tetromino_type.TetrominoType.I:
+    if tetromino_type == m_tetromino_type.TetrominoType.I_SHAPE:
         """
          0123
         [    ] 0
@@ -34,7 +34,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (2, 1),
             (3, 1)
         )
-    elif tetromino_type == m_tetromino_type.TetrominoType.O:
+    elif tetromino_type == m_tetromino_type.TetrominoType.O_SHAPE:
         """
          0123
         [    ] 0
@@ -48,7 +48,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (1, 2),
             (2, 2)
         )
-    elif tetromino_type == m_tetromino_type.TetrominoType.T:
+    elif tetromino_type == m_tetromino_type.TetrominoType.T_SHAPE:
         """
          0123
         [    ] 0
@@ -62,7 +62,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (2, 2),
             (3, 1)
         )
-    elif tetromino_type == m_tetromino_type.TetrominoType.L:
+    elif tetromino_type == m_tetromino_type.TetrominoType.L_SHAPE:
         """
          0123
         [    ] 0
@@ -76,7 +76,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (3, 1),
             (1, 2)
         )
-    elif tetromino_type == m_tetromino_type.TetrominoType.J:
+    elif tetromino_type == m_tetromino_type.TetrominoType.J_SHAPE:
         """
          0123
         [    ] 0
@@ -90,7 +90,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (3, 1),
             (1, 3)
         )
-    elif tetromino_type == m_tetromino_type.TetrominoType.Z:
+    elif tetromino_type == m_tetromino_type.TetrominoType.Z_SHAPE:
         """
          0123
         [    ] 0
@@ -104,7 +104,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (2, 2),
             (3, 2)
         )
-    elif tetromino_type == m_tetromino_type.TetrominoType.S:
+    elif tetromino_type == m_tetromino_type.TetrominoType.S_SHAPE:
         """
          0123
         [    ] 0
@@ -133,7 +133,6 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
 
     for position in positions:
         shape.set_box(tetromino_type, position[0], position[1])
-
     return shape
 
 
