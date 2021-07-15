@@ -6,6 +6,7 @@ import typing
 
 import common.tetromino_type as m_tetromino_type
 import common.message as m_message
+import common.message.message_subject as m_message_subject
 import common.rotation as m_rotation
 import common.direction as m_direction
 
@@ -39,8 +40,18 @@ class Model:
 
         :param message: the message to process
         """
-        # TODO
-        pass
+        if message.get_subject() == m_message_subject.MessageSubject.RUN:
+            self._run = True
+            while self._run:
+
+        elif message.get_subject() == m_message_subject.MessageSubject.PAUSE:
+            self._run = False
+
+    def _do_tick(self) -> None:
+        """
+        Did everything that is needed when the game is running
+        """
+
 
     def _can_active_rotate(self, rotation: m_rotation.Rotation) -> bool:
         """
