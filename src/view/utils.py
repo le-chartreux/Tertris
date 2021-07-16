@@ -50,22 +50,22 @@ def set_colorscheme() -> None:
     curses.init_pair(m_color_pair.ColorPair.RED_N_WHITE.value, curses.COLOR_RED, curses.COLOR_WHITE)
 
 
-def get_color_pair(tetromino_type: m_tetromino_type.TetrominoType) -> int:
+def get_color_pair(tetromino_type: m_tetromino_type.TetrominoType) -> m_color_pair.ColorPair:
     """
     :param tetromino_type: type of the tetromino that we want to know the color
     :return: the color pair linked to this tetromino type
     """
-    if tetromino_type == m_tetromino_type.TetrominoType.I:
-        return m_color_pair.ColorPair.I_COLOR.value
-    elif tetromino_type == m_tetromino_type.TetrominoType.O:
-        return m_color_pair.ColorPair.O_COLOR.value
-    elif tetromino_type == m_tetromino_type.TetrominoType.T:
-        return m_color_pair.ColorPair.T_COLOR.value
-    elif tetromino_type == m_tetromino_type.TetrominoType.L:
-        return m_color_pair.ColorPair.L_COLOR.value
-    elif tetromino_type == m_tetromino_type.TetrominoType.J:
-        return m_color_pair.ColorPair.J_COLOR.value
-    elif tetromino_type == m_tetromino_type.TetrominoType.Z:
-        return m_color_pair.ColorPair.Z_COLOR.value
-    elif tetromino_type == m_tetromino_type.TetrominoType.S:
-        return m_color_pair.ColorPair.S_COLOR.value
+    if tetromino_type == m_tetromino_type.TetrominoType.I_SHAPE:
+        return m_color_pair.ColorPair.I_COLOR
+    elif tetromino_type == m_tetromino_type.TetrominoType.O_SHAPE:
+        return m_color_pair.ColorPair.O_COLOR
+    elif tetromino_type == m_tetromino_type.TetrominoType.T_SHAPE:
+        return m_color_pair.ColorPair.T_COLOR
+    elif tetromino_type == m_tetromino_type.TetrominoType.L_SHAPE:
+        return m_color_pair.ColorPair.L_COLOR
+    elif tetromino_type == m_tetromino_type.TetrominoType.J_SHAPE:
+        return m_color_pair.ColorPair.J_COLOR
+    elif tetromino_type == m_tetromino_type.TetrominoType.Z_SHAPE:
+        return m_color_pair.ColorPair.Z_COLOR
+    elif tetromino_type == m_tetromino_type.TetrominoType.S_SHAPE:
+        return m_color_pair.ColorPair.S_COLOR

@@ -40,6 +40,7 @@ class Model:
 
         self._grid = m_grid.Grid()
 
+    # GETTERS
     def get_grid_with_active(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
         """
         :return: the shape of the actual grid
@@ -50,19 +51,43 @@ class Model:
             self._active_tetromino.get_y()
         ).get_boxes()
 
+    def get_next_tetromino_info(
+            self
+    ) -> tuple[m_tetromino_type.TetrominoType, list[list[typing.Optional[m_tetromino_type.TetrominoType]]]]:
+        return (
+            self._next_tetromino,
+            m_utils.get_tetromino_shape(self._next_tetromino).get_boxes()
+        )
+
+    def get_stored_tetromino_info(
+            self
+    ) -> tuple[
+        typing.Optional[m_tetromino_type.TetrominoType],
+        typing.Optional[list[list[typing.Optional[m_tetromino_type.TetrominoType]]]]
+    ]:
+        return (
+            self._stored_tetromino,
+            (
+                m_utils.get_tetromino_shape(self._stored_tetromino).get_boxes()
+                if self._stored_tetromino is not None
+                else None
+            )
+        )
+
     def process(self, message: m_message.Message) -> None:
         """
         Asks to the model to process the message
 
         :param message: the message to process
         """
-        if message.get_subject() == m_message_subject.MessageSubject.RUN:
-            self._run = True
-            while self._run:
-                self._do_tick()
-                time.sleep(0.1)  # refresh rate
-        elif message.get_subject() == m_message_subject.MessageSubject.PAUSE:
-            self._run = False
+        if message.get_subject() == m_message_subject.MessageSubject.TOGGL_PAUSED:
+            if self._run:
+                self._run = False
+            else:
+                self._run = True
+                while self._run:
+                    self._do_tick()
+                    time.sleep(0.1)  # refresh rate
         elif (
             message.get_subject() == m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO
             and

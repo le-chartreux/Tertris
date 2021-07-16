@@ -6,8 +6,7 @@ import enum
 
 
 class MessageSubject(enum.Enum):
-    PAUSE = enum.auto()
-    RUN = enum.auto()
+    TOGGL_PAUSED = enum.auto()
     MOVE_ACTIVE_TETROMINO = enum.auto()
     ROTATE_ACTIVE_TETROMINO = enum.auto()
     TOGGLE_STORED = enum.auto()
