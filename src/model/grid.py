@@ -8,7 +8,7 @@ import model.shape as m_shape
 
 class Grid(m_shape.Shape):
     def __init__(self):
-        super().__init__(40, 10)
+        super().__init__(20, 10)  # TODO le mettre à 40 et adapter pour que ça marche
 
     def add_tetromino(self, active_tetromino: m_active_tetromino.ActiveTetromino) -> None:
         """

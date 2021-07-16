@@ -61,17 +61,17 @@ class Shape:
         :param y_overlay: vertical overlay. Positive. Have to be small enough so <other_shape> is smaller than self
         :return: the combination of this shape and the given shape
         """
-        combination = Shape(self.get_width(), self.get_height())
+        combination = Shape(self.get_height(), self.get_width())
         for y in range(self.get_height()):
             for x in range(self.get_width()):
                 if self.is_occupied(x, y):
                     combination.set_box(self.get_box(x, y), x, y)
                 elif (
-                        y + y_overlay < other_shape.get_height()
-                        and x + x_overlay < other_shape.get_width()
+                        y < other_shape.get_height()
+                        and x < other_shape.get_width()
                         and other_shape.is_occupied(x, y)
                 ):
-                    combination.set_box(other_shape.get_box(x, y), x, y)
+                    combination.set_box(other_shape.get_box(x, y), x + x_overlay, y + y_overlay)
                 # else we let it at None
 
         return combination
@@ -84,7 +84,7 @@ class Shape:
 
     def get_width(self) -> int:
         """
-        :return: the width of the rectangle (size of list of list)
+        :return: the width of the rectangle (size of list in list)
         """
         if len(self._boxes) == 0:
             return 0
