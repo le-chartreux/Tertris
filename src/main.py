@@ -1,5 +1,6 @@
 import traceback
 import threading
+import time
 
 import model
 import view
@@ -19,7 +20,18 @@ try:
 
     # creating the view part
     # TODO
-    view_thread = threading.Thread(target=print)
+    # temporary print for testing
+    def run_view():
+        while True:
+            grid = model.get_grid_with_active()
+            for line in grid:
+                print("|", end="")
+                for column in line:
+                    print("#" if column is not None else " ", end="")
+                print("|")
+            print("+----------+")
+            time.sleep(0.3)
+    view_thread = threading.Thread(target=run_view)
 
     model_thread.start()
     view_thread.start()
