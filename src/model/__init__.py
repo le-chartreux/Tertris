@@ -5,6 +5,7 @@ File that contains the declaration of the Model class, the logic of the game
 import typing
 import random
 import time
+import queue
 
 import common.tetromino_type as m_tetromino_type
 import common.message as m_message
@@ -32,13 +33,16 @@ class Model:
         self._last_down = time.monotonic()
         self._never_down_this_tetromino = True
         self._player_already_store = False
-        self._run = False
+        self._run_game = False
+        self._exit = False
 
         self._active_tetromino = m_active_tetromino.ActiveTetromino(m_utils.random_tetromino())
         self._stored_tetromino: typing.Optional[m_tetromino_type.TetrominoType] = None
         self._next_tetromino = m_utils.random_tetromino()
 
         self._grid = m_grid.Grid()
+
+        self._todo: queue.Queue[m_message.Message] = queue.Queue()
 
     # GETTERS
     def get_grid_with_active(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
@@ -74,20 +78,35 @@ class Model:
             )
         )
 
-    def process(self, message: m_message.Message) -> None:
+    def main_loop(self) -> None:
         """
-        Asks to the model to process the message
+        Enter on the main loop, where the model processes and treat _todo when the fifo isn't empty
+        """
+        while not self._exit:
+            # check _todo
+            while not self._todo.empty():
+                self._process(self._todo.get())
+
+            if self._run_game:
+                self._do_tick()
+
+
+    def receive(self, message: m_message.Message) -> None:
+        """
+        Add a message to the _todo queue
+
+        :param message: message to add
+        """
+        self._todo.put(message)
+
+    def _process(self, message: m_message.Message) -> None:
+        """
+        Process the message
 
         :param message: the message to process
         """
         if message.get_subject() == m_message_subject.MessageSubject.TOGGL_PAUSED:
-            if self._run:
-                self._run = False
-            else:
-                self._run = True
-                while self._run:
-                    self._do_tick()
-                    time.sleep(0.1)  # refresh rate
+            self._run_game = not self._run_game
         elif (
             message.get_subject() == m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO
             and
@@ -117,7 +136,7 @@ class Model:
                 self._active_tetromino.move(m_direction.Direction.DOWN)
                 self._never_down_this_tetromino = False
             elif self._is_game_lost():
-                self._run = False
+                self._run_game = False
                 print("game lost")
             else:
                 # the tetromino is placed

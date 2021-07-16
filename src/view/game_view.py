@@ -499,21 +499,21 @@ class GameView(view.View):
     def treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
         # moves
         if player_input == m_player_input.PlayerInput.KEY_LEFT:
-            self._model.process(
+            self.send(
                 m_message.Message(
                     m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO,
                     m_direction.Direction.LEFT
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_RIGHT:
-            self._model.process(
+            self.send(
                 m_message.Message(
                     m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO,
                     m_direction.Direction.RIGHT
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_DOWN:
-            self._model.process(
+            self.send(
                 m_message.Message(
                     m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO,
                     m_direction.Direction.DOWN
@@ -521,14 +521,14 @@ class GameView(view.View):
             )
         # rotations
         elif player_input == m_player_input.PlayerInput.KEY_Q:
-            self._model.process(
+            self.send(
                 m_message.Message(
                     m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO,
                     m_rotation.Rotation.LEFT
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_D:
-            self._model.process(
+            self.send(
                 m_message.Message(
                     m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO,
                     m_rotation.Rotation.RIGHT
@@ -536,14 +536,14 @@ class GameView(view.View):
             )
         # store
         elif player_input == m_player_input.PlayerInput.KEY_S:
-            self._model.process(
+            self.send(
                 m_message.Message(
                     m_message_subject.MessageSubject.TOGGLE_STORED
                 )
             )
         # controls
         elif player_input == m_player_input.PlayerInput.KEY_P:
-            self._model.process(
+            self.send(
                 m_message.Message(
                     m_message_subject.MessageSubject.TOGGL_PAUSED,
                 )

@@ -52,7 +52,7 @@ class View(abc.ABC):
         """
         :param message: the message to send to the model
         """
-        self._model.process(message)
+        self._model.receive(message)
 
     def set_backgrounds(self) -> None:
         """

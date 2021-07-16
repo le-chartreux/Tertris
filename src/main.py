@@ -12,20 +12,17 @@ import common.message.message_subject as p_message_subject
 try:
     # model part
     model = m_model.Model(0)
-
-    def run_model():
-        run_message = p_message.Message(p_message_subject.MessageSubject.TOGGL_PAUSED)
-        model.process(run_message)
-
-    model_thread = threading.Thread(target=run_model)
+    model_thread = threading.Thread(target=model.main_loop)
 
     # view part
     view = m_game_view.GameView(model)
     view.setup()
 
     def run_view():
+        run_message = p_message.Message(p_message_subject.MessageSubject.TOGGL_PAUSED)
+        model.receive(run_message)
+
         while True:
-            time.sleep(0.1)
             view.print_windows()
             player_input = view.get_player_input()
             while player_input is not player_input.NOTHING:

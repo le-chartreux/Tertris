@@ -27,7 +27,7 @@ class Grid(m_shape.Shape):
         :return: if the asked line is full (no empty boxes)
         """
         column_number = 0
-        while column_number <= self.get_width() and self.is_occupied(column_number, line_number):
+        while column_number < self.get_width() and self.is_occupied(column_number, line_number):
             column_number += 1
         return column_number == self.get_width()
 
