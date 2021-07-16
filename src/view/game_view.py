@@ -545,8 +545,12 @@ class GameView(view.View):
         elif player_input == m_player_input.PlayerInput.KEY_P:
             self.send(
                 m_message.Message(
-                    m_message_subject.MessageSubject.TOGGL_PAUSED,
+                    m_message_subject.MessageSubject.TOGGL_PAUSED
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_ESC:
-            pass  # TODO
+            self.send(
+                m_message.Message(
+                    m_message_subject.MessageSubject.QUIT
+                )
+            )

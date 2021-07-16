@@ -10,3 +10,4 @@ class MessageSubject(enum.Enum):
     MOVE_ACTIVE_TETROMINO = enum.auto()
     ROTATE_ACTIVE_TETROMINO = enum.auto()
     TOGGLE_STORED = enum.auto()
+    QUIT = enum.auto()

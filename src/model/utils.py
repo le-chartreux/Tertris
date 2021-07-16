@@ -60,7 +60,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (1, 1),
             (1, 2),
             (2, 2),
-            (3, 1)
+            (1, 3)
         )
     elif tetromino_type == m_tetromino_type.TetrominoType.L_SHAPE:
         """
@@ -88,7 +88,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
             (1, 1),
             (2, 1),
             (3, 1),
-            (1, 3)
+            (3, 2)
         )
     elif tetromino_type == m_tetromino_type.TetrominoType.Z_SHAPE:
         """

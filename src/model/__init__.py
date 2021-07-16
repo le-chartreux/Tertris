@@ -90,7 +90,6 @@ class Model:
             if self._run_game:
                 self._do_tick()
 
-
     def receive(self, message: m_message.Message) -> None:
         """
         Add a message to the _todo queue
@@ -125,6 +124,8 @@ class Model:
             self._can_store_active()
         ):
             self._store_active()
+        elif message.get_subject() == m_message_subject.MessageSubject.QUIT:
+            self._exit = True
 
     def _do_tick(self) -> None:
         """
