@@ -17,9 +17,8 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 3. Follow the guide of the release you chose
 
 
-## LANGUAGES:
-- User interface and code are in english 🇬🇧
-- Comments are only in French for the time being 🇫🇷 (maybe an English version will come later)
+## LANGUAGE:
+- Everything is in english 🇬🇧 (except some `TODO` in the code that are in french)
 
 
 ## DISCLAIMERS
