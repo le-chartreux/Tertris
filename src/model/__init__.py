@@ -29,7 +29,7 @@ class Model:
         random.seed(self._seed)
 
         # setup of variables
-        self._last_down = 0.0
+        self._last_down = time.monotonic()
         self._never_down_this_tetromino = True
         self._player_already_store = False
         self._run = False
@@ -40,11 +40,15 @@ class Model:
 
         self._grid = m_grid.Grid()
 
-    def get_grid(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
+    def get_grid_with_active(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
         """
         :return: the shape of the actual grid
         """
-        return self._grid.get_boxes()
+        return self._grid.combine(
+            self._active_tetromino,
+            self._active_tetromino.get_x(),
+            self._active_tetromino.get_y()
+        ).get_boxes()
 
     def process(self, message: m_message.Message) -> None:
         """
@@ -56,6 +60,7 @@ class Model:
             self._run = True
             while self._run:
                 self._do_tick()
+                time.sleep(0.1)  # refresh rate
         elif message.get_subject() == m_message_subject.MessageSubject.PAUSE:
             self._run = False
         elif (
@@ -81,7 +86,6 @@ class Model:
         """
         Did everything that is needed when the game is running
         """
-        print("tick")
         if self._has_to_go_down():
             self._last_down = time.monotonic()
             if self._can_active_move(m_direction.Direction.DOWN):
