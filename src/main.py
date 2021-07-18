@@ -10,30 +10,25 @@ import common.message.message_subject as p_message_subject
 
 # Everything is in a try-except to get the error message if the program crashs
 try:
-    # model part
+    # setup of the model part (init and thread creation)
     model = m_model.Model(0)
     model_thread = threading.Thread(target=model.main_loop)
 
-    # view part
+    # setup of the view part (init and thread creation)
     view = m_game_view.GameView(model)
     view.setup()
+    view_thread = threading.Thread(target=view.main_loop)
 
-    def run_view():
-        run_message = p_message.Message(p_message_subject.MessageSubject.TOGGL_PAUSED)
-        model.receive(run_message)
+    # adding a starting request to the game, so it will start when the model thread will start
+    run_message = p_message.Message(p_message_subject.MessageSubject.TOGGL_PAUSED)
+    model.receive(run_message)
 
-        while True:
-            view.print_windows()
-            player_input = view.get_player_input()
-            while player_input is not player_input.NOTHING:
-                view.treat_player_input(player_input)
-                player_input = view.get_player_input()
-
-    view_thread = threading.Thread(target=run_view)
-
+    # starting the two threads (model and view)
     model_thread.start()
     view_thread.start()
 
+    # waiting for the threads to stop
+    model_thread.join()
     view_thread.join()
 
 except Exception:

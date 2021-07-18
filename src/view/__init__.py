@@ -20,13 +20,15 @@ class View(abc.ABC):
             model: m_model.Model
     ):
         """
-        Creates a View object, that contains a window of all the terminal (_window_all)
+        Creates a View object, that contains a window of all the terminal (_window_all).
+        After its creation, the View object has to be .setup() then .main_loop() to be print.
         WARNINGS:
             - to close the software without letting Python close an instance of View can broke the user terminal !
             - View instances have to be singletons
         """
         self._model = model
         self._window_all = curses.initscr()
+        self._run = False
 
     def __del__(self):
         """
@@ -38,7 +40,7 @@ class View(abc.ABC):
 
     def setup(self) -> None:
         """
-        Setup everything that is needed for the view
+        Setup everything that is needed for the view before printing
         """
         m_utils.setup_curses()
         # setup _window_all for text entries
@@ -46,42 +48,63 @@ class View(abc.ABC):
         self._window_all.keypad(True)  # allow compatibility of special keys (arrow-up for example)
         # Gestion des couleurs
         m_utils.set_colorscheme()
-        self.set_backgrounds()
+        self._set_backgrounds()
 
-    def send(self, message: m_message.Message) -> None:
+    def main_loop(self) -> None:
+        """
+        Enters in the main loop, that prints the view and reacts to player inputs
+        """
+        self._run = True
+        self._print_static_windows()
+
+        while self._run:
+            self._print_active_windows()
+            player_input = self._get_player_input()
+            while player_input is not player_input.NOTHING:
+                self._treat_player_input(player_input)
+                player_input = self._get_player_input()
+
+    def _send(self, message: m_message.Message) -> None:
         """
         :param message: the message to send to the model
         """
         self._model.receive(message)
 
-    def set_backgrounds(self) -> None:
+    def _set_backgrounds(self) -> None:
         """
         Set every background on the write color. set_colorscheme() has to be already call
         """
         self._window_all.bkgd(' ', curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
 
-        self.refresh_all()
+        self._refresh_all()
 
-    def refresh_all(self) -> None:
+    def _refresh_all(self) -> None:
         """
         Refresh every window. All the windows have to exist.
         """
         self._window_all.refresh()
 
     @abc.abstractmethod
-    def print_windows(self) -> None:
+    def _print_static_windows(self) -> None:
         """
-        Show every window
+        Print static windows. This windows will never change, so they will never been refresh on the main loop
         """
         pass
 
-    def clear(self) -> None:
+    @abc.abstractmethod
+    def _print_active_windows(self) -> None:
+        """
+        Shows active windows. This windows can change, so they will been refresh on the main loop
+        """
+        pass
+
+    def _clear(self) -> None:
         """
         Clear the windows
         """
         self._window_all.clear()
 
-    def get_player_input(self) -> m_player_input.PlayerInput:
+    def _get_player_input(self) -> m_player_input.PlayerInput:
         """
         :return: the first key that the user presses of the buffer
         """
@@ -91,7 +114,7 @@ class View(abc.ABC):
             return m_player_input.PlayerInput.KEY_UNUSED
 
     @abc.abstractmethod
-    def treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
+    def _treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
         """
         Treat a player input
         """
