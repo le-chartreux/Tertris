@@ -235,6 +235,8 @@ class Model:
         """
         Toggle the active Tetromino and the stored Tetromino
         """
+        self._player_already_store = True
+
         stored_tetromino_temp = self._stored_tetromino
         self._stored_tetromino = self._active_tetromino.get_tetromino_type()
 
