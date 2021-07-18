@@ -142,8 +142,7 @@ class Model:
             else:
                 # the tetromino is placed
                 self._grid.add_tetromino(self._active_tetromino)
-                self._active_tetromino = m_active_tetromino.ActiveTetromino(self._next_tetromino)
-                self._next_tetromino = m_utils.random_tetromino()
+                self._to_next_tetromino()
                 self._player_already_store = False
 
                 # checks if some lines are completed
@@ -236,8 +235,20 @@ class Model:
         """
         Toggle the active Tetromino and the stored Tetromino
         """
-        stored_tetromino = self._stored_tetromino
+        stored_tetromino_temp = self._stored_tetromino
         self._stored_tetromino = self._active_tetromino.get_tetromino_type()
-        self._active_tetromino = m_active_tetromino.ActiveTetromino(
-            stored_tetromino
-        )
+
+        if stored_tetromino_temp is None:
+            # there is no stored, so we only store this one and use the next
+            self._to_next_tetromino()
+        else:
+            self._active_tetromino = m_active_tetromino.ActiveTetromino(
+                stored_tetromino_temp
+            )
+
+    def _to_next_tetromino(self) -> None:
+        """
+        Set the active tetromino to the next, and select the next
+        """
+        self._active_tetromino = m_active_tetromino.ActiveTetromino(self._next_tetromino)
+        self._next_tetromino = m_utils.random_tetromino()

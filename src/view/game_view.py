@@ -73,39 +73,37 @@ class GameView(view.View):
             config.KEYBINDS_BEGIN_X
         )
 
-    def set_backgrounds(self) -> None:
-        view.View.set_backgrounds(self)
+    def _set_backgrounds(self) -> None:
+        view.View._set_backgrounds(self)
         self._window_game.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         self._window_next.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         self._window_stored.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         self._window_statistics.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         self._window_keybinds.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
 
-        self.refresh_all()
+        self._refresh_all()
 
-    def refresh_all(self) -> None:
-        view.View.refresh_all(self)
+    def _refresh_all(self) -> None:
+        view.View._refresh_all(self)
         self._window_game.refresh()
         self._window_next.refresh()
         self._window_stored.refresh()
         self._window_statistics.refresh()
         self._window_keybinds.refresh()
 
-    def print_windows(self) -> None:
-        self.print_grid()
+    def _print_static_windows(self) -> None:
         self.print_grid_border()
-
-        self.print_next()
         self.print_next_border()
-
-        self.print_stored()
         self.print_stored_border()
-
-        self.print_statistics()
         self.print_statistics_border()
-
         self.print_keybinds()
         self.print_keybinds_border()
+
+    def _print_active_windows(self) -> None:
+        self.print_grid()
+        self.print_next()
+        self.print_stored()
+        self.print_statistics()
 
     def print_grid(self) -> None:
         """
@@ -280,12 +278,12 @@ class GameView(view.View):
         if stored_tetromino is not None:
             for line in range(4):
                 for column in range(4):
-                    if stored_tetromino[line][column] is not None:
+                    if stored_shape[line][column] is not None:
                         self._window_stored.addstr(
                             line + 1,
                             column * 2 + 1,
                             "██".encode(locale.getpreferredencoding()),
-                            curses.color_pair(m_utils.get_color_pair(stored_tetromino.get_tetromino_type()).value)
+                            curses.color_pair(m_utils.get_color_pair(stored_tetromino).value)
                         )
                     else:
                         self._window_stored.addstr(
@@ -496,24 +494,24 @@ class GameView(view.View):
 
         self._window_keybinds.refresh()
 
-    def treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
+    def _treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
         # moves
         if player_input == m_player_input.PlayerInput.KEY_LEFT:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO,
                     m_direction.Direction.LEFT
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_RIGHT:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO,
                     m_direction.Direction.RIGHT
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_DOWN:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO,
                     m_direction.Direction.DOWN
@@ -521,14 +519,14 @@ class GameView(view.View):
             )
         # rotations
         elif player_input == m_player_input.PlayerInput.KEY_Q:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO,
                     m_rotation.Rotation.LEFT
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_D:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO,
                     m_rotation.Rotation.RIGHT
@@ -536,20 +534,20 @@ class GameView(view.View):
             )
         # store
         elif player_input == m_player_input.PlayerInput.KEY_S:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.TOGGLE_STORED
                 )
             )
         # controls
         elif player_input == m_player_input.PlayerInput.KEY_P:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.TOGGL_PAUSED
                 )
             )
         elif player_input == m_player_input.PlayerInput.KEY_ESC:
-            self.send(
+            self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.QUIT
                 )
