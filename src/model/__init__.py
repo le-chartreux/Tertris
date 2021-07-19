@@ -169,8 +169,13 @@ class Model:
         :param rotation: the rotation we want to know the feasibility
         :return: if it's possible for the active tetromino to do the rotation
         """
-        # TODO
-        return True
+        active_tetromino_copied = self._active_tetromino.copy_shape()
+        active_tetromino_copied.rotate(rotation)
+        return self._grid.can_combine_perfectly(
+            active_tetromino_copied,
+            self._active_tetromino.get_x(),
+            self._active_tetromino.get_y()
+        )
 
     def _can_active_move(self, direction: m_direction.Direction) -> bool:
         """
