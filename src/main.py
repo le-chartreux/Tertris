@@ -1,17 +1,15 @@
 import traceback
 import threading
-import time
 
 import model as m_model
 import view.game_view as m_game_view
-import view.player_input as m_player_input
 import common.message as p_message
 import common.message.message_subject as p_message_subject
 
 # Everything is in a try-except to get the error message if the program crashs
 try:
     # setup of the model part (init and thread creation)
-    model = m_model.Model(0)
+    model = m_model.Model()
     model_thread = threading.Thread(target=model.main_loop)
 
     # setup of the view part (init and thread creation)

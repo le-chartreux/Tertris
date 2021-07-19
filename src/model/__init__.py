@@ -1,7 +1,7 @@
 """
 File that contains the declaration of the Model class, the logic of the game
 """
-
+import sys
 import typing
 import random
 import time
@@ -19,14 +19,14 @@ import model.utils as m_utils
 
 
 class Model:
-    def __init__(self, seed: int):
+    def __init__(self, seed: typing.Optional[int] = None):
         """
         Creates a model, paused by default.
 
         :param seed: an optional seed for the randomization of the order of tetrominos
         """
         # setup of the random generation
-        self._seed = seed
+        self._seed = seed if seed is not None else random.randrange(sys.maxsize)
         random.seed(self._seed)
 
         # setup of variables
