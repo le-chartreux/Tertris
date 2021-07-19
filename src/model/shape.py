@@ -83,15 +83,23 @@ class Shape:
         :param y_overlay: vertical overlay
         :return: the combination of this shape and the given shape
         """
-        # checking that other_shape fits on self
-        if (
-            self.get_width() < other_shape.get_width()
-            or
-            self.get_height() < other_shape.get_height()
-        ):
-            return False
-        # checking that with the overlay, other_shape still fits on self
-        # TODO
+        # checking that the overlay don't put some other_shape occupied boxes outside of self borders
+        for y in range(other_shape.get_height()):
+            for x in range(other_shape.get_width()):
+                if (
+                    other_shape.is_occupied(x, y)
+                    and
+                    (
+                        x + x_overlay >= self.get_width()
+                        or
+                        x + x_overlay < 0
+                        or
+                        y + y_overlay >= self.get_height()
+                        or
+                        y + y_overlay < 0
+                    )
+                ):
+                    return False
 
         # checking that the combination won't put two occupied box at the same place
         for y in range(self.get_height()):
