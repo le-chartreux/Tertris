@@ -83,29 +83,21 @@ class GameView(view.View):
 
         self._refresh_all()
 
-    def _refresh_all(self) -> None:
-        view.View._refresh_all(self)
-        self._window_game.refresh()
-        self._window_next.refresh()
-        self._window_stored.refresh()
-        self._window_statistics.refresh()
-        self._window_keybinds.refresh()
-
     def _print_static_windows(self) -> None:
-        self.print_grid_border()
-        self.print_next_border()
-        self.print_stored_border()
-        self.print_statistics_border()
-        self.print_keybinds()
-        self.print_keybinds_border()
+        self._print_grid_border()
+        self._print_next_border()
+        self._print_stored_border()
+        self._print_statistics_border()
+        self._print_keybinds()
+        self._print_keybinds_border()
 
     def _print_active_windows(self) -> None:
-        self.print_grid()
-        self.print_next()
-        self.print_stored()
-        self.print_statistics()
+        self._print_grid()
+        self._print_next()
+        self._print_stored()
+        self._print_statistics()
 
-    def print_grid(self) -> None:
+    def _print_grid(self) -> None:
         """
         Show the game grid
         """
@@ -132,7 +124,7 @@ class GameView(view.View):
 
         self._window_game.refresh()
 
-    def print_grid_border(self) -> None:
+    def _print_grid_border(self) -> None:
         """
         Shows the border around the game grid
         """
@@ -183,7 +175,7 @@ class GameView(view.View):
 
         self._window_game.refresh()
 
-    def print_next(self) -> None:
+    def _print_next(self) -> None:
         """
         Shows the next tetromino in the next window
         """
@@ -210,7 +202,7 @@ class GameView(view.View):
 
         self._window_next.refresh()
 
-    def print_next_border(self) -> None:
+    def _print_next_border(self) -> None:
         """
         Shows the border around the next tetromino grid
         """
@@ -270,7 +262,7 @@ class GameView(view.View):
 
         self._window_next.refresh()
 
-    def print_stored(self):
+    def _print_stored(self):
         """
         Show the stored tetromino window, with the stored tetromino if exists
         """
@@ -295,7 +287,7 @@ class GameView(view.View):
 
         self._window_stored.refresh()
 
-    def print_stored_border(self) -> None:
+    def _print_stored_border(self) -> None:
         """
         Shows the border around the stored tetromino border
         """
@@ -352,7 +344,7 @@ class GameView(view.View):
 
         self._window_stored.refresh()
 
-    def print_statistics(self) -> None:
+    def _print_statistics(self) -> None:
         """
         Shows statistics on the statistic window
         """
@@ -363,7 +355,7 @@ class GameView(view.View):
 
         self._window_statistics.refresh()
 
-    def print_statistics_border(self) -> None:
+    def _print_statistics_border(self) -> None:
         """
         Shows the border around the statistics window
         """
@@ -420,7 +412,7 @@ class GameView(view.View):
 
         self._window_statistics.refresh()
 
-    def print_keybinds(self) -> None:
+    def _print_keybinds(self) -> None:
         """
         Shows keybinds
         """
@@ -437,7 +429,7 @@ class GameView(view.View):
 
         self._window_keybinds.refresh()
 
-    def print_keybinds_border(self) -> None:
+    def _print_keybinds_border(self) -> None:
         """
         Show the border around the keybinds
         """
@@ -495,6 +487,8 @@ class GameView(view.View):
         self._window_keybinds.refresh()
 
     def _treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
+        super(GameView, self)._treat_player_input(player_input)
+        
         # moves
         if player_input == m_player_input.PlayerInput.KEY_LEFT:
             self._send(
@@ -544,11 +538,5 @@ class GameView(view.View):
             self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.TOGGL_PAUSED
-                )
-            )
-        elif player_input == m_player_input.PlayerInput.KEY_ESC:
-            self._send(
-                m_message.Message(
-                    m_message_subject.MessageSubject.QUIT
                 )
             )

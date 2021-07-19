@@ -34,7 +34,7 @@ class Model:
         self._never_down_this_tetromino = True
         self._player_already_store = False
         self._run_game = False
-        self._exit = False
+        self._exit_next_tick = False
 
         self._active_tetromino = m_active_tetromino.ActiveTetromino(m_utils.random_tetromino())
         self._stored_tetromino: typing.Optional[m_tetromino_type.TetrominoType] = None
@@ -42,7 +42,7 @@ class Model:
 
         self._grid = m_grid.Grid()
 
-        self._todo: queue.Queue[m_message.Message] = queue.Queue()
+        self._inbox: queue.Queue[m_message.Message] = queue.Queue()
 
     # GETTERS
     def get_grid_with_active(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
@@ -80,27 +80,27 @@ class Model:
 
     def main_loop(self) -> None:
         """
-        Enter on the main loop, where the model processes and treat _todo when the fifo isn't empty
+        Enter on the main loop, where the model processes and treat _inbox when the fifo isn't empty
         """
-        while not self._exit:
-            # check _todo
-            while not self._todo.empty():
-                self._process(self._todo.get())
+        while not self._exit_next_tick:
+            # check _inbox
+            while not self._inbox.empty():
+                self._process(self._inbox.get())
 
             if self._run_game:
                 self._do_tick()
 
     def receive(self, message: m_message.Message) -> None:
         """
-        Add a message to the _todo queue
+        Add a message to the _inbox queue
 
         :param message: message to add
         """
-        self._todo.put(message)
+        self._inbox.put(message)
 
     def _process(self, message: m_message.Message) -> None:
         """
-        Process the message
+        Process a message
 
         :param message: the message to process
         """
@@ -125,7 +125,7 @@ class Model:
         ):
             self._store_active()
         elif message.get_subject() == m_message_subject.MessageSubject.QUIT:
-            self._exit = True
+            self._exit_next_tick = True
 
     def _do_tick(self) -> None:
         """

@@ -3,7 +3,7 @@ File that contains the declaration of the PlayerInput class (enum)
 """
 
 import enum
-import curses  # for curses const
+import curses  # for curses constants
 
 
 class PlayerInput(enum.Enum):

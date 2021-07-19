@@ -22,8 +22,20 @@ class Shape:
         ]
 
     # GETTERS
-    def get_boxes(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
-        return self._boxes
+    def get_height(self) -> int:
+        """
+        :return: the height of the rectangle (number of list of list)
+        """
+        return len(self._boxes)
+
+    def get_width(self) -> int:
+        """
+        :return: the width of the rectangle (size of list in list)
+        """
+        if len(self._boxes) == 0:
+            return 0
+        else:
+            return len(self._boxes[0])
 
     def get_box(self, x: int, y: int) -> typing.Optional[m_tetromino_type.TetrominoType]:
         """
@@ -32,6 +44,9 @@ class Shape:
         :return: the box at (x, y)
         """
         return self._boxes[y][x]
+
+    def get_boxes(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
+        return self._boxes
 
     # SETTERS
     def set_box(self, box_value: typing.Optional[m_tetromino_type.TetrominoType], x: int, y: int) -> None:
@@ -53,26 +68,6 @@ class Shape:
         """
         return self.get_box(x, y) is not None
 
-    def is_column_empty(self, column_number: int) -> bool:
-        """
-        :param column_number: the index of the column we want. Starts at zero
-        :return: if the column is full of None
-        """
-        x = 0
-        while x < self.get_width() and not self.is_occupied(x, column_number):
-            x += 1
-        return x == self.get_width()
-
-    def is_line_empty(self, line_number: int) -> bool:
-        """
-        :param line_number: the index of the line we want. Starts at zero
-        :return: if the line is full of None
-        """
-        y = 0
-        while y < self.get_height() and not self.is_occupied(line_number, y):
-            y += 1
-        return y == self.get_height()
-
     def can_combine_perfectly(self, other_shape: "Shape", x_overlay: int, y_overlay: int) -> bool:
         """
         Checks if a logical "xor" can be made on the two shapes.
@@ -83,7 +78,7 @@ class Shape:
         :param y_overlay: vertical overlay
         :return: the combination of this shape and the given shape
         """
-        # checking that the overlay don't put some other_shape occupied boxes outside of self borders
+        # checking that the overlay doesn't put some other_shape's occupied boxes outside of self borders
         for y in range(other_shape.get_height()):
             for x in range(other_shape.get_width()):
                 if (
@@ -144,21 +139,6 @@ class Shape:
                     combination.set_box(self.get_box(x, y), x, y)
 
         return combination
-
-    def get_height(self) -> int:
-        """
-        :return: the height of the rectangle (number of list of list)
-        """
-        return len(self._boxes)
-
-    def get_width(self) -> int:
-        """
-        :return: the width of the rectangle (size of list in list)
-        """
-        if len(self._boxes) == 0:
-            return 0
-        else:
-            return len(self._boxes[0])
 
     def copy_shape(self) -> "Shape":
         """
