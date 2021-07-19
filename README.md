@@ -28,6 +28,6 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 
 ## OTHER LINKS:
 - The [official Tetris website](https://tetris.com/)
-- The [Wikipedia's page of the Tetris' guideline](https://tetris.wiki/Tetris_Guideline) that I will try to follow (this is only partially the case now)
+- The [Tetris' guideline](https://tetris.wiki/Tetris_Guideline) that I will try to follow (this is only partially the case now)
 - The [curses' how to use guide](https://docs.python.org/3/howto/curses.html) I used
 - The [official GitHub page of Tertris](https://github.com/vmom/tertris)
