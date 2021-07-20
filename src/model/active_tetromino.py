@@ -7,13 +7,15 @@ import common.tetromino_type as m_tetromino_type
 import model.shape as m_shape
 import model.utils as m_utils
 
+import model.config as m_config
+
 
 class ActiveTetromino(m_shape.Shape):
     def __init__(self, tetromino_type: m_tetromino_type.TetrominoType):
         super(ActiveTetromino, self).__init__(4, 4)
         self.set_boxes(m_utils.get_tetromino_shape(tetromino_type).get_boxes())
-        self._x = 0
-        self._y = 0
+        self._x = m_config.SPAWNING_COLUMN
+        self._y = m_config.SPAWNING_LINE
         self._type = tetromino_type
 
     # GETTER

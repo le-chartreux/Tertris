@@ -5,10 +5,12 @@ File that contains the declaration of the Shape class
 import model.active_tetromino as m_active_tetromino
 import model.shape as m_shape
 
+import model.config as m_config
+
 
 class Grid(m_shape.Shape):
     def __init__(self):
-        super().__init__(20, 10)  # TODO le mettre à 40 et adapter pour que ça marche
+        super().__init__(m_config.GRID_HEIGHT, m_config.GRID_WIDTH)
 
     def add_tetromino(self, active_tetromino: m_active_tetromino.ActiveTetromino) -> None:
         """

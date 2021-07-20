@@ -18,7 +18,6 @@ import common.direction as m_direction
 import common.rotation as m_rotation
 
 import view.config as config
-import common.config as config_general
 
 import model as m_model
 
@@ -39,38 +38,38 @@ class GameView(view.View):
         view.View.__init__(self, model)
 
         self._window_game = curses.newwin(
-            config.GRID_HEIGHT,
-            config.GRID_WIDTH,
-            config.GRID_BEGIN_Y,
-            config.GRID_BEGIN_X
+            config.GRID_WINDOW_HEIGHT,
+            config.GRID_WINDOW_WIDTH,
+            config.GRID_WINDOW_BEGIN_Y,
+            config.GRID_WINDOW_BEGIN_X
         )
 
         self._window_next = curses.newwin(
-            config.NEXT_HEIGHT,
-            config.NEXT_WIDTH,
-            config.NEXT_BEGIN_Y,
-            config.NEXT_BEGIN_X
+            config.NEXT_WINDOW_HEIGHT,
+            config.NEXT_WINDOW_WIDTH,
+            config.NEXT_WINDOW_BEGIN_Y,
+            config.NEXT_WINDOW_BEGIN_X
         )
 
         self._window_stored = curses.newwin(
-            config.STORED_HEIGHT,
-            config.STORED_WIDTH,
-            config.STORED_BEGIN_Y,
-            config.STORED_BEGIN_X
+            config.STORED_WINDOW_HEIGHT,
+            config.STORED_WINDOW_WIDTH,
+            config.STORED_WINDOW_BEGIN_Y,
+            config.STORED_WINDOW_BEGIN_X
         )
 
         self._window_statistics = curses.newwin(
-            config.STATISTICS_HEIGHT,
-            config.STATISTICS_WIDTH,
-            config.STATISTICS_BEGIN_Y,
-            config.STATISTICS_BEGIN_X
+            config.STATISTICS_WINDOW_HEIGHT,
+            config.STATISTICS_WINDOW_WIDTH,
+            config.STATISTICS_WINDOW_BEGIN_Y,
+            config.STATISTICS_WINDOW_BEGIN_X
         )
 
         self._window_keybinds = curses.newwin(
-            config.KEYBINDS_HEIGHT,
-            config.KEYBINDS_WIDTH,
-            config.KEYBINDS_BEGIN_Y,
-            config.KEYBINDS_BEGIN_X
+            config.KEYBINDS_WINDOW_HEIGHT,
+            config.KEYBINDS_WINDOW_WIDTH,
+            config.KEYBINDS_WINDOW_BEGIN_Y,
+            config.KEYBINDS_WINDOW_BEGIN_X
         )
 
     def _set_backgrounds(self) -> None:
@@ -103,21 +102,27 @@ class GameView(view.View):
         """
         grid = self._model.get_grid_with_active()
 
-        for line in range(config_general.GRID_HEIGHT):
-            for column in range(config_general.GRID_WIDTH):
-                if grid[line][column] is not None:
+        for (line_number_print, line_number_grid) in zip(
+                range(config.GRID_HEIGHT_DISPLAYED),
+                range(len(grid) - config.GRID_HEIGHT_DISPLAYED, len(grid))
+        ):
+            for (column_number_print, column_number_grid) in zip(
+                    range(config.GRID_WIDTH_DISPLAYED),
+                    range(len(grid[0]) - config.GRID_WIDTH_DISPLAYED, len(grid[0]))
+            ):
+                if grid[line_number_grid][column_number_grid] is not None:
                     # we put a bloc
                     self._window_game.addstr(
-                        line + 1,
-                        column * 2 + 1,  # *2 since tetrominos are 2 char wide
+                        line_number_print + 1,
+                        column_number_print * 2 + 1,  # *2 since tetrominos are 2 char wide
                         "██".encode(locale.getpreferredencoding()),
-                        curses.color_pair(m_utils.get_color_pair(grid[line][column]).value)
+                        curses.color_pair(m_utils.get_color_pair(grid[line_number_grid][column_number_grid]).value)
                     )
                 else:
                     # we put a space to hide a potential old bloc
                     self._window_game.addstr(
-                        line + 1,
-                        column * 2 + 1,  # *2 since tetrominos are 2 char wide
+                        line_number_print + 1,
+                        column_number_print * 2 + 1,  # *2 since tetrominos are 2 char wide
                         "  ",
                         curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
                     )
@@ -134,7 +139,7 @@ class GameView(view.View):
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(1, config.GRID_WIDTH - 2):
+        for _ in range(1, config.GRID_WINDOW_WIDTH - 2):
             self._window_game.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -145,25 +150,25 @@ class GameView(view.View):
         )
 
         # intermediate lines
-        for line in range(1, config.GRID_HEIGHT - 1):
+        for line in range(1, config.GRID_WINDOW_HEIGHT - 1):
             self._window_game.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
             self._window_game.addstr(
-                line, config.GRID_WIDTH - 2,
+                line, config.GRID_WINDOW_WIDTH - 2,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
 
         # last line
         self._window_game.addstr(
-            config.GRID_HEIGHT - 1, 0,
+            config.GRID_WINDOW_HEIGHT - 1, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(1, config.GRID_WIDTH - 2):
+        for _ in range(1, config.GRID_WINDOW_WIDTH - 2):
             self._window_game.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -212,7 +217,7 @@ class GameView(view.View):
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(math.ceil((config.NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+        for _ in range(math.ceil((config.NEXT_WINDOW_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
             self._window_next.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -221,7 +226,7 @@ class GameView(view.View):
             "Next",  # only ASCII so no need en encode
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(math.floor((config.NEXT_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+        for _ in range(math.floor((config.NEXT_WINDOW_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
             self._window_next.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -232,25 +237,25 @@ class GameView(view.View):
         )
 
         # intermediate lines
-        for line in range(1, config.NEXT_HEIGHT - 2):
+        for line in range(1, config.NEXT_WINDOW_HEIGHT - 2):
             self._window_next.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
             self._window_next.addstr(
-                line, config.NEXT_WIDTH - 1,
+                line, config.NEXT_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
 
         # last line
         self._window_next.addstr(
-            config.NEXT_HEIGHT - 2, 0,
+            config.NEXT_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(1, config.NEXT_WIDTH - 1):
+        for _ in range(1, config.NEXT_WINDOW_WIDTH - 1):
             self._window_next.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -297,7 +302,7 @@ class GameView(view.View):
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(math.ceil((config.STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+        for _ in range(math.ceil((config.STORED_WINDOW_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
             self._window_stored.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -306,7 +311,7 @@ class GameView(view.View):
             "Stored",
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(math.floor((config.STORED_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+        for _ in range(math.floor((config.STORED_WINDOW_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
             self._window_stored.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -314,25 +319,25 @@ class GameView(view.View):
         self._window_stored.addstr("╗", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
 
         # intermediate lines
-        for line in range(1, config.STORED_HEIGHT - 2):
+        for line in range(1, config.STORED_WINDOW_HEIGHT - 2):
             self._window_stored.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
             self._window_stored.addstr(
-                line, config.STORED_WIDTH - 1,
+                line, config.STORED_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
 
         # last line
         self._window_stored.addstr(
-            config.STORED_HEIGHT - 2, 0,
+            config.STORED_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(1, config.STORED_WIDTH - 1):
+        for _ in range(1, config.STORED_WINDOW_WIDTH - 1):
             self._window_stored.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -365,13 +370,13 @@ class GameView(view.View):
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(math.ceil((config.STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+        for _ in range(math.ceil((config.STATISTICS_WINDOW_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
             self._window_statistics.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
         self._window_statistics.addstr("Statistics", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
-        for _ in range(math.floor((config.STATISTICS_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+        for _ in range(math.floor((config.STATISTICS_WINDOW_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
             self._window_statistics.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -382,25 +387,25 @@ class GameView(view.View):
         )
 
         # intermediate lines
-        for line in range(1, config.STATISTICS_HEIGHT - 2):
+        for line in range(1, config.STATISTICS_WINDOW_HEIGHT - 2):
             self._window_statistics.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
             self._window_statistics.addstr(
-                line, config.STATISTICS_WIDTH - 1,
+                line, config.STATISTICS_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
 
         # last line
         self._window_statistics.addstr(
-            config.STATISTICS_HEIGHT - 2, 0,
+            config.STATISTICS_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(1, config.STATISTICS_WIDTH - 1):
+        for _ in range(1, config.STATISTICS_WINDOW_WIDTH - 1):
             self._window_statistics.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -439,13 +444,13 @@ class GameView(view.View):
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(math.ceil((config.KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+        for _ in range(math.ceil((config.KEYBINDS_WINDOW_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
             self._window_keybinds.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
         self._window_keybinds.addstr("Keybinds", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
-        for _ in range(math.floor((config.KEYBINDS_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+        for _ in range(math.floor((config.KEYBINDS_WINDOW_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
             self._window_keybinds.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -456,25 +461,25 @@ class GameView(view.View):
         )
 
         # intermediate lines
-        for line in range(1, config.KEYBINDS_HEIGHT - 2):
+        for line in range(1, config.KEYBINDS_WINDOW_HEIGHT - 2):
             self._window_keybinds.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
             self._window_keybinds.addstr(
-                line, config.KEYBINDS_WIDTH - 1,
+                line, config.KEYBINDS_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
 
         # last line
         self._window_keybinds.addstr(
-            config.KEYBINDS_HEIGHT - 2, 0,
+            config.KEYBINDS_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
-        for _ in range(1, config.KEYBINDS_WIDTH - 1):
+        for _ in range(1, config.KEYBINDS_WINDOW_WIDTH - 1):
             self._window_keybinds.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -488,7 +493,7 @@ class GameView(view.View):
 
     def _treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
         super(GameView, self)._treat_player_input(player_input)
-        
+
         # moves
         if player_input == m_player_input.PlayerInput.KEY_LEFT:
             self._send(
