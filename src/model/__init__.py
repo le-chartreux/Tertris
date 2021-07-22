@@ -12,6 +12,7 @@ import common.message as m_message
 import common.message.message_subject as m_message_subject
 import common.rotation as m_rotation
 import common.direction as m_direction
+import common.statistics as m_statistics
 
 import model.grid as m_grid
 import model.active_tetromino as m_active_tetromino
@@ -44,7 +45,12 @@ class Model:
 
         self._inbox: queue.Queue[m_message.Message] = queue.Queue()
 
+        self._statistics = m_statistics.Statistics()
+
     # GETTERS
+    def get_statistics(self) -> m_statistics.Statistics:
+        return self._statistics
+
     def get_grid_with_active(self) -> list[list[typing.Optional[m_tetromino_type.TetrominoType]]]:
         """
         :return: the shape of the actual grid
@@ -106,6 +112,10 @@ class Model:
         """
         if message.get_subject() == m_message_subject.MessageSubject.TOGGL_PAUSED:
             self._run_game = not self._run_game
+            if self._run_game:
+                self._statistics.run_chrono()
+            else:
+                self._statistics.pause_chrono()
         elif (
             message.get_subject() == m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO
             and
@@ -152,7 +162,8 @@ class Model:
                         self._grid.drop_lines_upper(line)
                         number_of_completed_lines += 1
 
-                # TODO l'ajouter aux statistiques
+                self._statistics.add_lines_completed(number_of_completed_lines)
+                self._statistics.add_points_for_lines(number_of_completed_lines)
 
     # QUESTIONS
     def _has_to_go_down(self) -> bool:

@@ -353,10 +353,11 @@ class GameView(view.View):
         """
         Shows statistics on the statistic window
         """
-        self._window_statistics.addstr(1, 2, "Level: " + str(1))
-        self._window_statistics.addstr(2, 2, "Score: " + str(1))
-        self._window_statistics.addstr(3, 2, "Lines: " + str(1))
-        self._window_statistics.addstr(4, 2, "Time: " + str(1))
+        statistics = self._model.get_statistics()
+        self._window_statistics.addstr(1, 2, "Level: " + str(statistics.get_level()))
+        self._window_statistics.addstr(2, 2, "Score: " + str(statistics.get_score()))
+        self._window_statistics.addstr(3, 2, "Lines: " + str(statistics.get_lines_completed()))
+        self._window_statistics.addstr(4, 2, "Time: " + str(statistics.get_duration()))
 
         self._window_statistics.refresh()
 
