@@ -14,8 +14,8 @@ class ActiveTetromino(m_shape.Shape):
     def __init__(self, tetromino_type: m_tetromino_type.TetrominoType):
         super(ActiveTetromino, self).__init__(4, 4)
         self.set_boxes(m_utils.get_tetromino_shape(tetromino_type).get_boxes())
-        self._x = m_config.SPAWNING_COLUMN
-        self._y = m_config.SPAWNING_LINE
+        self._x = self.get_spawn_location_y(tetromino_type)
+        self._y = 19
         self._type = tetromino_type
 
     # GETTER
@@ -37,3 +37,16 @@ class ActiveTetromino(m_shape.Shape):
         """
         self._x += direction.get_x_variation()
         self._y += direction.get_y_variation()
+
+    @staticmethod
+    def get_spawn_location_y(tetromino_type: m_tetromino_type.TetrominoType) -> int:
+        """
+        :param tetromino_type:
+        :return:
+        """
+        if tetromino_type in (m_tetromino_type.TetrominoType.I_SHAPE, m_tetromino_type.TetrominoType.O_SHAPE):
+            # the I and O spawn in the middle columns
+            return (m_config.GRID_WIDTH // 2) - (4 // 2)
+        else:
+            # the rest spawn in the left-middle columns
+            return (m_config.GRID_WIDTH // 2) - (4 // 2) - 1
