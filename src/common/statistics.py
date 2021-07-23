@@ -33,7 +33,11 @@ class Statistics:
 
     # GETTERS
     def get_level(self) -> int:
-        return 1  # TODO trouver comment ça marche
+        """
+        Computes the level. Since the level increments each 10 lines completed, there is no need to store it as a
+        variable
+        """
+        return 1 + self._lines_completed // 10
 
     def get_score(self) -> int:
         return self._score

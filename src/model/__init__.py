@@ -172,7 +172,7 @@ class Model:
             True if more than  (0.8 - (level - 1)*0.007)**(level - 1) seconds happened since last down
             else False
         """
-        level = 1  # TODO faire le système de niveaux
+        level = self._statistics.get_level()
         return (time.monotonic() - self._last_down) > (0.8 - (level - 1) * 0.007) ** (level - 1)
 
     def _can_active_rotate(self, rotation: m_rotation.Rotation) -> bool:
