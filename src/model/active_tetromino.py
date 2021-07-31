@@ -12,8 +12,9 @@ import model.config as m_config
 
 class ActiveTetromino(m_shape.Shape):
     def __init__(self, tetromino_type: m_tetromino_type.TetrominoType):
-        super(ActiveTetromino, self).__init__(4, 4)
-        self.set_boxes(m_utils.get_tetromino_shape(tetromino_type).get_boxes())
+        shape = m_utils.get_tetromino_shape(tetromino_type)
+        super(ActiveTetromino, self).__init__(shape.get_height(), shape.get_width())
+        self.set_boxes(shape.get_boxes())
         self._x = self.get_spawn_location_y(tetromino_type)
         self._y = 19
         self._type = tetromino_type

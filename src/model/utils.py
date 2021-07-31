@@ -12,112 +12,99 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
     :param tetromino_type: type of the tetromino we want the shape
     :return: the initial shape of the tetromino type given
     """
-    shape = p_shape.Shape(4, 4)
-    # (x, y) tuple
-    positions: tuple[
-        tuple[int, int],
-        tuple[int, int],
-        tuple[int, int],
-        tuple[int, int]
-    ]
     if tetromino_type == m_tetromino_type.TetrominoType.I_SHAPE:
         """
-         0123
-        [    ] 0
-        [####] 1
-        [    ] 2
-        [    ] 3
+        [    ]
+        [####]
+        [    ]
+        [    ]
         """
-        positions = (
-            (0, 1),
-            (1, 1),
-            (2, 1),
-            (3, 1)
-        )
+        shape = p_shape.Shape(4, 4)  # 4 by 4
+        shape.set_boxes([
+            [None, None, None, None],
+            [tetromino_type, tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None, None],
+            [None, None, None, None]
+        ])
+        return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.O_SHAPE:
         """
-         0123
-        [    ] 0
         [ ## ] 1
         [ ## ] 2
         [    ] 3
         """
-        positions = (
-            (1, 1),
-            (2, 1),
-            (1, 2),
-            (2, 2)
-        )
+        shape = p_shape.Shape(3, 4)  # 3 by 4
+        shape.set_boxes([
+            [None, tetromino_type, tetromino_type, None],
+            [None, tetromino_type, tetromino_type, None],
+            [None, None, None, None],
+        ])
+        return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.T_SHAPE:
         """
-         0123
-        [    ] 0
-        [ #  ] 1
-        [ ## ] 2
-        [ #  ] 3
+        [ # ] 
+        [###] 
+        [   ] 
         """
-        positions = (
-            (1, 1),
-            (1, 2),
-            (2, 2),
-            (1, 3)
-        )
+        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape.set_boxes([
+            [None, tetromino_type, None],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None],
+        ])
+        return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.L_SHAPE:
         """
-         0123
-        [    ] 0
-        [ ###] 1
-        [ #  ] 2
-        [    ] 3
+        [  #]
+        [###]
+        [   ]
         """
-        positions = (
-            (1, 1),
-            (2, 1),
-            (3, 1),
-            (1, 2)
-        )
+        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape.set_boxes([
+            [None, None, tetromino_type],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None],
+        ])
+        return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.J_SHAPE:
         """
-         0123
-        [    ] 0
-        [ ###] 1
-        [   #] 2
-        [    ] 3
+        [#  ]
+        [###]
+        [   ] 
         """
-        positions = (
-            (1, 1),
-            (2, 1),
-            (3, 1),
-            (3, 2)
-        )
+        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape.set_boxes([
+            [tetromino_type, None, None],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None],
+        ])
+        return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.Z_SHAPE:
         """
-         0123
-        [    ] 0
-        [ ## ] 1
-        [  ##] 2
-        [    ] 3
+        [## ]
+        [ ##]
+        [   ]
         """
-        positions = (
-            (1, 1),
-            (2, 1),
-            (2, 2),
-            (3, 2)
-        )
+        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape.set_boxes([
+            [tetromino_type, tetromino_type, None],
+            [None, tetromino_type, tetromino_type],
+            [None, None, None],
+        ])
+        return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.S_SHAPE:
         """
-         0123
-        [    ] 0
-        [ ## ] 1
-        [##  ] 2
-        [    ] 3
+        [ ## ]
+        [##  ]
+        [    ]
         """
-        positions = (
-            (1, 1),
-            (2, 1),
-            (0, 2),
-            (1, 2)
-        )
+        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape.set_boxes([
+            [None, tetromino_type, tetromino_type],
+            [tetromino_type, tetromino_type, None],
+            [None, None, None],
+        ])
+        return shape
     else:
         if isinstance(tetromino_type, m_tetromino_type.TetrominoType):
             raise ValueError(
@@ -130,10 +117,6 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
                 "type must be TetrominoType but a %s is given."
                 % type(tetromino_type).name
             )
-
-    for position in positions:
-        shape.set_box(tetromino_type, position[0], position[1])
-    return shape
 
 
 def random_tetromino() -> m_tetromino_type.TetrominoType:
