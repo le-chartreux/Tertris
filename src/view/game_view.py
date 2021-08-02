@@ -186,8 +186,8 @@ class GameView(view.View):
         """
         next_tetromino, next_shape = self._model.get_next_tetromino_info()
 
-        for line in range(4):
-            for column in range(4):
+        for line in range(len(next_shape)):
+            for column in range(len(next_shape[0])):
                 if next_shape[line][column] is not None:
                     # we put a bloc
                     self._window_next.addstr(
@@ -273,8 +273,8 @@ class GameView(view.View):
         """
         stored_tetromino, stored_shape = self._model.get_stored_tetromino_info()
         if stored_tetromino is not None:
-            for line in range(4):
-                for column in range(4):
+            for line in range(len(stored_shape)):
+                for column in range(len(stored_shape[0])):
                     if stored_shape[line][column] is not None:
                         self._window_stored.addstr(
                             line + 1,

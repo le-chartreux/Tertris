@@ -145,8 +145,8 @@ class Shape:
         :return: a copy of self. Modifying it doesn't modify self
         """
         new_shape = Shape(self.get_height(), self.get_width())
-        for y in range(4):
-            for x in range(4):
+        for y in range(self.get_height()):
+            for x in range(self.get_width()):
                 new_shape.set_box(
                     self.get_box(x, y),
                     x,
@@ -161,31 +161,31 @@ class Shape:
 
         :param rotation: the rotation the shape has to move to
         """
-        new_shape = Shape(4, 4)
+        new_shape = Shape(self.get_height(), self.get_width())
 
         if rotation == m_rotation.Rotation.RIGHT:
-            for y in range(4):
-                for x in range(4):
+            for y in range(self.get_height()):
+                for x in range(self.get_width()):
                     new_shape.set_box(
                         self.get_box(x, y),
-                        3 - y,
+                        self.get_height() -1 - y,
                         x
                     )
         elif rotation == m_rotation.Rotation.LEFT:
-            for y in range(4):
-                for x in range(4):
+            for y in range(self.get_height()):
+                for x in range(self.get_width()):
                     new_shape.set_box(
                         self.get_box(x, y),
                         y,
-                        3 - x
+                        self.get_width() -1 - x
                     )
         elif rotation == m_rotation.Rotation.REVERSE:
-            for y in range(4):
-                for x in range(4):
+            for y in range(self.get_height()):
+                for x in range(self.get_width()):
                     new_shape.set_box(
                         self.get_box(x, y),
-                        3 - x,
-                        3 - y
+                        self.get_width() - 1 - x,
+                        self.get_height() - 1 - y
                     )
         else:
             if isinstance(rotation, m_rotation.Rotation):
