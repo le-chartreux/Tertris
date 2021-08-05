@@ -184,8 +184,18 @@ class GameView(view.View):
         """
         Shows the next tetromino in the next window
         """
-        next_tetromino, next_shape = self._model.get_next_tetromino_info()
+        # cleaning the board
+        for line in range(4):
+            for column in range(4):
+                # we put a space to hide a potential old bloc
+                self._window_next.addstr(
+                    line + 1,
+                    column * 2 + 1,
+                    "  ".encode(locale.getpreferredencoding()),  # *2 since tetrominos are 2 char wide
+                    curses.A_BOLD | curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
+                )
 
+        next_tetromino, next_shape = self._model.get_next_tetromino_info()
         for line in range(len(next_shape)):
             for column in range(len(next_shape[0])):
                 if next_shape[line][column] is not None:
@@ -271,6 +281,17 @@ class GameView(view.View):
         """
         Show the stored tetromino window, with the stored tetromino if exists
         """
+        # cleaning the board
+        for line in range(4):
+            for column in range(4):
+                # we put a space to hide a potential old bloc
+                self._window_stored.addstr(
+                    line + 1,
+                    column * 2 + 1,
+                    "  ",  # only ASCII so no need to encode
+                    curses.A_BOLD | curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
+                )
+
         stored_tetromino, stored_shape = self._model.get_stored_tetromino_info()
         if stored_tetromino is not None:
             for line in range(len(stored_shape)):
@@ -281,13 +302,6 @@ class GameView(view.View):
                             column * 2 + 1,
                             "██".encode(locale.getpreferredencoding()),
                             curses.color_pair(m_utils.get_color_pair(stored_tetromino).value)
-                        )
-                    else:
-                        self._window_stored.addstr(
-                            line + 1,
-                            column * 2 + 1,
-                            "  ",  # only ASCII so no need to encode
-                            curses.A_BOLD | curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
                         )
 
         self._window_stored.refresh()
