@@ -17,6 +17,7 @@ import common.statistics as m_statistics
 import model.grid as m_grid
 import model.active_tetromino as m_active_tetromino
 import model.utils as m_utils
+import model.config as m_config
 
 
 class Model:
@@ -38,6 +39,7 @@ class Model:
         self._exit_next_tick = False
 
         self._active_tetromino = m_active_tetromino.ActiveTetromino(m_utils.random_tetromino())
+        self._active_tetromino.put_at_spawnpoint()
         self._stored_tetromino: typing.Optional[m_tetromino_type.TetrominoType] = None
         self._next_tetromino = m_utils.random_tetromino()
 
@@ -154,6 +156,7 @@ class Model:
                 self._grid.add_tetromino(self._active_tetromino)
                 self._to_next_tetromino()
                 self._player_already_store = False
+                self._never_down_this_tetromino = True
 
                 # checks if some lines are completed
                 number_of_completed_lines = 0
@@ -175,6 +178,18 @@ class Model:
         level = self._statistics.get_level()
         return (time.monotonic() - self._last_down) > (0.8 - (level - 1) * 0.007) ** (level - 1)
 
+    def _can_spawn(self, tetromino_type: m_tetromino_type.TetrominoType) -> bool:
+        """
+        :return: if the tetromino has the space to spawn
+        """
+        temp_tetromino = m_active_tetromino.ActiveTetromino(tetromino_type)
+        remaining_down = m_config.SPAWN_LINE
+        while remaining_down != 0 and self._can_active_move(m_direction.Direction.DOWN, temp_tetromino):
+            temp_tetromino.move(m_direction.Direction.DOWN)
+            remaining_down -= 1
+
+        return remaining_down == 0
+
     def _can_active_rotate(self, rotation: m_rotation.Rotation) -> bool:
         """
         :param rotation: the rotation we want to know the feasibility
@@ -188,33 +203,39 @@ class Model:
             self._active_tetromino.get_y()
         )
 
-    def _can_active_move(self, direction: m_direction.Direction) -> bool:
+    def _can_active_move(
+            self,
+            direction: m_direction.Direction,
+            active_to_use: typing.Optional[m_active_tetromino.ActiveTetromino] = None
+    ) -> bool:
         """
         :param direction: the direction we want to know the feasibility of the move
         :return: if it's possible for the active tetromino to move to that direction
         """
+        if active_to_use is None:
+            active_to_use = self._active_tetromino
         line = 0
 
         possible = True
-        while line < self._active_tetromino.get_height() and possible:
+        while line < active_to_use.get_height() and possible:
             column = 0
-            while column < self._active_tetromino.get_width() and possible:
+            while column < active_to_use.get_width() and possible:
                 possible = (
-                    not self._active_tetromino.is_occupied(x=column, y=line)  # There is no bloc
+                    not active_to_use.is_occupied(x=column, y=line)  # There is no bloc
                     or  # or
                     (  # The bloc will go outside of the grid border
                         0 <= (
-                            self._active_tetromino.get_x() + column + direction.get_x_variation()
+                            active_to_use.get_x() + column + direction.get_x_variation()
                         ) < self._grid.get_width()
                         and
                         0 <= (
-                                self._active_tetromino.get_y() + line + direction.get_y_variation()
+                                active_to_use.get_y() + line + direction.get_y_variation()
                         ) < self._grid.get_height()
                     )
                     and not (  # ... and the futur bloc is empty
                         self._grid.is_occupied(
-                            self._active_tetromino.get_x() + direction.get_x_variation() + column,
-                            self._active_tetromino.get_y() + direction.get_y_variation() + line
+                            active_to_use.get_x() + direction.get_x_variation() + column,
+                            active_to_use.get_y() + direction.get_y_variation() + line
                         )
                     )
                 )
@@ -237,14 +258,19 @@ class Model:
             # if there is no stored tetromino, that's all since spawning issues can't happened
             return True
         else:
-            # TODO check if possible
-            return True
+            return self._can_spawn(self._stored_tetromino)
 
     def _is_game_lost(self) -> bool:
         """
-        :return: if the game is lost (if the active tetromino can't move and it never down)
+        :return: if the game is lost (if the active tetromino has to go down, can't move and it never down)
         """
-        return not self._can_active_move(m_direction.Direction.DOWN) and self._never_down_this_tetromino
+        return (
+                self._has_to_go_down()
+                and
+                not self._can_active_move(m_direction.Direction.DOWN)
+                and
+                self._never_down_this_tetromino
+        )
 
     # ACTIONS
     def _store_active(self) -> None:
@@ -263,6 +289,7 @@ class Model:
             self._active_tetromino = m_active_tetromino.ActiveTetromino(
                 stored_tetromino_temp
             )
+            self._active_tetromino.put_at_spawnpoint()
 
     def _to_next_tetromino(self) -> None:
         """
@@ -270,3 +297,4 @@ class Model:
         """
         self._active_tetromino = m_active_tetromino.ActiveTetromino(self._next_tetromino)
         self._next_tetromino = m_utils.random_tetromino()
+        self._active_tetromino.put_at_spawnpoint()
