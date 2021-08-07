@@ -12,7 +12,7 @@ class Statistics:
             self,
             score: int = 0,
             lines_completed: int = 0,
-            begin_time: float = time.monotonic(),
+            begin_time: typing.Optional[float] = None,
             paused_time: float = 0.0
     ) -> None:
         """
@@ -27,7 +27,7 @@ class Statistics:
         """
         self._score = score
         self._lines_completed = lines_completed
-        self._begin_time = begin_time
+        self._begin_time = time.monotonic() if begin_time is None else begin_time
         self._paused_time = paused_time
         self._chrono_paused_since: typing.Optional[float] = None
 
