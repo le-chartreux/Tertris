@@ -67,18 +67,18 @@ class Statistics:
 
     def get_points_for_lines(self, number_of_lines: int) -> int:
         """
-        Computes the number of points that gives the action of destroying <number_of_lines> lines
+        Computes the number of points that gives the action of destroying <number_of_lines> lines.
+
+        :param number_of_lines: integer between 1 and 4
         """
-        multiplier = 0
-        if number_of_lines == 1:
-            multiplier = 40
-        elif number_of_lines == 2:
-            multiplier = 100
-        elif number_of_lines == 3:
-            multiplier = 300
-        elif number_of_lines == 4:
-            multiplier = 1200
-        return multiplier * self.get_level()
+        assert 1 <= number_of_lines <= 4
+        correspondence_table = {
+            1: 40,
+            2: 100,
+            3: 300,
+            4: 1200
+        }
+        return correspondence_table[number_of_lines] * self.get_level()
 
     # ADDERS
     def add_score(self, score_to_add) -> None:
