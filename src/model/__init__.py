@@ -164,9 +164,10 @@ class Model:
                     if self._grid.is_line_full(line):
                         self._grid.drop_lines_upper(line)
                         number_of_completed_lines += 1
-
-                self._statistics.add_lines_completed(number_of_completed_lines)
-                self._statistics.add_points_for_lines(number_of_completed_lines)
+                
+                if number_of_completed_lines != 0:
+                    self._statistics.add_lines_completed(number_of_completed_lines)
+                    self._statistics.add_points_for_lines(number_of_completed_lines)
 
     # QUESTIONS
     def _has_to_go_down(self) -> bool:
