@@ -78,7 +78,7 @@ class Statistics:
             multiplier = 300
         elif number_of_lines == 4:
             multiplier = 1200
-        return multiplier * (self.get_level() + 1)
+        return multiplier * self.get_level()
 
     # ADDERS
     def add_score(self, score_to_add) -> None:
