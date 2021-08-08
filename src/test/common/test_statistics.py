@@ -21,9 +21,9 @@ class TestStatistics(unittest.TestCase):
                 self.assertEqual(self._default_stats.get_level(), level, "Should be %i" % level)
                 self._default_stats.add_lines_completed(1)
 
+    # warning: this testing will last 9 seconds so it is commented
+    """
     def test_get_duration(self) -> None:
-        # warning: this testing will last 9 seconds
-
         # testing without pause time
         # there is no pause at init, so the duration is just <int(end_time - self._begin_time)>
         for ds in range(30):
@@ -54,7 +54,7 @@ class TestStatistics(unittest.TestCase):
                 (self._default_stats.get_duration(), self._default_stats.get_duration() + 1)
             )
             self._default_stats.run_chrono()
-
+    """
 
 if __name__ == '__main__':
     unittest.main()
