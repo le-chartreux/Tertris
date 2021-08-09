@@ -119,7 +119,7 @@ class Shape:
         Does a logical "or" on the two shapes, and returns the result. If a box is occupied on the two shapes, the one
         of self is kept.
 
-        :param other_shape: other shape to combine. Have to be smaller that this one
+        :param other_shape: other shape to combine. Has to be smaller that this one or the same size
         :param x_overlay: horizontal overlay
         :param y_overlay: vertical overlay
         :return: the combination of this shape and the given shape
@@ -198,3 +198,25 @@ class Shape:
                 )
 
         self.set_boxes(new_shape.get_boxes())
+
+    def is_equal(self, other_shape: "Shape") -> bool:
+        """
+        :param other_shape: the other shape we want to compare to this one
+        :return: if the two shapes are equals
+        """
+        if self.get_width() != other_shape.get_width() or self.get_height() != other_shape.get_height():
+            return False
+
+        x = 0
+        equals = True
+        while x < other_shape.get_width() and equals:
+            y = 0
+            while y < other_shape.get_height() and equals:
+                if (
+                    self.get_box(x, y) != other_shape.get_box(x, y)
+                ):
+                    equals = False
+                y += 1
+            x += 1
+
+        return equals
