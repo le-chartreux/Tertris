@@ -99,7 +99,7 @@ class TestShape(unittest.TestCase):
                 )
 
             # between 2 non-empty shapes
-            for _ in range(500):  # maybe overkill haha
+            for _ in range(100):
                 overlay_x, overlay_y = random.randint(0, 5), random.randint(0, 5)
 
                 shape_1 = self.random_size_shape()
@@ -119,7 +119,7 @@ class TestShape(unittest.TestCase):
                         (
                             random.randint(0, shape_to_fill.get_width() - 1),
                             random.randint(0, shape_to_fill.get_height() - 1)
-                        ) for _ in range(random.randint(5, 6))
+                        ) for _ in range(random.randint(1, 100))
                     ])
                     for position_to_put in positions_to_put_list[len(positions_to_put_list) - 1]:
                         shape_to_fill.set_box(
@@ -144,6 +144,114 @@ class TestShape(unittest.TestCase):
                     ),
                     intersects
                 )
+
+    def test_combine(self) -> None:
+        # same sizes, only empty boxes, no overlay
+        for _ in range(10):
+            shape_1 = self.random_size_shape()
+            shape_2 = m_shape.Shape(shape_1.get_height(), shape_1.get_width())
+            self.assertTrue(
+                shape_1.is_equal(shape_1.combine(shape_2, 0, 0))
+            )
+
+        # different sizes, only empty boxes, with overlay
+        for _ in range(10):
+            shape_1 = self.random_size_shape()
+            shape_2 = self.random_size_shape(
+                min_height=shape_1.get_height() + 5,
+                max_height=shape_1.get_height() + 15,
+                min_width=shape_1.get_width() + 5,
+                max_width=shape_1.get_width() + 15
+            )
+            self.assertTrue(
+                shape_2.is_equal(
+                    shape_2.combine(shape_1, random.randint(0, 5), random.randint(0, 5))
+                )
+            )
+
+        # different sizes, one empty and one with boxes
+        for _ in range(10):
+            shape_1 = self.random_size_shape()
+            shape_2 = self.random_size_shape(
+                min_height=shape_1.get_height() + 5,
+                max_height=shape_1.get_height() + 15,
+                min_width=shape_1.get_width() + 5,
+                max_width=shape_1.get_width() + 15
+            )
+            for _ in range(10):
+                shape_2.set_box(
+                    m_tetromino_type.TetrominoType.O_SHAPE,
+                    random.randint(
+                        0,
+                        shape_2.get_width() - 1
+                    ),
+                    random.randint(
+                        0,
+                        shape_2.get_height() - 1
+                    )
+                )
+
+            self.assertTrue(
+                shape_2.is_equal(shape_2.combine(shape_1, random.randint(0, 5), random.randint(0, 5)))
+            )
+
+        # different sizes, both with non-empty boxes and with an overlay
+        overlay_x, overlay_y = random.randint(0, 5), random.randint(0, 5)
+        for _ in range(100):
+            shape_1 = self.random_size_shape()
+            shape_2 = self.random_size_shape(
+                min_height=shape_1.get_height() + 5,
+                max_height=shape_1.get_height() + 15,
+                min_width=shape_1.get_width() + 5,
+                max_width=shape_1.get_width() + 15
+            )
+            # filling the shapes
+            positions_to_put_list = []
+
+            for shape_to_fill in shape_1, shape_2:
+                positions_to_put_list.append([
+                    (
+                        random.randint(0, shape_to_fill.get_width() - 1),
+                        random.randint(0, shape_to_fill.get_height() - 1)
+                    ) for _ in range(random.randint(1, 100))
+                ])
+                for position_to_put in positions_to_put_list[len(positions_to_put_list) - 1]:
+                    shape_to_fill.set_box(
+                        m_tetromino_type.TetrominoType.O_SHAPE,
+                        position_to_put[0],
+                        position_to_put[1]
+                    )
+
+            combination = shape_2.combine(shape_1, overlay_x, overlay_y)
+            is_good = True
+            x = 0
+            while x < combination.get_width() and is_good:
+                y = 0
+                while (
+                        y < combination.get_height()
+                        and
+                        is_good
+                ):
+                    if not (
+                            combination.is_occupied(x, y)
+                            and
+                            (
+                                (
+                                        x + overlay_x < shape_1.get_width()
+                                        and
+                                        y + overlay_y < shape_1.get_height()
+                                        and
+                                        shape_1.is_occupied(x + overlay_x, y + overlay_y)
+                                )
+                                or
+                                shape_2.is_occupied(x, y)
+                            )
+                            or
+                            not combination.is_occupied(x, y)
+                    ):
+                        is_good = False
+                    y += 1
+                x += 1
 
 
 if __name__ == '__main__':
