@@ -1,8 +1,10 @@
 import unittest
 import random
 
-import model.shape as m_shape
 import common.tetromino_type as m_tetromino_type
+import common.rotation as m_rotation
+
+import model.shape as m_shape
 
 
 class TestShape(unittest.TestCase):
@@ -262,11 +264,12 @@ class TestShape(unittest.TestCase):
 
         # asserting an shape with some boxes is correctly copied
         shape = self.random_size_shape()
+        copy_shape = shape.copy_shape()
         for _ in range(5):
             copy_shape.set_box(
                 m_tetromino_type.TetrominoType.O_SHAPE,
-                random.randint(0, 4),
-                random.randint(0, 4)
+                random.randint(0, shape.get_width() - 1),
+                random.randint(0, shape.get_height() - 1)
             )
         copy_shape = shape.copy_shape()
         # asserting the copy and the original are similar
@@ -275,7 +278,8 @@ class TestShape(unittest.TestCase):
         # changing the copy and asserting it doesn't change the original
         shape = self.random_size_shape()
         copy_shape = shape.copy_shape()
-        place_to_put_x, place_to_put_y = random.randint(0, 4), random.randint(0, 4)
+        place_to_put_x = random.randint(0, shape.get_width() - 1)
+        place_to_put_y = random.randint(0, shape.get_height() - 1)
         copy_shape.set_box(m_tetromino_type.TetrominoType.O_SHAPE, place_to_put_x, place_to_put_y)
         self.assertFalse(shape.is_occupied(place_to_put_x, place_to_put_y))
 
