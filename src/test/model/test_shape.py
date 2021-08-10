@@ -373,6 +373,181 @@ class TestShape(unittest.TestCase):
             shape_initial
         )
 
+        # for the <T> tetromino
+        tetromino_type = m_tetromino_type.TetrominoType.T_SHAPE
+        shape_initial = m_shape.Shape(3, 3)
+        shape_right_rotation = m_shape.Shape(3, 3)
+        shape_reverse_rotation = m_shape.Shape(3, 3)
+        shape_left_rotation = m_shape.Shape(3, 3)
+
+        shape_initial.set_boxes([
+            [None, tetromino_type, None],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None]
+        ])
+        shape_right_rotation.set_boxes([
+            [None, tetromino_type, None],
+            [None, tetromino_type, tetromino_type],
+            [None, tetromino_type, None]
+        ])
+        shape_reverse_rotation.set_boxes([
+            [None, None, None],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, tetromino_type, None]
+        ])
+        shape_left_rotation.set_boxes([
+            [None, tetromino_type, None],
+            [tetromino_type, tetromino_type, None],
+            [None, tetromino_type, None]
+        ])
+
+        test_one_shape(
+            shape_initial,
+            shape_right_rotation,
+            shape_reverse_rotation,
+            shape_left_rotation
+        )
+
+        # for the <L> tetromino
+        tetromino_type = m_tetromino_type.TetrominoType.L_SHAPE
+        shape_initial = m_shape.Shape(3, 3)
+        shape_right_rotation = m_shape.Shape(3, 3)
+        shape_reverse_rotation = m_shape.Shape(3, 3)
+        shape_left_rotation = m_shape.Shape(3, 3)
+
+        shape_initial.set_boxes([
+            [None, None, tetromino_type],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None],
+        ])
+        shape_right_rotation.set_boxes([
+            [None, tetromino_type, None],
+            [None, tetromino_type, None],
+            [None, tetromino_type, tetromino_type],
+        ])
+        shape_reverse_rotation.set_boxes([
+            [None, None, None],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [tetromino_type, None, None],
+        ])
+        shape_left_rotation.set_boxes([
+            [tetromino_type, tetromino_type, None],
+            [None, tetromino_type, None],
+            [None, tetromino_type, None],
+        ])
+
+        test_one_shape(
+            shape_initial,
+            shape_right_rotation,
+            shape_reverse_rotation,
+            shape_left_rotation
+        )
+
+        # for the <J> tetromino
+        tetromino_type = m_tetromino_type.TetrominoType.J_SHAPE
+        shape_initial = m_shape.Shape(3, 3)
+        shape_right_rotation = m_shape.Shape(3, 3)
+        shape_reverse_rotation = m_shape.Shape(3, 3)
+        shape_left_rotation = m_shape.Shape(3, 3)
+
+        shape_initial.set_boxes([
+            [tetromino_type, None, None],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None],
+        ])
+        shape_right_rotation.set_boxes([
+            [None, tetromino_type, tetromino_type],
+            [None, tetromino_type, None],
+            [None, tetromino_type, None],
+        ])
+        shape_reverse_rotation.set_boxes([
+            [None, None, None],
+            [tetromino_type, tetromino_type, tetromino_type],
+            [None, None, tetromino_type],
+        ])
+        shape_left_rotation.set_boxes([
+            [None, tetromino_type, None],
+            [None, tetromino_type, None],
+            [tetromino_type, tetromino_type, None],
+        ])
+
+        test_one_shape(
+            shape_initial,
+            shape_right_rotation,
+            shape_reverse_rotation,
+            shape_left_rotation
+        )
+
+        # for the <Z> tetromino
+        tetromino_type = m_tetromino_type.TetrominoType.Z_SHAPE
+        shape_initial = m_shape.Shape(3, 3)
+        shape_right_rotation = m_shape.Shape(3, 3)
+        shape_reverse_rotation = m_shape.Shape(3, 3)
+        shape_left_rotation = m_shape.Shape(3, 3)
+
+        shape_initial.set_boxes([
+            [tetromino_type, tetromino_type, None],
+            [None, tetromino_type, tetromino_type],
+            [None, None, None],
+        ])
+        shape_right_rotation.set_boxes([
+            [None, None, tetromino_type],
+            [None, tetromino_type, tetromino_type],
+            [None, tetromino_type, None],
+        ])
+        shape_reverse_rotation.set_boxes([
+            [None, None, None],
+            [tetromino_type, tetromino_type, None],
+            [None, tetromino_type, tetromino_type],
+        ])
+        shape_left_rotation.set_boxes([
+            [None, tetromino_type, None],
+            [tetromino_type, tetromino_type, None],
+            [tetromino_type, None, None],
+        ])
+
+        test_one_shape(
+            shape_initial,
+            shape_right_rotation,
+            shape_reverse_rotation,
+            shape_left_rotation
+        )
+
+        # for the <S> tetromino
+        tetromino_type = m_tetromino_type.TetrominoType.S_SHAPE
+        shape_initial = m_shape.Shape(3, 3)
+        shape_right_rotation = m_shape.Shape(3, 3)
+        shape_reverse_rotation = m_shape.Shape(3, 3)
+        shape_left_rotation = m_shape.Shape(3, 3)
+
+        shape_initial.set_boxes([
+            [None, tetromino_type, tetromino_type],
+            [tetromino_type, tetromino_type, None],
+            [None, None, None],
+        ])
+        shape_right_rotation.set_boxes([
+            [None, tetromino_type, None],
+            [None, tetromino_type, tetromino_type],
+            [None, None, tetromino_type],
+        ])
+        shape_reverse_rotation.set_boxes([
+            [None, None, None],
+            [None, tetromino_type, tetromino_type],
+            [tetromino_type, tetromino_type, None],
+        ])
+        shape_left_rotation.set_boxes([
+            [tetromino_type, None, None],
+            [tetromino_type, tetromino_type, None],
+            [None, tetromino_type, None],
+        ])
+
+        test_one_shape(
+            shape_initial,
+            shape_right_rotation,
+            shape_reverse_rotation,
+            shape_left_rotation
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
