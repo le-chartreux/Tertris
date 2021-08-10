@@ -29,9 +29,9 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.O_SHAPE:
         """
-        [ ## ] 1
-        [ ## ] 2
-        [    ] 3
+        [ ## ]
+        [ ## ]
+        [    ]
         """
         shape = m_shape.Shape(3, 4)  # 3 by 4
         shape.set_boxes([
