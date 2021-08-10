@@ -238,15 +238,15 @@ class TestShape(unittest.TestCase):
                             combination.is_occupied(x, y)
                             and
                             (
-                                (
-                                        x + overlay_x < shape_1.get_width()
-                                        and
-                                        y + overlay_y < shape_1.get_height()
-                                        and
-                                        shape_1.is_occupied(x + overlay_x, y + overlay_y)
-                                )
-                                or
-                                shape_2.is_occupied(x, y)
+                                    (
+                                            x + overlay_x < shape_1.get_width()
+                                            and
+                                            y + overlay_y < shape_1.get_height()
+                                            and
+                                            shape_1.is_occupied(x + overlay_x, y + overlay_y)
+                                    )
+                                    or
+                                    shape_2.is_occupied(x, y)
                             )
                             or
                             not combination.is_occupied(x, y)
@@ -359,39 +359,18 @@ class TestShape(unittest.TestCase):
 
         # for the <O> tetromino
         tetromino_type = m_tetromino_type.TetrominoType.O_SHAPE
-        shape_initial = m_shape.Shape(3, 4)
-        shape_right_rotation = m_shape.Shape(4, 3)
-        shape_reverse_rotation = m_shape.Shape(3, 4)
-        shape_left_rotation = m_shape.Shape(4, 3)
+        shape_initial = m_shape.Shape(2, 2)
 
         shape_initial.set_boxes([
-            [None, tetromino_type, tetromino_type, None],
-            [None, tetromino_type, tetromino_type, None],
-            [None, None, None, None],
+            [tetromino_type, tetromino_type],
+            [tetromino_type, tetromino_type]
         ])
-        shape_right_rotation.set_boxes([
-            [None, None, None],
-            [None, tetromino_type, tetromino_type],
-            [None, tetromino_type, tetromino_type],
-            [None, None, None]
-        ])
-        shape_reverse_rotation.set_boxes([
-            [None, None, None, None],
-            [None, tetromino_type, tetromino_type, None],
-            [None, tetromino_type, tetromino_type, None],
-        ])
-        shape_left_rotation.set_boxes([
-            [None, None, None],
-            [tetromino_type, tetromino_type, None],
-            [tetromino_type, tetromino_type, None],
-            [None, None, None]
-        ])
-
+        # it's all the time the same shape
         test_one_shape(
             shape_initial,
-            shape_right_rotation,
-            shape_reverse_rotation,
-            shape_left_rotation
+            shape_initial,
+            shape_initial,
+            shape_initial
         )
 
 
