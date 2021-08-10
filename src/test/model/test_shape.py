@@ -284,7 +284,7 @@ class TestShape(unittest.TestCase):
         self.assertFalse(shape.is_occupied(place_to_put_x, place_to_put_y))
 
     def test_rotate(self) -> None:
-        # testing each rotation for each tetromino, in clockwise then anticlockwise
+        # testing each rotation for each tetromino
 
         def test_one_shape(
                 initial: m_shape.Shape,
@@ -305,6 +305,18 @@ class TestShape(unittest.TestCase):
             for to_check in order_to_check:
                 test_shape.rotate(m_rotation.Rotation.LEFT)
                 self.assertTrue(test_shape.is_equal(to_check))
+
+            # reverse
+            initial_final_list = [
+                (initial, reverse_rotation),
+                (left_rotation, right_rotation),
+                (reverse_rotation, initial),
+                (right_rotation, left_rotation)
+            ]
+            for initial_final_pair in initial_final_list:
+                test_shape = initial_final_pair[0].copy_shape()
+                test_shape.rotate(m_rotation.Rotation.REVERSE)
+                self.assertTrue(test_shape.is_equal(initial_final_pair[1]))
 
         # for the <I> tetromino
         tetromino_type = m_tetromino_type.TetrominoType.I_SHAPE
