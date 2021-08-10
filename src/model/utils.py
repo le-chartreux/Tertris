@@ -19,7 +19,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         [    ]
         [    ]
         """
-        shape = m_shape.Shape(4, 4)  # 4 by 4
+        shape = m_shape.Shape(4, 4)
         shape.set_boxes([
             [None, None, None, None],
             [tetromino_type, tetromino_type, tetromino_type, tetromino_type],
@@ -29,15 +29,19 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.O_SHAPE:
         """
+        in guidelines it's:
         [ ## ]
         [ ## ]
         [    ]
+        but this one is better with my code:
+        [##]
+        [##]
         """
-        shape = m_shape.Shape(3, 4)  # 3 by 4
+
+        shape = m_shape.Shape(2, 2)
         shape.set_boxes([
-            [None, tetromino_type, tetromino_type, None],
-            [None, tetromino_type, tetromino_type, None],
-            [None, None, None, None],
+            [tetromino_type, tetromino_type],
+            [tetromino_type, tetromino_type]
         ])
         return shape
     elif tetromino_type == m_tetromino_type.TetrominoType.T_SHAPE:
@@ -46,7 +50,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         [###] 
         [   ] 
         """
-        shape = m_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)
         shape.set_boxes([
             [None, tetromino_type, None],
             [tetromino_type, tetromino_type, tetromino_type],
@@ -59,7 +63,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         [###]
         [   ]
         """
-        shape = m_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)
         shape.set_boxes([
             [None, None, tetromino_type],
             [tetromino_type, tetromino_type, tetromino_type],
@@ -72,7 +76,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         [###]
         [   ] 
         """
-        shape = m_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)
         shape.set_boxes([
             [tetromino_type, None, None],
             [tetromino_type, tetromino_type, tetromino_type],
@@ -85,7 +89,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         [ ##]
         [   ]
         """
-        shape = m_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)
         shape.set_boxes([
             [tetromino_type, tetromino_type, None],
             [None, tetromino_type, tetromino_type],
@@ -98,7 +102,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
         [##  ]
         [    ]
         """
-        shape = m_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)
         shape.set_boxes([
             [None, tetromino_type, tetromino_type],
             [tetromino_type, tetromino_type, None],
