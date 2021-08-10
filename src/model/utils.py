@@ -4,10 +4,10 @@ File that contains various utils for the model
 import random
 
 import common.tetromino_type as m_tetromino_type
-import model.shape as p_shape
+import model.shape as m_shape
 
 
-def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_shape.Shape:
+def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_shape.Shape:
     """
     :param tetromino_type: type of the tetromino we want the shape
     :return: the initial shape of the tetromino type given
@@ -19,7 +19,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         [    ]
         [    ]
         """
-        shape = p_shape.Shape(4, 4)  # 4 by 4
+        shape = m_shape.Shape(4, 4)  # 4 by 4
         shape.set_boxes([
             [None, None, None, None],
             [tetromino_type, tetromino_type, tetromino_type, tetromino_type],
@@ -33,7 +33,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         [ ## ] 2
         [    ] 3
         """
-        shape = p_shape.Shape(3, 4)  # 3 by 4
+        shape = m_shape.Shape(3, 4)  # 3 by 4
         shape.set_boxes([
             [None, tetromino_type, tetromino_type, None],
             [None, tetromino_type, tetromino_type, None],
@@ -46,7 +46,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         [###] 
         [   ] 
         """
-        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)  # 3 by 3
         shape.set_boxes([
             [None, tetromino_type, None],
             [tetromino_type, tetromino_type, tetromino_type],
@@ -59,7 +59,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         [###]
         [   ]
         """
-        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)  # 3 by 3
         shape.set_boxes([
             [None, None, tetromino_type],
             [tetromino_type, tetromino_type, tetromino_type],
@@ -72,7 +72,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         [###]
         [   ] 
         """
-        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)  # 3 by 3
         shape.set_boxes([
             [tetromino_type, None, None],
             [tetromino_type, tetromino_type, tetromino_type],
@@ -85,7 +85,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         [ ##]
         [   ]
         """
-        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)  # 3 by 3
         shape.set_boxes([
             [tetromino_type, tetromino_type, None],
             [None, tetromino_type, tetromino_type],
@@ -98,7 +98,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> p_sha
         [##  ]
         [    ]
         """
-        shape = p_shape.Shape(3, 3)  # 3 by 3
+        shape = m_shape.Shape(3, 3)  # 3 by 3
         shape.set_boxes([
             [None, tetromino_type, tetromino_type],
             [tetromino_type, tetromino_type, None],
