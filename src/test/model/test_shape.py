@@ -253,6 +253,32 @@ class TestShape(unittest.TestCase):
                     y += 1
                 x += 1
 
+    def test_copy_shape(self) -> None:
+        # asserting an empty shape is copied as an empty shape
+        shape = self.random_size_shape()
+        copy_shape = shape.copy_shape()
+        # asserting the copy and the original are similar
+        self.assertTrue(shape.is_equal(copy_shape))
+
+        # asserting an shape with some boxes is correctly copied
+        shape = self.random_size_shape()
+        for _ in range(5):
+            copy_shape.set_box(
+                m_tetromino_type.TetrominoType.O_SHAPE,
+                random.randint(0, 4),
+                random.randint(0, 4)
+            )
+        copy_shape = shape.copy_shape()
+        # asserting the copy and the original are similar
+        self.assertTrue(shape.is_equal(copy_shape))
+
+        # changing the copy and asserting it doesn't change the original
+        shape = self.random_size_shape()
+        copy_shape = shape.copy_shape()
+        place_to_put_x, place_to_put_y = random.randint(0, 4), random.randint(0, 4)
+        copy_shape.set_box(m_tetromino_type.TetrominoType.O_SHAPE, place_to_put_x, place_to_put_y)
+        self.assertFalse(shape.is_occupied(place_to_put_x, place_to_put_y))
+
 
 if __name__ == '__main__':
     unittest.main()
