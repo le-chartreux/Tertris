@@ -548,6 +548,45 @@ class TestShape(unittest.TestCase):
             shape_left_rotation
         )
 
+    def test_is_equal(self) -> None:
+        for _ in range(10):
+            shape_1 = self.random_size_shape()
+            shape_2 = shape_1.copy_shape()
+
+            # literally same shape
+            self.assertTrue(shape_1.is_equal(shape_1))
+
+            # same empty shape
+            self.assertTrue(shape_1.is_equal(shape_2))
+
+            # empty shape with non-empty shape
+            non_empty_box_positions_shape_1: list[tuple[int, int]] = []
+            for i in range(random.randint(1, 10)):
+                non_empty_box_positions_shape_1.append(
+                    (
+                        random.randint(0, shape_1.get_width() - 1),
+                        random.randint(0, shape_1.get_height() - 1)
+                    )
+                )
+                shape_1.set_box(
+                    m_tetromino_type.TetrominoType.O_SHAPE,
+                    non_empty_box_positions_shape_1[i][0],
+                    non_empty_box_positions_shape_1[i][1]
+                )
+                self.assertFalse(shape_1.is_equal(shape_2))
+
+            # two non-empty shapes
+            for i in range(len(non_empty_box_positions_shape_1)):
+                shape_2.set_box(
+                    m_tetromino_type.TetrominoType.O_SHAPE,
+                    non_empty_box_positions_shape_1[i][0],
+                    non_empty_box_positions_shape_1[i][1]
+                )
+                if i == len(non_empty_box_positions_shape_1) - 1:
+                    self.assertTrue(shape_1.is_equal(shape_2))
+                else:
+                    self.assertFalse(shape_1.is_equal(shape_2))
+
 
 if __name__ == '__main__':
     unittest.main()
