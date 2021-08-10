@@ -283,6 +283,105 @@ class TestShape(unittest.TestCase):
         copy_shape.set_box(m_tetromino_type.TetrominoType.O_SHAPE, place_to_put_x, place_to_put_y)
         self.assertFalse(shape.is_occupied(place_to_put_x, place_to_put_y))
 
+    def test_rotate(self) -> None:
+        # testing each rotation for each tetromino, in clockwise then anticlockwise
+
+        def test_one_shape(
+                initial: m_shape.Shape,
+                right_rotation: m_shape.Shape,
+                reverse_rotation: m_shape.Shape,
+                left_rotation: m_shape.Shape
+        ):
+            # testing all rotations
+            test_shape = initial.copy_shape()
+            # clockwise
+            order_to_check = [right_rotation, reverse_rotation, left_rotation, initial]
+            for to_check in order_to_check:
+                test_shape.rotate(m_rotation.Rotation.RIGHT)
+                self.assertTrue(test_shape.is_equal(to_check))
+
+            # anticlockwise
+            order_to_check = [left_rotation, reverse_rotation, right_rotation, initial]
+            for to_check in order_to_check:
+                test_shape.rotate(m_rotation.Rotation.LEFT)
+                self.assertTrue(test_shape.is_equal(to_check))
+
+        # for the <I> tetromino
+        tetromino_type = m_tetromino_type.TetrominoType.I_SHAPE
+        shape_initial = m_shape.Shape(4, 4)
+        shape_right_rotation = m_shape.Shape(4, 4)
+        shape_reverse_rotation = m_shape.Shape(4, 4)
+        shape_left_rotation = m_shape.Shape(4, 4)
+
+        shape_initial.set_boxes([
+            [None, None, None, None],
+            [tetromino_type, tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None, None],
+            [None, None, None, None]
+        ])
+        shape_right_rotation.set_boxes([
+            [None, None, tetromino_type, None],
+            [None, None, tetromino_type, None],
+            [None, None, tetromino_type, None],
+            [None, None, tetromino_type, None]
+        ])
+        shape_reverse_rotation.set_boxes([
+            [None, None, None, None],
+            [None, None, None, None],
+            [tetromino_type, tetromino_type, tetromino_type, tetromino_type],
+            [None, None, None, None]
+        ])
+        shape_left_rotation.set_boxes([
+            [None, tetromino_type, None, None],
+            [None, tetromino_type, None, None],
+            [None, tetromino_type, None, None],
+            [None, tetromino_type, None, None]
+        ])
+
+        test_one_shape(
+            shape_initial,
+            shape_right_rotation,
+            shape_reverse_rotation,
+            shape_left_rotation
+        )
+
+        # for the <O> tetromino
+        tetromino_type = m_tetromino_type.TetrominoType.O_SHAPE
+        shape_initial = m_shape.Shape(3, 4)
+        shape_right_rotation = m_shape.Shape(4, 3)
+        shape_reverse_rotation = m_shape.Shape(3, 4)
+        shape_left_rotation = m_shape.Shape(4, 3)
+
+        shape_initial.set_boxes([
+            [None, tetromino_type, tetromino_type, None],
+            [None, tetromino_type, tetromino_type, None],
+            [None, None, None, None],
+        ])
+        shape_right_rotation.set_boxes([
+            [None, None, None],
+            [None, tetromino_type, tetromino_type],
+            [None, tetromino_type, tetromino_type],
+            [None, None, None]
+        ])
+        shape_reverse_rotation.set_boxes([
+            [None, None, None, None],
+            [None, tetromino_type, tetromino_type, None],
+            [None, tetromino_type, tetromino_type, None],
+        ])
+        shape_left_rotation.set_boxes([
+            [None, None, None],
+            [tetromino_type, tetromino_type, None],
+            [tetromino_type, tetromino_type, None],
+            [None, None, None]
+        ])
+
+        test_one_shape(
+            shape_initial,
+            shape_right_rotation,
+            shape_reverse_rotation,
+            shape_left_rotation
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
