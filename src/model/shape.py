@@ -161,25 +161,26 @@ class Shape:
 
         :param rotation: the rotation the shape has to move to
         """
-        new_shape = Shape(self.get_height(), self.get_width())
-
         if rotation == m_rotation.Rotation.RIGHT:
+            new_shape = Shape(self.get_width(), self.get_height())
             for y in range(self.get_height()):
                 for x in range(self.get_width()):
                     new_shape.set_box(
                         self.get_box(x, y),
-                        self.get_height() -1 - y,
+                        self.get_height() - 1 - y,
                         x
                     )
         elif rotation == m_rotation.Rotation.LEFT:
+            new_shape = Shape(self.get_width(), self.get_height())
             for y in range(self.get_height()):
                 for x in range(self.get_width()):
                     new_shape.set_box(
                         self.get_box(x, y),
                         y,
-                        self.get_width() -1 - x
+                        self.get_width() - 1 - x
                     )
         elif rotation == m_rotation.Rotation.REVERSE:
+            new_shape = Shape(self.get_height(), self.get_width())
             for y in range(self.get_height()):
                 for x in range(self.get_width()):
                     new_shape.set_box(
