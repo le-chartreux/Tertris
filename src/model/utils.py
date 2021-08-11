@@ -12,102 +12,55 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
     :param tetromino_type: type of the tetromino we want the shape
     :return: the initial shape of the tetromino type given
     """
-    if tetromino_type == m_tetromino_type.TetrominoType.I_SHAPE:
-        """
-        [    ]
-        [####]
-        [    ]
-        [    ]
-        """
-        shape = m_shape.Shape(4, 4)
-        shape.set_boxes([
+    # I use 4 letter names so it's the same size as None so the shape is clear
+    i_te = m_tetromino_type.TetrominoType.I_SHAPE
+    o_te = m_tetromino_type.TetrominoType.O_SHAPE
+    s_te = m_tetromino_type.TetrominoType.S_SHAPE
+    z_te = m_tetromino_type.TetrominoType.Z_SHAPE
+    j_te = m_tetromino_type.TetrominoType.J_SHAPE
+    l_te = m_tetromino_type.TetrominoType.L_SHAPE
+    t_te = m_tetromino_type.TetrominoType.T_SHAPE
+
+    bodies = {
+        i_te: [
             [None, None, None, None],
-            [tetromino_type, tetromino_type, tetromino_type, tetromino_type],
+            [i_te, i_te, i_te, i_te],
             [None, None, None, None],
             [None, None, None, None]
-        ])
-        return shape
-    elif tetromino_type == m_tetromino_type.TetrominoType.O_SHAPE:
-        """
-        in guidelines it's:
-        [ ## ]
-        [ ## ]
-        [    ]
-        but this one is better with my code:
-        [##]
-        [##]
-        """
-
-        shape = m_shape.Shape(2, 2)
-        shape.set_boxes([
-            [tetromino_type, tetromino_type],
-            [tetromino_type, tetromino_type]
-        ])
-        return shape
-    elif tetromino_type == m_tetromino_type.TetrominoType.T_SHAPE:
-        """
-        [ # ] 
-        [###] 
-        [   ] 
-        """
-        shape = m_shape.Shape(3, 3)
-        shape.set_boxes([
-            [None, tetromino_type, None],
-            [tetromino_type, tetromino_type, tetromino_type],
+        ],
+        o_te: [
+            [o_te, o_te],
+            [o_te, o_te]
+        ],
+        t_te: [
+            [None, t_te, None],
+            [t_te, t_te, t_te],
+            [None, None, None]
+        ],
+        l_te: [
+            [None, None, l_te],
+            [l_te, l_te, l_te],
             [None, None, None],
-        ])
-        return shape
-    elif tetromino_type == m_tetromino_type.TetrominoType.L_SHAPE:
-        """
-        [  #]
-        [###]
-        [   ]
-        """
-        shape = m_shape.Shape(3, 3)
-        shape.set_boxes([
-            [None, None, tetromino_type],
-            [tetromino_type, tetromino_type, tetromino_type],
+        ],
+        j_te: [
+            [j_te, None, None],
+            [j_te, j_te, j_te],
             [None, None, None],
-        ])
-        return shape
-    elif tetromino_type == m_tetromino_type.TetrominoType.J_SHAPE:
-        """
-        [#  ]
-        [###]
-        [   ] 
-        """
-        shape = m_shape.Shape(3, 3)
-        shape.set_boxes([
-            [tetromino_type, None, None],
-            [tetromino_type, tetromino_type, tetromino_type],
+        ],
+        z_te: [
+            [z_te, z_te, None],
+            [None, z_te, z_te],
             [None, None, None],
-        ])
-        return shape
-    elif tetromino_type == m_tetromino_type.TetrominoType.Z_SHAPE:
-        """
-        [## ]
-        [ ##]
-        [   ]
-        """
-        shape = m_shape.Shape(3, 3)
-        shape.set_boxes([
-            [tetromino_type, tetromino_type, None],
-            [None, tetromino_type, tetromino_type],
-            [None, None, None],
-        ])
-        return shape
-    elif tetromino_type == m_tetromino_type.TetrominoType.S_SHAPE:
-        """
-        [ ## ]
-        [##  ]
-        [    ]
-        """
-        shape = m_shape.Shape(3, 3)
-        shape.set_boxes([
-            [None, tetromino_type, tetromino_type],
-            [tetromino_type, tetromino_type, None],
-            [None, None, None],
-        ])
+        ],
+        s_te: [
+            [None, s_te, s_te],
+            [s_te, s_te, None],
+            [None, None, None]
+        ]
+    }
+    if tetromino_type in bodies.keys():
+        shape = m_shape.Shape(1, 1)  # since we set the boxes after we don't care about the width and height
+        shape.set_boxes(bodies[tetromino_type])
         return shape
     else:
         if isinstance(tetromino_type, m_tetromino_type.TetrominoType):
