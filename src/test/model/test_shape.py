@@ -549,7 +549,7 @@ class TestShape(unittest.TestCase):
         )
 
     def test_is_equal(self) -> None:
-        for _ in range(10):
+        for _ in range(30):
             shape_1 = self.random_size_shape()
             shape_2 = shape_1.copy_shape()
 
@@ -561,19 +561,19 @@ class TestShape(unittest.TestCase):
 
             # empty shape with non-empty shape
             non_empty_box_positions_shape_1: list[tuple[int, int]] = []
-            for i in range(random.randint(1, 10)):
-                non_empty_box_positions_shape_1.append(
-                    (
-                        random.randint(0, shape_1.get_width() - 1),
-                        random.randint(0, shape_1.get_height() - 1)
+            for _ in range(random.randint(1, 10)):
+                position = (
+                    random.randint(0, shape_1.get_width() - 1),
+                    random.randint(0, shape_1.get_height() - 1)
+                )
+                if position not in non_empty_box_positions_shape_1:
+                    non_empty_box_positions_shape_1.append(position)
+                    shape_1.set_box(
+                        m_tetromino_type.TetrominoType.O_SHAPE,
+                        non_empty_box_positions_shape_1[len(non_empty_box_positions_shape_1) - 1][0],
+                        non_empty_box_positions_shape_1[len(non_empty_box_positions_shape_1) - 1][1]
                     )
-                )
-                shape_1.set_box(
-                    m_tetromino_type.TetrominoType.O_SHAPE,
-                    non_empty_box_positions_shape_1[i][0],
-                    non_empty_box_positions_shape_1[i][1]
-                )
-                self.assertFalse(shape_1.is_equal(shape_2))
+                    self.assertFalse(shape_1.is_equal(shape_2))
 
             # two non-empty shapes
             for i in range(len(non_empty_box_positions_shape_1)):
