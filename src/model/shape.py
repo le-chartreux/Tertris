@@ -82,17 +82,17 @@ class Shape:
         for y in range(other_shape.get_height()):
             for x in range(other_shape.get_width()):
                 if (
-                    other_shape.is_occupied(x, y)
-                    and
-                    (
-                        x + x_overlay >= self.get_width()
-                        or
-                        x + x_overlay < 0
-                        or
-                        y + y_overlay >= self.get_height()
-                        or
-                        y + y_overlay < 0
-                    )
+                        other_shape.is_occupied(x, y)
+                        and
+                        (
+                                x + x_overlay >= self.get_width()
+                                or
+                                x + x_overlay < 0
+                                or
+                                y + y_overlay >= self.get_height()
+                                or
+                                y + y_overlay < 0
+                        )
                 ):
                     return False
 
@@ -100,15 +100,15 @@ class Shape:
         for y in range(self.get_height()):
             for x in range(self.get_width()):
                 if (
-                    self.is_occupied(x, y)
-                    and
-                    (
-                        0 <= x - x_overlay < other_shape.get_width()
+                        self.is_occupied(x, y)
                         and
-                        0 <= y - y_overlay < other_shape.get_height()
-                        and
-                        other_shape.is_occupied(x - x_overlay, y - y_overlay)
-                    )
+                        (
+                                0 <= x - x_overlay < other_shape.get_width()
+                                and
+                                0 <= y - y_overlay < other_shape.get_height()
+                                and
+                                other_shape.is_occupied(x - x_overlay, y - y_overlay)
+                        )
                 ):
                     return False
 
@@ -214,7 +214,7 @@ class Shape:
             y = 0
             while y < other_shape.get_height() and equals:
                 if (
-                    self.get_box(x, y) != other_shape.get_box(x, y)
+                        self.get_box(x, y) != other_shape.get_box(x, y)
                 ):
                     equals = False
                 y += 1

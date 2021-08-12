@@ -10,7 +10,6 @@ import model.shape as m_shape
 class TestUtils(unittest.TestCase):
 
     def test_get_tetromino_shape(self):
-
         tetromino_type = m_tetromino_type.TetrominoType.I_SHAPE
         shape = m_shape.Shape(4, 4)
         shape.set_boxes([

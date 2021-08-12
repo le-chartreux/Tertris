@@ -4,7 +4,6 @@ import os
 
 import common.statistics as m_statistics
 
-
 SLOW_TESTS = int(os.getenv('SLOW_TESTS', "0"))
 
 

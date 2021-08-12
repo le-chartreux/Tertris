@@ -119,21 +119,21 @@ class Model:
             else:
                 self._statistics.pause_chrono()
         elif (
-            message.get_subject() == m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO
-            and
-            self._can_active_move(message.get_content())  # the direction is in content
+                message.get_subject() == m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO
+                and
+                self._can_active_move(message.get_content())  # the direction is in content
         ):
             self._active_tetromino.move(message.get_content())
         elif (
-            message.get_subject() == m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO
-            and
-            self._can_active_rotate(message.get_content())
+                message.get_subject() == m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO
+                and
+                self._can_active_rotate(message.get_content())
         ):
             self._active_tetromino.rotate(message.get_content())
         elif (
-            message.get_subject() == m_message_subject.MessageSubject.TOGGLE_STORED
-            and
-            self._can_store_active()
+                message.get_subject() == m_message_subject.MessageSubject.TOGGLE_STORED
+                and
+                self._can_store_active()
         ):
             self._store_active()
         elif message.get_subject() == m_message_subject.MessageSubject.QUIT:
@@ -164,7 +164,7 @@ class Model:
                     if self._grid.is_line_full(line):
                         self._grid.drop_lines_upper(line)
                         number_of_completed_lines += 1
-                
+
                 if number_of_completed_lines != 0:
                     self._statistics.add_lines_completed(number_of_completed_lines)
                     self._statistics.add_points_for_lines(number_of_completed_lines)
@@ -222,23 +222,23 @@ class Model:
             column = 0
             while column < active_to_use.get_width() and possible:
                 possible = (
-                    not active_to_use.is_occupied(x=column, y=line)  # There is no bloc
-                    or  # or
-                    (  # The bloc will go outside of the grid border
-                        0 <= (
-                            active_to_use.get_x() + column + direction.get_x_variation()
+                        not active_to_use.is_occupied(x=column, y=line)  # There is no bloc
+                        or  # or
+                        (  # The bloc will go outside of the grid border
+                                0 <= (
+                                active_to_use.get_x() + column + direction.get_x_variation()
                         ) < self._grid.get_width()
-                        and
-                        0 <= (
-                                active_to_use.get_y() + line + direction.get_y_variation()
-                        ) < self._grid.get_height()
-                    )
-                    and not (  # ... and the futur bloc is empty
-                        self._grid.is_occupied(
-                            active_to_use.get_x() + direction.get_x_variation() + column,
-                            active_to_use.get_y() + direction.get_y_variation() + line
+                                and
+                                0 <= (
+                                        active_to_use.get_y() + line + direction.get_y_variation()
+                                ) < self._grid.get_height()
                         )
+                        and not (  # ... and the futur bloc is empty
+                    self._grid.is_occupied(
+                        active_to_use.get_x() + direction.get_x_variation() + column,
+                        active_to_use.get_y() + direction.get_y_variation() + line
                     )
+                )
                 )
                 column += 1
             line += 1
