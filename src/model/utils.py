@@ -72,7 +72,7 @@ def get_tetromino_shape(tetromino_type: m_tetromino_type.TetrominoType) -> m_sha
             raise TypeError(
                 "Error: impossible to create the tetromino shape for the given tetromino: "
                 "type must be TetrominoType but a %s is given."
-                % type(tetromino_type).name
+                % type(tetromino_type)
             )
 
 
