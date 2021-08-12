@@ -1,7 +1,11 @@
 import unittest
-import common.statistics as m_statistics
 import time
-import random
+import os
+
+import common.statistics as m_statistics
+
+
+SLOW_TESTS = int(os.getenv('SLOW_TESTS', "0"))
 
 
 class TestStatistics(unittest.TestCase):
@@ -22,7 +26,7 @@ class TestStatistics(unittest.TestCase):
                 self._default_stats.add_lines_completed(1)
 
     # warning: this testing will last 9 seconds so it is commented
-    """
+    @unittest.skipIf(not SLOW_TESTS, "slow")
     def test_get_duration(self) -> None:
         # testing without pause time
         # there is no pause at init, so the duration is just <int(end_time - self._begin_time)>
@@ -54,7 +58,7 @@ class TestStatistics(unittest.TestCase):
                 (self._default_stats.get_duration(), self._default_stats.get_duration() + 1)
             )
             self._default_stats.run_chrono()
-    """
+
 
 if __name__ == '__main__':
     unittest.main()
