@@ -66,7 +66,37 @@ class TestGrid(unittest.TestCase):
             )
 
     def test_drop_lines_upper(self) -> None:
-        pass  # TODO
+        for _ in range(50):
+            grid = m_grid.Grid()
+            tetromino = m_utils.random_tetromino()
+            line_to_drop = random.randint(0, grid.get_height() - 1)
+
+            # filling the grid
+            for _ in range(random.randint(0, 20)):
+                grid.set_box(
+                    tetromino,
+                    random.randint(0, grid.get_width() - 5),
+                    random.randint(0, grid.get_height() - 5)
+                )
+
+            # creating a copy and making it drop, so we can compare
+            # with the original
+            grid_after_drop = m_grid.Grid()
+            grid_after_drop.set_boxes(grid.copy_shape().get_boxes())
+            grid_after_drop.drop_lines_upper(line_to_drop)
+
+            # checking that the grid dropped correctly
+            for x in range(grid.get_width()):
+                for y in range(0, line_to_drop):
+                    self.assertEqual(
+                        grid.get_box(x, y),
+                        grid_after_drop.get_box(x, y + 1)
+                    )
+            # checking that the first line is empty
+            for x in range(grid_after_drop.get_width()):
+                self.assertFalse(
+                    grid_after_drop.is_occupied(x, 0)
+                )
 
 
 if __name__ == '__main__':
