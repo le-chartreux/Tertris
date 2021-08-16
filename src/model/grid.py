@@ -44,9 +44,14 @@ class Grid(m_shape.Shape):
         # replaces each line higher than <line_number> by it's higher
         line = line_number
         while line != 0:
-            # TODO faire quelque chose de plus propre
-            self.get_boxes()[line][:] = self.get_boxes()[line - 1][:]
+            for column in range(self.get_width()):
+                self.set_box(
+                    self.get_box(column, line - 1),
+                    column,
+                    line
+                )
             line -= 1
+
         # We put None on the higher line
         for column in range(self.get_width()):
             self.set_box(None, column, 0)
