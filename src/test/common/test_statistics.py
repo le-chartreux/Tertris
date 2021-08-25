@@ -49,14 +49,14 @@ class TestStatistics(unittest.TestCase):
         for pause_number in range(4):
             # 4 pauses: one of 0 sec, one of 1 sec, one of 2 sec and one of 3 sec
             # the total duration should not change
-            self._default_stats.pause_chrono()
+            self._default_stats.pause_timer()
             time.sleep(pause_number)
             # between 2 values to counter the case where the loop process lasts enough to add 1 sec
             self.assertIn(
                 total_duration,
                 (self._default_stats.get_duration(), self._default_stats.get_duration() + 1)
             )
-            self._default_stats.run_chrono()
+            self._default_stats.run_timer()
 
 
 if __name__ == '__main__':
