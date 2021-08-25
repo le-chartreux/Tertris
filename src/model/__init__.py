@@ -115,9 +115,9 @@ class Model:
         if message.get_subject() == m_message_subject.MessageSubject.TOGGL_PAUSED:
             self._run_game = not self._run_game
             if self._run_game:
-                self._statistics.run_chrono()
+                self._statistics.run_timer()
             else:
-                self._statistics.pause_chrono()
+                self._statistics.pause_timer()
         elif (
                 message.get_subject() == m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO
                 and

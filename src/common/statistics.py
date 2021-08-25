@@ -21,7 +21,7 @@ class Statistics:
         - the number of completed lines
         - a begin time (the moment where the game started)
         - a paused time (the sum of duration of moments where the game was paused)
-        - _chrono_paused_since, to manage pauses
+        - _timer_paused_since, to manage pauses
 
         The level is computed with the score, so we don't store it.
         """
@@ -29,7 +29,7 @@ class Statistics:
         self._lines_completed = lines_completed
         self._begin_time = time.monotonic() if begin_time is None else begin_time
         self._paused_time = paused_time
-        self._chrono_paused_since: typing.Optional[float] = None
+        self._timer_paused_since: typing.Optional[float] = None
 
     # GETTERS
     def get_level(self) -> int:
@@ -60,10 +60,10 @@ class Statistics:
         """
         :return: the current total of paused time (with the current pause)
         """
-        if self._chrono_paused_since is None:
+        if self._timer_paused_since is None:
             return self._paused_time
         else:
-            return self._paused_time + time.monotonic() - self._chrono_paused_since
+            return self._paused_time + time.monotonic() - self._timer_paused_since
 
     def get_points_for_lines(self, number_of_lines: int) -> int:
         """
@@ -91,20 +91,20 @@ class Statistics:
         self.add_score(self.get_points_for_lines(number_of_lines))
 
     # OTHER METHODS
-    def run_chrono(self) -> None:
+    def run_timer(self) -> None:
         """
-        Quit the pause mod of the chrono and start tracking time
+        Quit the pause mod of the timer and start tracking time
         """
-        # we add the current chrono_paused_since
-        if self._chrono_paused_since is not None:
-            self._paused_time += time.monotonic() - self._chrono_paused_since
-        self._chrono_paused_since = None
+        # we add the current timer_paused_since
+        if self._timer_paused_since is not None:
+            self._paused_time += time.monotonic() - self._timer_paused_since
+        self._timer_paused_since = None
 
-    def pause_chrono(self) -> None:
+    def pause_timer(self) -> None:
         """
-        Pause the chrono, so when the game is paused the duration of the game don't change
+        Pause the timer, so when the game is paused the duration of the game don't change
         """
-        # we add the current chrono_paused_since
-        if self._chrono_paused_since is not None:
-            self._paused_time += time.monotonic() - self._chrono_paused_since
-        self._chrono_paused_since = time.monotonic()
+        # we add the current timer_paused_since
+        if self._timer_paused_since is not None:
+            self._paused_time += time.monotonic() - self._timer_paused_since
+        self._timer_paused_since = time.monotonic()
