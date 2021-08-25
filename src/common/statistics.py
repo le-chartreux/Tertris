@@ -13,13 +13,14 @@ class Statistics:
             score: int = 0,
             lines_completed: int = 0,
             begin_time: typing.Optional[float] = None,
-            paused_time: float = 0.0
+            paused_time: float = 0.0,
+            paused: bool = True
     ) -> None:
         """
         Creates a Statistics object, characterized by:
         - a score (starts at 0 and increments during the game)
         - the number of completed lines
-        - a begin time (the moment where the game started)
+        - a begin time (the moment when the game started, or when the Statistics object was created)
         - a paused time (the sum of duration of moments where the game was paused)
         - _timer_paused_since, to manage pauses
 
@@ -29,7 +30,7 @@ class Statistics:
         self._lines_completed = lines_completed
         self._begin_time = time.monotonic() if begin_time is None else begin_time
         self._paused_time = paused_time
-        self._timer_paused_since: typing.Optional[float] = None
+        self._timer_paused_since: typing.Optional[float] = time.monotonic() if paused else None
 
     # GETTERS
     def get_level(self) -> int:
