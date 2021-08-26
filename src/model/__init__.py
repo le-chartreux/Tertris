@@ -98,6 +98,8 @@ class Model:
             if self._run_game:
                 self._do_tick()
 
+            time.sleep(0.01)
+
     def receive(self, message: m_message.Message) -> None:
         """
         Add a message to the _inbox queue

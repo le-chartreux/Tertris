@@ -72,6 +72,7 @@ class View(abc.ABC):
                 while older_untreated_player_input is not m_player_input.PlayerInput.NOTHING:
                     self._treat_player_input(older_untreated_player_input)
                     older_untreated_player_input = self._get_player_input()
+                time.sleep(0.01)
             else:
                 time.sleep(0.3)
 
