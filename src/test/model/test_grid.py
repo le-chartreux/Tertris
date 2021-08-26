@@ -53,15 +53,15 @@ class TestGrid(unittest.TestCase):
 
             self.assertTrue(
                 (
-                    number_of_columns_to_leave_empty == 0
-                    and
-                    grid.is_line_full(line_to_test)
+                        number_of_columns_to_leave_empty == 0
+                        and
+                        grid.is_line_full(line_to_test)
                 )
                 or
                 (
-                    number_of_columns_to_leave_empty != 0
-                    and
-                    not grid.is_line_full(line_to_test)
+                        number_of_columns_to_leave_empty != 0
+                        and
+                        not grid.is_line_full(line_to_test)
                 )
             )
 

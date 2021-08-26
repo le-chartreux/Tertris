@@ -7,6 +7,7 @@ import common.message as p_message
 import common.message.message_subject as p_message_subject
 
 # Everything is in a try-except to get the error message if the program crashs
+# noinspection PyBroadException
 try:
     # setup of the model part (init and thread creation)
     model = m_model.Model()

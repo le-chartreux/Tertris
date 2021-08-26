@@ -221,24 +221,32 @@ class Model:
         while line < active_to_use.get_height() and possible:
             column = 0
             while column < active_to_use.get_width() and possible:
-                possible = (
-                        not active_to_use.is_occupied(x=column, y=line)  # There is no bloc
-                        or  # or
-                        (  # The bloc will go outside of the grid border
-                                0 <= (
-                                active_to_use.get_x() + column + direction.get_x_variation()
-                        ) < self._grid.get_width()
-                                and
-                                0 <= (
-                                        active_to_use.get_y() + line + direction.get_y_variation()
-                                ) < self._grid.get_height()
-                        )
-                        and not (  # ... and the futur bloc is empty
-                    self._grid.is_occupied(
+                # possible if
+                # - the bloc is empty
+                # OR
+                # - the bloc will not go outside of the grid border AND the destination of the bloc is empty
+
+                bloc_empty = not active_to_use.is_occupied(x=column, y=line)
+
+                will_not_go_outside = (
+                        0 <= active_to_use.get_x() + column + direction.get_x_variation() < self._grid.get_width()
+                        and
+                        0 <= active_to_use.get_y() + line + direction.get_y_variation() < self._grid.get_height()
+                )
+                # we have to check that <will_not_go_outside>, else we query a bloc outside of the border
+                futur_bloc_empty = False
+                if will_not_go_outside:
+                    futur_bloc_empty = not self._grid.is_occupied(
                         active_to_use.get_x() + direction.get_x_variation() + column,
                         active_to_use.get_y() + direction.get_y_variation() + line
                     )
-                )
+
+                possible = (
+                        bloc_empty
+                        or
+                        will_not_go_outside
+                        and
+                        futur_bloc_empty
                 )
                 column += 1
             line += 1

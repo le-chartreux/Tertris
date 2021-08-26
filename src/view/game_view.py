@@ -112,6 +112,8 @@ class GameView(view.View):
             ):
                 if grid[line_number_grid][column_number_grid] is not None:
                     # we put a bloc
+                    # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+                    # noinspection PyTypeChecker
                     self._window_game.addstr(
                         line_number_print + 1,
                         column_number_print * 2 + 1,  # *2 since tetrominos are 2 char wide
@@ -134,16 +136,22 @@ class GameView(view.View):
         Shows the border around the game grid
         """
         # first line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_game.addstr(
             0, 0,
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(1, config.GRID_WINDOW_WIDTH - 2):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_game.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_game.addstr(
             "╗".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -151,11 +159,15 @@ class GameView(view.View):
 
         # intermediate lines
         for line in range(1, config.GRID_WINDOW_HEIGHT - 1):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_game.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_game.addstr(
                 line, config.GRID_WINDOW_WIDTH - 2,
                 "║".encode(locale.getpreferredencoding()),
@@ -163,16 +175,22 @@ class GameView(view.View):
             )
 
         # last line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_game.addstr(
             config.GRID_WINDOW_HEIGHT - 1, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(1, config.GRID_WINDOW_WIDTH - 2):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_game.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_game.addstr(
             "╝".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -188,6 +206,8 @@ class GameView(view.View):
         for line in range(4):
             for column in range(4):
                 # we put a space to hide a potential old bloc
+                # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+                # noinspection PyTypeChecker
                 self._window_next.addstr(
                     line + 1,
                     column * 2 + 1,
@@ -200,6 +220,8 @@ class GameView(view.View):
             for column in range(len(next_shape[0])):
                 if next_shape[line][column] is not None:
                     # we put a bloc
+                    # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+                    # noinspection PyTypeChecker
                     self._window_next.addstr(
                         line + 1,
                         column * 2 + 1,  # *2 since tetrominos are 2 char wide
@@ -208,6 +230,8 @@ class GameView(view.View):
                     )
                 else:
                     # we put a space to hide a potential old bloc
+                    # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+                    # noinspection PyTypeChecker
                     self._window_next.addstr(
                         line + 1,
                         column * 2 + 1,
@@ -222,12 +246,16 @@ class GameView(view.View):
         Shows the border around the next tetromino grid
         """
         # first line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_next.addstr(
             0, 0,
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(math.ceil((config.NEXT_WINDOW_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_next.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -237,10 +265,14 @@ class GameView(view.View):
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(math.floor((config.NEXT_WINDOW_WIDTH - 4 - 2) / 2)):  # -4 car Next, -1 car ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_next.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_next.addstr(
             "╗".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -248,11 +280,15 @@ class GameView(view.View):
 
         # intermediate lines
         for line in range(1, config.NEXT_WINDOW_HEIGHT - 2):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_next.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_next.addstr(
                 line, config.NEXT_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
@@ -260,16 +296,22 @@ class GameView(view.View):
             )
 
         # last line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_next.addstr(
             config.NEXT_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(1, config.NEXT_WINDOW_WIDTH - 1):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_next.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_next.addstr(
             "╝".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -297,6 +339,8 @@ class GameView(view.View):
             for line in range(len(stored_shape)):
                 for column in range(len(stored_shape[0])):
                     if stored_shape[line][column] is not None:
+                        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+                        # noinspection PyTypeChecker
                         self._window_stored.addstr(
                             line + 1,
                             column * 2 + 1,
@@ -311,12 +355,16 @@ class GameView(view.View):
         Shows the border around the stored tetromino border
         """
         # first line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_stored.addstr(
             0, 0,
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(math.ceil((config.STORED_WINDOW_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_stored.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -326,6 +374,8 @@ class GameView(view.View):
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(math.floor((config.STORED_WINDOW_WIDTH - 6 - 2) / 2)):  # -6 car Stored, -2 car ╔ et ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_stored.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -334,11 +384,15 @@ class GameView(view.View):
 
         # intermediate lines
         for line in range(1, config.STORED_WINDOW_HEIGHT - 2):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_stored.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_stored.addstr(
                 line, config.STORED_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
@@ -346,16 +400,22 @@ class GameView(view.View):
             )
 
         # last line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_stored.addstr(
             config.STORED_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(1, config.STORED_WINDOW_WIDTH - 1):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_stored.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_stored.addstr(
             "╝".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -380,22 +440,30 @@ class GameView(view.View):
         Shows the border around the statistics window
         """
         # first line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_statistics.addstr(
             0, 0,
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(math.ceil((config.STATISTICS_WINDOW_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_statistics.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
         self._window_statistics.addstr("Statistics", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         for _ in range(math.floor((config.STATISTICS_WINDOW_WIDTH - 10 - 2) / 2)):  # -10 car Statistics, -2 car ╔ et ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_statistics.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_statistics.addstr(
             "╗".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -403,11 +471,15 @@ class GameView(view.View):
 
         # intermediate lines
         for line in range(1, config.STATISTICS_WINDOW_HEIGHT - 2):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_statistics.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_statistics.addstr(
                 line, config.STATISTICS_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
@@ -415,16 +487,22 @@ class GameView(view.View):
             )
 
         # last line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_statistics.addstr(
             config.STATISTICS_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(1, config.STATISTICS_WINDOW_WIDTH - 1):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_statistics.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_statistics.addstr(
             "╝".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -454,22 +532,30 @@ class GameView(view.View):
         Show the border around the keybinds
         """
         # first line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_keybinds.addstr(
             0, 0,
             "╔".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(math.ceil((config.KEYBINDS_WINDOW_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_keybinds.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
         self._window_keybinds.addstr("Keybinds", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         for _ in range(math.floor((config.KEYBINDS_WINDOW_WIDTH - 8 - 2) / 2)):  # -8 car Keybinds, -2 car ╔ et ╗
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_keybinds.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_keybinds.addstr(
             "╗".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
@@ -477,11 +563,15 @@ class GameView(view.View):
 
         # intermediate lines
         for line in range(1, config.KEYBINDS_WINDOW_HEIGHT - 2):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_keybinds.addstr(
                 line, 0,
                 "║".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_keybinds.addstr(
                 line, config.KEYBINDS_WINDOW_WIDTH - 1,
                 "║".encode(locale.getpreferredencoding()),
@@ -489,16 +579,22 @@ class GameView(view.View):
             )
 
         # last line
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_keybinds.addstr(
             config.KEYBINDS_WINDOW_HEIGHT - 2, 0,
             "╚".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
         )
         for _ in range(1, config.KEYBINDS_WINDOW_WIDTH - 1):
+            # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+            # noinspection PyTypeChecker
             self._window_keybinds.addstr(
                 "═".encode(locale.getpreferredencoding()),
                 curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
             )
+        # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+        # noinspection PyTypeChecker
         self._window_keybinds.addstr(
             "╝".encode(locale.getpreferredencoding()),
             curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)

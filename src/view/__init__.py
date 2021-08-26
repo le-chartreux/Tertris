@@ -63,10 +63,10 @@ class View(abc.ABC):
         while not self._exit_next_tick:
             if self._run:
                 self._print_active_windows()
-                player_input = self._get_player_input()
-                while player_input is not player_input.NOTHING:
-                    self._treat_player_input(player_input)
-                    player_input = self._get_player_input()
+                older_untreated_player_input = self._get_player_input()
+                while older_untreated_player_input is not m_player_input.PlayerInput.NOTHING:
+                    self._treat_player_input(older_untreated_player_input)
+                    older_untreated_player_input = self._get_player_input()
             else:
                 time.sleep(0.3)
 
@@ -119,12 +119,12 @@ class View(abc.ABC):
         except ValueError:
             return m_player_input.PlayerInput.KEY_UNUSED
 
-    def _treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
+    def _treat_player_input(self, player_input_to_treat: m_player_input.PlayerInput) -> None:
         """
         Treat a player input
         """
         # closing the app
-        if player_input == m_player_input.PlayerInput.KEY_ESC:
+        if player_input_to_treat is m_player_input.PlayerInput.KEY_ESC:
             self._send(
                 m_message.Message(
                     m_message_subject.MessageSubject.QUIT
