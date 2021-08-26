@@ -124,6 +124,8 @@ class Model:
                 self._can_active_move(message.get_content())  # the direction is in content
         ):
             self._active_tetromino.move(message.get_content())
+            if message.get_content() is m_direction.Direction.DOWN:
+                self._never_down_this_tetromino = False
         elif (
                 message.get_subject() == m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO
                 and
@@ -144,13 +146,13 @@ class Model:
         Did everything that is needed when the game is running
         """
         if self._has_to_go_down():
-            self._last_down = time.monotonic()
             if self._can_active_move(m_direction.Direction.DOWN):
                 self._active_tetromino.move(m_direction.Direction.DOWN)
                 self._never_down_this_tetromino = False
+                self._last_down = time.monotonic()
             elif self._is_game_lost():
                 self._run_game = False
-                print("game lost")
+                self._statistics.pause_timer()
             else:
                 # the tetromino is placed
                 self._grid.add_tetromino(self._active_tetromino)
