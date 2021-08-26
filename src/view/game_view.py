@@ -80,10 +80,13 @@ class GameView(view.View):
         self._window_keybinds.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
 
     def _print_active_windows(self) -> None:
-        self._print_grid()
-        self._print_next()
-        self._print_stored()
-        self._print_statistics()
+        if self._model.is_game_lost():
+            self._print_game_over()
+        else:
+            self._print_grid()
+            self._print_next()
+            self._print_stored()
+            self._print_statistics()
 
     def _print_grid(self) -> None:
         """
@@ -231,6 +234,27 @@ class GameView(view.View):
         self._window_statistics.addstr(3, 1, "Time:  " + str(statistics.get_duration()))
 
         self._window_statistics.refresh()
+
+    def _print_game_over(self) -> None:
+        """
+        Shows "GAME OVER"
+        """
+        self._window_game.addstr(
+            8, 3,
+            "╔════════════╗",
+            curses.color_pair(m_color_pair.ColorPair.RED_N_WHITE.value)
+        )
+        self._window_game.addstr(
+            9, 3,
+            "║ GAME OVER! ║",
+            curses.color_pair(m_color_pair.ColorPair.RED_N_WHITE.value)
+        )
+        self._window_game.addstr(
+            10, 3,
+            "╚════════════╝",
+            curses.color_pair(m_color_pair.ColorPair.RED_N_WHITE.value)
+        )
+        self._window_game.refresh()
 
     def _treat_player_input(self, player_input: m_player_input.PlayerInput) -> None:
         super(GameView, self)._treat_player_input(player_input)
