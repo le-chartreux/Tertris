@@ -117,7 +117,9 @@ class TestDirection(unittest.TestCase):
                     self.model._active_tetromino.put_at_spawnpoint()
 
                     can_rotate = self.model._can_active_rotate(rotation)
-                    boxes_before_rotation = self.model._active_tetromino.copy_shape()
+                    shape_wanted = self.model._active_tetromino.copy_shape()
+                    if can_rotate:
+                        shape_wanted.rotate(rotation)
 
                     self.model._process(
                         m_message.Message(
@@ -126,18 +128,7 @@ class TestDirection(unittest.TestCase):
                         )
                     )
 
-                    self.assertEqual(
-                        boxes_before_rotation.is_equal(self.model._active_tetromino),  # true if no rotation or O shape
-                        (
-                                not can_rotate
-                                or
-                                (
-                                        self.model._active_tetromino.get_tetromino_type()
-                                        is
-                                        m_tetromino_type.TetrominoType.O_SHAPE
-                                )
-                        )  # because the O shape doesn't changes it's shape when it rotates :)
-                    )
+                    self.assertTrue(shape_wanted.is_equal(self.model._active_tetromino))
 
         # for a "TOGGLE_STORED"
         # resetting the grid so we are sure that the stored tetromino has the space to spawn
