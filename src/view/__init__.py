@@ -3,8 +3,10 @@ File that contains the declaration of the View class, the user interface of the 
 """
 
 import curses
+import _curses
 import abc
 import time
+import locale  # to encode non-ASCII char
 
 import model as m_model
 
@@ -41,9 +43,11 @@ class View(abc.ABC):
         self._window_all.clear()
         m_utils.revert_curses()
 
-    def setup(self) -> None:
+    def setup(self, background_file_path: str) -> None:
         """
         Setup everything that is needed for the view before printing
+
+        :param background_file_path: path to the background file
         """
         m_utils.setup_curses()
         # setup _window_all for text entries
@@ -51,14 +55,15 @@ class View(abc.ABC):
         self._window_all.keypad(True)  # allow compatibility of special keys (arrow-up for example)
         # Gestion des couleurs
         m_utils.set_colorscheme()
-        self._set_backgrounds()
+
+        self.set_background_colors()
+        self._load_background(background_file_path)
 
     def main_loop(self) -> None:
         """
         Enters in the main loop, that prints the view and reacts to player inputs
         """
         self._run = True
-        self._print_static_windows()
 
         while not self._exit_next_tick:
             if self._run:
@@ -76,26 +81,41 @@ class View(abc.ABC):
         """
         self._model.receive(message)
 
-    def _set_backgrounds(self) -> None:
+    def set_background_colors(self) -> None:
         """
-        Set every background on the write color. set_colorscheme() has to be already call
+        Set all backgrounds to their color
         """
-        self._window_all.bkgd(' ', curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
+        self._window_all.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
 
-        self._refresh_all()
+    def _load_background(self, file_path: str) -> None:
+        """
+        :param file_path: file path of the background
+        """
+        with open(file_path, "r") as background_file:
+            line_number = 0
+            line = background_file.readline()
+            while line:
+                # in a try-catch because if the terminal is too small it will creates an error
+                try:
+                    # next comment because addstr is supposed to take str, but we use bytes to get a proper encoding
+                    # noinspection PyTypeChecker
+                    self._window_all.addstr(
+                        line_number,
+                        0,
+                        line.encode(locale.getpreferredencoding()),
+                        curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value)
+                    )
+                except _curses.error:
+                    pass
+                line = background_file.readline()
+                line_number += 1
+        self._window_all.refresh()
 
     def _refresh_all(self) -> None:
         """
         Refresh all the windows.
         """
         self._window_all.refresh()
-
-    @abc.abstractmethod
-    def _print_static_windows(self) -> None:
-        """
-        Print static windows. This windows will never change, so they will never been refresh on the main loop
-        """
-        pass
 
     @abc.abstractmethod
     def _print_active_windows(self) -> None:

@@ -5,6 +5,7 @@ import model as m_model
 import view.game_view as m_game_view
 import common.message as p_message
 import common.message.message_subject as p_message_subject
+import common.path as m_path
 
 # Everything is in a try-except to get the error message if the program crashs
 # noinspection PyBroadException
@@ -15,7 +16,7 @@ try:
 
     # setup of the view part (init and thread creation)
     view = m_game_view.GameView(model)
-    view.setup()
+    view.setup(m_path.get_absolute_res_path("game_background.txt"))
     view_thread = threading.Thread(target=view.main_loop)
 
     # adding a starting request to the game, so it will start when the model thread will start
