@@ -64,20 +64,12 @@ class GameView(view.View):
             config.STATISTICS_WINDOW_BEGIN_X
         )
 
-        self._window_keybinds = curses.newwin(
-            config.KEYBINDS_WINDOW_HEIGHT,
-            config.KEYBINDS_WINDOW_WIDTH,
-            config.KEYBINDS_WINDOW_BEGIN_Y,
-            config.KEYBINDS_WINDOW_BEGIN_X
-        )
-
     def set_background_colors(self) -> None:
         super(GameView, self).set_background_colors()
         self._window_game.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         self._window_statistics.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         self._window_next.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
         self._window_stored.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
-        self._window_keybinds.bkgd(" ", curses.color_pair(m_color_pair.ColorPair.BLACK_N_WHITE.value))
 
     def _print_active_windows(self) -> None:
         if self._model.is_game_lost():
