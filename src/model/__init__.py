@@ -123,6 +123,8 @@ class Model:
         elif (
                 message.get_subject() == m_message_subject.MessageSubject.MOVE_ACTIVE_TETROMINO
                 and
+                self._run_game
+                and
                 self._can_active_move(message.get_content())  # the direction is in content
         ):
             self._active_tetromino.move(message.get_content())
@@ -131,11 +133,15 @@ class Model:
         elif (
                 message.get_subject() == m_message_subject.MessageSubject.ROTATE_ACTIVE_TETROMINO
                 and
+                self._run_game
+                and
                 self._can_active_rotate(message.get_content())
         ):
             self._active_tetromino.rotate(message.get_content())
         elif (
                 message.get_subject() == m_message_subject.MessageSubject.TOGGLE_STORED
+                and
+                self._run_game
                 and
                 self._can_store_active()
         ):
@@ -152,7 +158,7 @@ class Model:
                 self._active_tetromino.move(m_direction.Direction.DOWN)
                 self._never_down_this_tetromino = False
                 self._last_down = time.monotonic()
-            elif self._is_game_lost():
+            elif self.is_game_lost():
                 self._run_game = False
                 self._statistics.pause_timer()
             else:
@@ -273,7 +279,7 @@ class Model:
         else:
             return self._can_spawn(self._stored_tetromino)
 
-    def _is_game_lost(self) -> bool:
+    def is_game_lost(self) -> bool:
         """
         :return: if the game is lost (if the active tetromino has to go down, can't move and it never down)
         """
