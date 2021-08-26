@@ -8,7 +8,7 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 ![License](https://img.shields.io/github/license/VMoM/Tertris.svg?color=blue)
 
 ## LOOK:
-![Example of look - if not show look at informations/social preview.png](information/readme/social%20preview.png)
+![Example of look - if not show look at informations/demo.gif](information/readme/demo.gif)
 
 
 ## HOW TO USE IT ?
@@ -18,7 +18,7 @@ Terminal-based clone of the [Tetris' NES version](https://tetris.wiki/Tetris_(NE
 
 
 ## LANGUAGE:
-- Everything is in english 🇬🇧 (except some `TODO` in the code that are in french)
+- Everything is in english 🇬🇧 (except maybe some `TODO` in the code that are in french)
 
 
 ## DISCLAIMERS
