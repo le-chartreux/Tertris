@@ -6,7 +6,6 @@ from os import path
 
 WORKING_DIR = path.dirname(__file__)
 RES_DIR = path.join(WORKING_DIR, "../..", "res")
-RESTITUTIONS_DIR = path.join(WORKING_DIR, "../..", "restitutions")
 
 
 def get_absolute_res_path(res_path: str) -> str:
